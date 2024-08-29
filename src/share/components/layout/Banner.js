@@ -1,0 +1,72 @@
+import Slider from "react-slick";
+import { CustomNextArrow, CustomePrevArrow } from "../CustomArrowSlick";
+let settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  prevArrow: <CustomePrevArrow />,
+  nextArrow: <CustomNextArrow />,
+};
+const Banner = () => {
+  return (
+    <section id="banner" className="mb-4">
+      <div className="container-fluid">
+        <div className="row d-none d-sm-block">
+          <div id="ads">
+            <p>
+              Discover cutting-edge electronics at unbeatable prices at
+              AlphaLink Store, your premier destination for tech gadgets!
+            </p>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-8 col-sm-12">
+            <Slider {...settings}>
+              <div>
+                <img
+                  src="./img/banner-1.jpg"
+                  className="d-block w-100"
+                  alt="..."
+                />
+              </div>
+              <div>
+                <img
+                  src="./img/banner-2.jpg"
+                  className="d-block w-100"
+                  alt="..."
+                />
+              </div>
+              <div>
+                <img
+                  src="./img/banner-3.jpg"
+                  className="d-block w-100"
+                  alt="..."
+                />
+              </div>
+              <div>
+                <img
+                  src="./img/banner-4.jpg"
+                  className="d-block w-100"
+                  alt="..."
+                />
+              </div>
+            </Slider>
+          </div>
+          <div className="sub-carousel col-lg-4 col-sm-12 d-flex flex-lg-column mt-4 mt-lg-0">
+            <div>
+              <img src="./img/banner-sub1.png" alt="ac" />
+            </div>
+            <div>
+              <img src="./img/banner-sub2.png" alt="ac" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Banner;

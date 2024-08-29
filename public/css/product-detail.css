@@ -1,0 +1,93 @@
+#product-details .wrapper-img-product,
+#product-details .content {
+  padding: 32px 16px;
+  background-color: var(--light-color);
+  border-radius: var(--radius-m);
+}
+
+#product-details .content div {
+  margin: 8px;
+}
+
+#product-details .img-product .main-img img {
+  width: 100%;
+  aspect-ratio: 679 / 486;
+  cursor: pointer;
+}
+
+#product-details .img-product .sub-img img {
+  padding: 4px;
+  border-right: 2px solid var(--border-color);
+}
+
+#product-details .content .price-item .discount {
+  text-decoration: line-through;
+}
+
+#product-details .content .btn-color {
+  padding: 4px 16px;
+  margin: 0 8px;
+  border: 2px solid var(--border-color);
+  transition: border 0.2s ease-in-out;
+}
+
+#product-details .content .btn-color.active {
+  border: 2px solid var(--red-color);
+}
+
+.content .quantity .number button {
+  padding: 8px 14px;
+}
+
+.content .quantity .number input {
+  outline: none;
+  width: 40px;
+  text-align: center;
+}
+
+.content .quantity .number button,
+.content .quantity .number input {
+  border: 1px solid var(--border-color);
+  background-color: var(--light-color);
+}
+
+.content .btn-items {
+  flex: 1;
+  padding: 8px 0;
+}
+
+/*! comment */
+#product-details #reviews {
+  margin: 16px 0;
+  background-color: var(--light-color);
+  border-radius: var(--radius-m);
+  padding: 16px;
+}
+
+#reviews .title {
+  padding: 8px 0;
+  border-bottom: 2px solid var(--main-color);
+  color: var(--main-color);
+  font-weight: bold;
+}
+
+#reviews .comments {
+  margin: 16px 0;
+}
+
+#reviews .comments .item {
+  padding: 8px 0;
+  margin: 16px 0;
+  border-bottom: 2px solid var(--border-color);
+}
+
+#reviews .item .img-item {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+}
+
+#reviews .item .content-item .img-details {
+  width: 100px;
+  height: 100px;
+}

@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import publicRoutes from "./routes";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 
-function App() {
+// import share Component
+import Header from "./share/components/layout/Header";
+import Navigation from "./share/components/layout/Navigation";
+import Footer from "./share/components/layout/Footer";
+import Banner from "./share/components/layout/Banner";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Header />
+      <Navigation />
+      <main>
+        <Banner />
+        <Routes>
+          {publicRoutes.map((route) => {
+            return (
+              <Route
+                path={route.path}
+                element={route.element}
+                key={route.path}
+              />
+            );
+          })}
+          <Route />
+        </Routes>
+      </main>
+      <Footer />
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
