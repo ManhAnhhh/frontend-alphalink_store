@@ -5,7 +5,11 @@ import Payment from "../pages/Payment";
 import Success from "../pages/Success";
 import ProductDetail from "../pages/ProductDetail";
 import NotFound from "../pages/NotFound";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 const publicRoutes = [
+  { path: "/register", element: <Register />},
+  { path: "/login", element: <Login />},
   { path: "/product-detail/:id", element: <ProductDetail/> },
   { path: "/category/:id", element: <Category /> },
   { path: "/cart", element: <Cart/> },

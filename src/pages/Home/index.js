@@ -1,10 +1,7 @@
 import Slider from "react-slick";
 import { useState, useEffect } from "react";
 import ProductItem from "../../share/components/Product-item";
-import {
-  CustomNextArrow,
-  CustomePrevArrow,
-} from "../../share/components/CustomArrowSlick";
+import { CustomNextArrow, CustomePrevArrow } from "../../share/utilities";
 import { getProducts } from "../../services/Api";
 
 const Home = () => {

@@ -1,6 +1,8 @@
 import Slider from "react-slick";
-import { CustomNextArrow, CustomePrevArrow } from "../CustomArrowSlick";
-let settings = {
+import { useLocation } from "react-router-dom";
+import { CustomNextArrow, CustomePrevArrow } from "../../utilities";
+
+const settings = {
   dots: true,
   infinite: true,
   speed: 500,
@@ -10,7 +12,18 @@ let settings = {
   prevArrow: <CustomePrevArrow />,
   nextArrow: <CustomNextArrow />,
 };
+
 const Banner = () => {
+  const location = useLocation();
+  const pathUsed = ["/category"];
+
+  const isCheckPath = () => {
+    if (location.pathname === "/") return true;
+    return pathUsed.some((path) => location.pathname.startsWith(path));
+  };
+
+  if (!isCheckPath()) return;
+
   return (
     <section id="banner" className="mb-4">
       <div className="container-fluid">

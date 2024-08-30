@@ -98,11 +98,11 @@ input[type=number] {
 }
 
 .fs-12 {
-  font-size: 0.75rem;
+  font-size: 0.75rem !important;
 }
 
 .fs-14 {
-  font-size: 0.875rem;
+  font-size: 0.875rem !important;
 }
 
 /*! header */

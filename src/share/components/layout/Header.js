@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const Header = () => {
+  const navigate = useNavigate();
+  const register = () => {
+    navigate("/register");
+  };
+  const login = () => {
+    navigate("/login");
+  };
   return (
-    <header >
+    <header>
       <section id="helper">
         <div className="container-fluid py-2 d-flex justify-content-end align-items-center gap-4">
           <div>
@@ -15,7 +23,7 @@ const Header = () => {
               <span className="d-none d-sm-inline-block circle me-1">A</span>
               <span className="d-none d-sm-inline-block">Hello, </span>
               <span>Ngo Manh Anh</span>
-              <i className="fa-solid fa-chevron-down fa-2xs" />
+              <i className="fa-solid fa-chevron-down fa-2xs ms-1" />
             </p>
           </div>
         </div>
@@ -45,17 +53,26 @@ const Header = () => {
               </button>
             </div>
             <div className="col-lg-3 col-md-6 col-sm-12 icon-home d-flex gap-4 justify-content-center">
-              <div className="heart-icon py-1 mx-2">
+              {/* <div className="heart-icon py-1 mx-2">
                 <i className="fa-regular fa-heart fa-2xl" />
                 <span className="badge-custom badge-top-right">10</span>
               </div>
               <div className="cart-icon py-1 mx-2">
                 <i className="fa-solid fa-cart-shopping fa-2xl" />
                 <span className="badge-custom badge-top-right">1</span>
-              </div>
+              </div> */}
               {/* login */}
-              {/* <button class="btn-custom py-2 px-2">Sign Up</button>
-              <button class="btn-custom py-2 px-2">Log in</button> */}
+              <div>
+                <button
+                  onClick={register}
+                  className="btn-custom py-2 px-2 mx-2"
+                >
+                  Sign Up
+                </button>
+                <button onClick={login} className="btn-custom py-2 px-2 mx-2">
+                  Log in
+                </button>
+              </div>
             </div>
           </div>
         </div>

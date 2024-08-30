@@ -18,3 +18,30 @@ export const PopUp = ({
     theme,
   });
 };
+
+export const CustomNextArrow = (props) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "#dee2e6" }}
+      onClick={onClick}
+    />
+  );
+}
+
+export const CustomePrevArrow = (props) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{
+        ...style,
+        display: "block",
+        background: "#dee2e6",
+        
+      }}
+      onClick={onClick}
+    />
+  );
+}

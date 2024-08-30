@@ -3,10 +3,7 @@ import { GetImageProduct, PopUp } from "../../share/utilities";
 import { getProductByID, getCategories } from "../../services/Api";
 import { useParams } from "react-router-dom";
 import Slider from "react-slick";
-import {
-  CustomNextArrow,
-  CustomePrevArrow,
-} from "../../share/components/CustomArrowSlick";
+import { CustomNextArrow, CustomePrevArrow } from "../../share/utilities";
 const ProductDetail = () => {
   const [categories, setCategories] = useState([]);
   const [colorChoosed, setColorChoosed] = useState(0);
