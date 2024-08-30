@@ -1,45 +1,60 @@
-const ProductItem = () => {
+import {GetImageProduct} from "../utilities";
+import { Link } from "react-router-dom";
+const ProductItem = (props) => {
+  const {_id: id, name, accessories, price, discount, star, sold, img, is_stock } =
+    props.product;
   return (
     <>
       <div className="discount-percent">
-        <p>-12%</p>
+        <p className="fs-14">{`-${discount}%`}</p>
       </div>
       <div className="img-item">
-        <a href="./category.html">
-          <img src="./img/products/acer1.jpg" alt="acer" />
-        </a>
+        <Link to={`/product-detail/${id}`}>
+          <img src={GetImageProduct(img[0])} alt={name} />
+        </Link>
       </div>
-      <h5 className="name-item pt-2">Acer Aspire Go 15 Slim Laptop</h5>
+      <h5 className="name-item pt-2">{name}</h5>
       <div className="desc-item fs-12">
-        <p>Free charging cable, mouse and backpack</p>
+        <p>{accessories}</p>
       </div>
       <div className="review d-flex justify-content-between my-1">
         <div className="rate">
-          <i className="fa fa-star text-warning" />
-          <i className="fa fa-star text-warning" />
-          <i className="fa fa-star text-warning" />
-          <i className="fa fa-star text-warning" />
-          <i className="fa-regular fa-star text-black-50" />
+          {Array.from({ length: star }).map((e,i) => (
+            <i key={i} className="fa fa-star text-warning" />
+          ))}
+          {Array.from({ length: 5 - star}).map((e,i) => (
+            <i key={i + 100} className="fa-regular fa-star text-black-50" />
+          ))}
         </div>
-        <div className="sold fw-bold">Sold: 2</div>
+        <div className="sold fw-bold">Sold: {sold}</div>
       </div>
       <div className="price-item d-flex justify-content-between my-1">
-        <p className="price text-danger fw-bold">$1639</p>
-        <p className="discount text-secondary">$1000</p>
+        <p className="price-decreased text-danger fw-bold">
+          $ {price - (price * discount) / 100}
+        </p>
+        <p className="price text-secondary text-decoration-line-through">
+          $ {price}
+        </p>
       </div>
       <div className="stock-item my-1 d-flex justify-content-between align-items-center">
-        {/* success */}
-        {/* <p class="text-success fw-bold">
-            <i style="color: #198754;" class="fa-regular fa-circle-check"></i> In stock
-          </p> */}
-        {/* danger */}
-        <p className="text-danger fw-bold">
-          <i
-            style={{ color: "#dc3545" }}
-            className="fa-regular fa-circle-xmark me-1"
-          />
-          Out of stock
-        </p>
+        {is_stock ? (
+          <p className="text-success fw-bold m-0">
+            <i
+              style={{ color: "#198754" }}
+              className="fa-regular fa-circle-check me-1"
+            />
+            In stock
+          </p>
+        ) : (
+          <p className="text-danger fw-bold mb-0">
+            <i
+              style={{ color: "#dc3545" }}
+              className="fa-regular fa-circle-xmark me-1 "
+            />
+            Out of stock
+          </p>
+        )}
+
         <div className="heart-icon py-1 mx-2">
           <i className="fa-regular fa-heart fa-2xl me-1" />
         </div>

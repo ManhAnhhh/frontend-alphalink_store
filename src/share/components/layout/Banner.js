@@ -27,28 +27,28 @@ const Banner = () => {
             <Slider {...settings}>
               <div>
                 <img
-                  src="./img/banner-1.jpg"
+                  src="/img/banner-1.jpg"
                   className="d-block w-100"
                   alt="..."
                 />
               </div>
               <div>
                 <img
-                  src="./img/banner-2.jpg"
+                  src="/img/banner-2.jpg"
                   className="d-block w-100"
                   alt="..."
                 />
               </div>
               <div>
                 <img
-                  src="./img/banner-3.jpg"
+                  src="/img/banner-3.jpg"
                   className="d-block w-100"
                   alt="..."
                 />
               </div>
               <div>
                 <img
-                  src="./img/banner-4.jpg"
+                  src="/img/banner-4.jpg"
                   className="d-block w-100"
                   alt="..."
                 />
@@ -57,10 +57,10 @@ const Banner = () => {
           </div>
           <div className="sub-carousel col-lg-4 col-sm-12 d-flex flex-lg-column mt-4 mt-lg-0">
             <div>
-              <img src="./img/banner-sub1.png" alt="ac" />
+              <img src="/img/banner-sub1.png" alt="ac" />
             </div>
             <div>
-              <img src="./img/banner-sub2.png" alt="ac" />
+              <img src="/img/banner-sub2.png" alt="ac" />
             </div>
           </div>
         </div>

@@ -1,5 +1,17 @@
 import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getCategories } from "../../../services/Api";
 const Navigation = () => {
+  const [categories, setCategories] = useState([]);
+  const [categoriesParent, setCategoriesParent] = useState([]);
+  useEffect(() => {
+    getCategories().then((res) => {
+      setCategoriesParent(
+        res.data.data.filter((cat) => cat.parent_id === null)
+      );
+      setCategories(res.data.data);
+    });
+  }, []);
   return (
     <nav className="navbar navbar-expand-lg">
       <div className="container-fluid">
@@ -18,111 +30,48 @@ const Navigation = () => {
                 Home
               </NavLink>
             </li>
-            <li className="nav-item rounded-pill fw-medium dropdown">
-              <span
-                className="nav-link dropdown-toggle"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Laptop
-              </span>
-              <ul className="dropdown-menu">
-                <li>
-                  <NavLink className="dropdown-item" to="/category">
-                    Apple
+            {categoriesParent.map((category) => {
+              return categories.some(
+                (cat) => category._id === cat.parent_id
+              ) ? (
+                <li
+                  key={category._id}
+                  className="nav-item rounded-pill fw-medium dropdown"
+                >
+                  <span
+                    className="nav-link dropdown-toggle text-capitalize"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {category.name}
+                  </span>
+                  <ul className="dropdown-menu">
+                    {categories
+                      .filter((cat) => category._id === cat.parent_id)
+                      .map((subCategory) => (
+                        <li key={subCategory._id}>
+                          <NavLink
+                            className="dropdown-item"
+                            to={`/category/${subCategory._id}`}
+                          >
+                            {subCategory.name}
+                          </NavLink>
+                        </li>
+                      ))}
+                  </ul>
+                </li>
+              ) : (
+                <li key={category._id} className="nav-item rounded-pill">
+                  <NavLink
+                    className="nav-link fw-medium text-capitalize"
+                    to={`/category/${category._id}`}
+                  >
+                    {category.name}
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink className="dropdown-item" to="/">
-                    ASUS
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="dropdown-item" to="/category">
-                    Dell
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="dropdown-item" to="/category">
-                    HP
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="dropdown-item" to="/category">
-                    Lenovo
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="dropdown-item" to="/category">
-                    Acer
-                  </NavLink>
-                </li>
-              </ul>
-            </li>
-            <li className="nav-item rounded-pill fw-medium dropdown">
-              <NavLink
-                className="nav-link dropdown-toggle"
-                to="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Phone
-              </NavLink>
-              <ul className="dropdown-menu">
-                <li>
-                  <NavLink className="dropdown-item" to="#">
-                    Apple
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="dropdown-item" to="#">
-                    OPPO
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="dropdown-item" to="#">
-                    IPhone
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="dropdown-item" to="#">
-                    Samsung
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="dropdown-item" to="#">
-                    Huawei
-                  </NavLink>
-                </li>
-              </ul>
-            </li>
-            <li className="nav-item rounded-pill">
-              <NavLink className="nav-link fw-medium" to="#">
-                Tablets
-              </NavLink>
-            </li>
-            <li className="nav-item rounded-pill">
-              <NavLink className="nav-link fw-medium" to="#">
-                Mouse
-              </NavLink>
-            </li>
-            <li className="nav-item rounded-pill">
-              <NavLink className="nav-link fw-medium" to="#">
-                Headphones
-              </NavLink>
-            </li>
-            <li className="nav-item rounded-pill">
-              <NavLink className="nav-link fw-medium" to="#">
-                Keyboards
-              </NavLink>
-            </li>
-            <li className="nav-item rounded-pill">
-              <NavLink className="nav-link fw-medium" to="#">
-                Smart Watches
-              </NavLink>
-            </li>
+              );
+            })}
           </ul>
         </div>
       </div>

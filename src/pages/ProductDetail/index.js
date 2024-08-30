@@ -1,7 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
+import { GetImageProduct, PopUp } from "../../share/utilities";
+import { getProductByID, getCategories } from "../../services/Api";
+import { useParams } from "react-router-dom";
 import Slider from "react-slick";
-import { CustomNextArrow, CustomePrevArrow } from "../../share/components/CustomArrowSlick";
+import {
+  CustomNextArrow,
+  CustomePrevArrow,
+} from "../../share/components/CustomArrowSlick";
 const ProductDetail = () => {
+  const [categories, setCategories] = useState([]);
+  const [colorChoosed, setColorChoosed] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [product, setProduct] = useState({});
+  const { id } = useParams();
+
+  //? config slick carousel
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
   let sliderRef1 = useRef(null);
@@ -13,17 +26,80 @@ const ProductDetail = () => {
 
   const settings = {
     infinite: true,
-    // speed: 2000,
-    // autoplaySpeed: 2000,
-    // autoplay: false,
+    speed: 2000,
+    autoplaySpeed: 2000,
+    autoplay: false,
     nextArrow: <CustomNextArrow />,
     prevArrow: <CustomePrevArrow />,
-  }
+  };
+  //? end config slick carousel
+
+  const handleColorsProduct = (index) => {
+    setColorChoosed(index);
+  };
+
+  const onBlurInput = (value) => {
+    if (Number(value) <= 0) {
+      PopUp({
+        type: "error",
+        content: "Quanttity must be greater than 1",
+      });
+      setQuantity(1);
+      return;
+    }
+    if (Number(value) > product.stock) {
+      PopUp({
+        type: "error",
+        content: `Quanttity must be less than ${product.stock}`,
+      });
+      setQuantity(product.stock);
+      return;
+    }
+  };
+
+  const handleQuantity = (state) => {
+    // state = 0 => decrease quantity
+    // state = 1 => increase quantity
+    if (state === 0) {
+      if (Number(quantity) === 1) {
+        PopUp({
+          type: "error",
+          content: "Quanttity must be greater than 1",
+        });
+        return;
+      }
+      setQuantity((prevQuantity) => Number(prevQuantity) - 1);
+    } else if (state === 1) {
+      if (Number(quantity) === product.stock) {
+        PopUp({
+          type: "error",
+          content: `Quanttity must be less than ${product.stock}`,
+        });
+        return;
+      }
+      setQuantity((prevQuantity) => Number(prevQuantity) + 1);
+    }
+  };
+
+  useEffect(() => {
+    getProductByID(id, {}).then(({ data }) => setProduct(data.data));
+  }, [id]);
+  useEffect(() => {
+    getCategories().then(({ data }) => setCategories(data.data));
+  }, [product.category_id]);
+  const category = categories.find((cat) => cat._id === product.category_id);
+  const categoryParent = categories.find(
+    (cat) => cat._id === category.parent_id
+  );
+
   return (
     <>
       <section className="breadcrumb-custom">
         <div className="container-fluid">
-          <p>home / laptop / Acer Aspire Go 15 Slim Laptop</p>
+          <p>
+            home / {categoryParent?.name ? `${categoryParent.name} / ` : ""}{" "}
+            {category?.name} / {product.name}
+          </p>
         </div>
       </section>
       <section id="product-details">
@@ -38,20 +114,12 @@ const ProductDetail = () => {
                     className="main-img"
                     {...settings}
                   >
-                    <div>
-                      <img src="./img/products/acer1.jpg" alt="acer" />
-                    </div>
-                    <div>
-                      <img src="./img/products/acer1_1.jpg" alt="acer" />
-                    </div>
-                    <div>
-                      <img src="./img/products/acer1_2.jpg" alt="acer" />
-                    </div>
-                    <div>
-                      <img src="./img/products/acer1_3.jpg" alt="acer" />
-                    </div>
+                    {product?.img?.map((item) => (
+                      <div key={item}>
+                        <img src={GetImageProduct(item)} alt={product.name} />
+                      </div>
+                    ))}
                   </Slider>
-
                   <hr />
                   <Slider
                     asNavFor={nav1}
@@ -62,73 +130,99 @@ const ProductDetail = () => {
                     className="sub-img mt-4"
                     {...settings}
                   >
-                    <div>
-                      <img className="img-fluid" src="./img/products/acer1_1.jpg" alt="acer" />
-                    </div>
-                    <div>
-                      <img className="img-fluid" src="./img/products/acer1_2.jpg" alt="acer" />
-                    </div>
-                    <div>
-                      <img className="img-fluid" src="./img/products/acer1_3.jpg" alt="acer" />
-                    </div>
+                    {product?.img?.map(
+                      (item, index) =>
+                        index !== 0 && (
+                          <div key={item}>
+                            <img
+                              src={GetImageProduct(item)}
+                              alt={product.name}
+                              className="img-fluid"
+                            />
+                          </div>
+                        )
+                    )}
                   </Slider>
                 </div>
               </div>
             </div>
             <div className="col-lg-8 col-md-7 col-12 mt-2 mt-md-0">
               <div className="content h-100 mt-4 mt-md-0">
-                <h2>Acer Aspire Go 15 Slim Laptop</h2>
+                <h2>{product.name}</h2>
                 <div className="review d-flex gap-4">
                   <div className="rate">
-                    <i className="fa fa-star text-warning" />
-                    <i className="fa fa-star text-warning" />
-                    <i className="fa fa-star text-warning" />
-                    <i className="fa fa-star text-warning" />
-                    <i className="fa-regular fa-star text-black-50" />
+                    {Array.from({ length: product.star }).map((e, i) => (
+                      <i key={i} className="fa fa-star text-warning" />
+                    ))}
+                    {Array.from({ length: 5 - product.star }).map((e, i) => (
+                      <i
+                        key={i + 100}
+                        className="fa-regular fa-star text-black-50"
+                      />
+                    ))}
                   </div>
-                  <div className="sold fw-bold">Sold: 2</div>
+                  <div className="sold fw-bold">Sold: {product.sold}</div>
                 </div>
                 <div className="price-item d-flex gap-4">
-                  <p className="discount text-secondary">$1000</p>
-                  <p className="price text-danger fw-bold">$1639</p>
+                  <p className="discount text-secondary text-decoration-line-through">
+                    {" "}
+                    $ {product.price}
+                  </p>
+                  <p className="price text-danger fw-bold">
+                    $ {product.price - (product.price * product.discount) / 100}
+                  </p>
                 </div>
                 {/* color */}
-                <div className="d-flex align-items-lg-center flex-wrap">
+                <div className="d-flex align-items-lg-center flex-wrap align-items-center">
                   <p className="me-2 mb-0">Color:</p>
                   <div className="d-flex flex-wrap">
-                    <button className="btn-color active my-2 my-lg-0">
-                      Black
-                    </button>
-                    <button className="btn-color my-2 my-lg-0">Blue</button>
-                    <button className="btn-color my-2 my-lg-0">White</button>
-                    <button className="btn-color my-2 my-lg-0">Yellow</button>
+                    {product?.color?.map((item, index) => (
+                      <button
+                        onClick={() => handleColorsProduct(index)}
+                        key={index}
+                        className={`btn-color my-2 my-lg-0 text-capitalize ${
+                          colorChoosed === index && "active"
+                        }`}
+                      >
+                        {item}
+                      </button>
+                    ))}
                   </div>
                 </div>
                 {/* quantity */}
                 <div className="quantity d-flex flex-wrap gap-2 gap-lg-5 align-items-center">
-                  <div>Quantity</div>
+                  <div className="m-0">Quantity</div>
                   <div className="d-flex number">
-                    <button>−</button>
-                    <input type="number" min={1} defaultValue={1} />
-                    <button>+</button>
+                    <button onClick={() => handleQuantity(0)}>−</button>
+                    <input
+                      type="number"
+                      min={1}
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                      onBlur={(e) => onBlurInput(e.target.value)}
+                    />
+                    <button onClick={() => handleQuantity(1)}>+</button>
                   </div>
-                  <div className="d-none d-lg-block my-1 d-flex justify-content-between align-items-center">
+                  <div className="my-1 d-flex justify-content-between align-items-center flex-wrap">
                     {/* success */}
-                    <p className="text-success fw-bold mb-0">
-                      <i
-                        style={{ color: "#198754" }}
-                        className="fa-regular fa-circle-check me-1 "
-                      />
-                      In stock
-                    </p>
-                    {/* danger */}
-                    {/* <p class="text-danger fw-bold">
-                <i
-                  style="color: #dc3545;"
-                  class="fa-regular fa-circle-xmark"
-                ></i>
-                Out of stock
-              </p> */}
+                    {product.is_stock ? (
+                      <p className="text-success fw-bold mb-0">
+                        <i
+                          style={{ color: "#198754" }}
+                          className="fa-regular fa-circle-check me-1 "
+                        />
+                        In stock: {product.stock}
+                      </p>
+                    ) : (
+                      /* danger */
+                      <p className="text-danger fw-bold m-0">
+                        <i
+                          style={{ color: "#dc3545" }}
+                          className="fa-regular fa-circle-xmark me-1"
+                        />
+                        Out of stock
+                      </p>
+                    )}
                   </div>
                 </div>
                 {/* add-to-cart */}
@@ -143,13 +237,7 @@ const ProductDetail = () => {
                   <p className="mb-2">
                     <b>Product details:</b>
                   </p>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Labore consequatur culpa, inventore at deserunt dicta
-                    sapiente fugiat, pariatur debitis quasi libero ipsa!
-                    Similique, aspernatur asperiores impedit eligendi fuga est
-                    recusandae.
-                  </p>
+                  <p>{product.product_details}</p>
                 </div>
               </div>
             </div>
@@ -159,7 +247,11 @@ const ProductDetail = () => {
                 <div className="comments">
                   <div className="item d-flex gap-3">
                     <div className="img-item">
-                      <img className="img-fluid" src="./img/linhh.png" alt="acer" />
+                      <img
+                        className="img-fluid"
+                        src=" /img/linhh.png"
+                        alt="acer"
+                      />
                     </div>
                     <div className="content-item w-100">
                       <p>
@@ -183,13 +275,21 @@ const ProductDetail = () => {
                         </p>
                       </div>
                       <div className="img-details">
-                        <img className="img-fluid" src="./img/linhh.png" alt="acer" />
+                        <img
+                          className="img-fluid"
+                          src=" /img/linhh.png"
+                          alt="acer"
+                        />
                       </div>
                     </div>
                   </div>
                   <div className="item d-flex gap-3">
                     <div className="img-item">
-                      <img className="img-fluid" src="./img/linhh.png" alt="acer" />
+                      <img
+                        className="img-fluid"
+                        src=" /img/linhh.png"
+                        alt="acer"
+                      />
                     </div>
                     <div className="content-item w-100">
                       <p>
@@ -213,7 +313,11 @@ const ProductDetail = () => {
                         </p>
                       </div>
                       <div className="img-details">
-                        <img className="img-fluid" src="./img/linhh.png" alt="acer" />
+                        <img
+                          className="img-fluid"
+                          src=" /img/linhh.png"
+                          alt="acer"
+                        />
                       </div>
                     </div>
                   </div>

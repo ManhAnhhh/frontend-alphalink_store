@@ -20,10 +20,6 @@
   border-right: 2px solid var(--border-color);
 }
 
-#product-details .content .price-item .discount {
-  text-decoration: line-through;
-}
-
 #product-details .content .btn-color {
   padding: 4px 16px;
   margin: 0 8px;

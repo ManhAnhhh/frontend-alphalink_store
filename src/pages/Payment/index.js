@@ -79,7 +79,7 @@ const Payment = () => {
                       <div className="img-item">
                         <img
                           className="img-fluid"
-                          src="./img/products/acer1.jpg"
+                          src=" /img/products/acer1.jpg"
                           alt = "acer"
                         />
                       </div>
@@ -122,7 +122,7 @@ const Payment = () => {
                       <div className="img-item">
                         <img
                           className="img-fluid"
-                          src="./img/products/acer1.jpg"
+                          src=" /img/products/acer1.jpg"
                           alt = "acer"
                         />
                       </div>

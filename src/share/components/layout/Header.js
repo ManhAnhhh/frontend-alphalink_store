@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <header >
@@ -23,13 +24,13 @@ const Header = () => {
         <div className="container-fluid py-4">
           <div className="row align-items-end">
             <div className="logo-top col-lg-4 col-md-12 col-sm-12 text-center text-lg-start mb-4 mb-lg-0">
-              <a href="./home.html">
+              <Link to="/">
                 <img
                   className="img-fluid"
-                  src="./img/logo-top.png"
+                  src="/img/logo-top.png"
                   alt="logo-top"
                 />
-              </a>
+              </Link>
             </div>
             <div className="search-box col-lg-5 col-md-6 col-sm-12 mb-4 mb-md-0 d-flex justify-content-center">
               <input
