@@ -1,6 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import { PopUp } from "../../share/utilities";
 import { useState, useRef } from "react";
+import { registerCustomer } from "../../services/Api";
 const Register = () => {
   const inputRef = useRef(null);
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Register = () => {
     if (fullName === "") {
       PopUp({
         type: "error",
-        content: "Full Name is required",
+        content: "Username is required",
       });
       setObjectInputs({ ...defaultObjectInputs, isValidFullName: false });
       inputRef.current.focus();
@@ -101,11 +102,25 @@ const Register = () => {
   const handleRegister = (e) => {
     e.preventDefault();
     if (!isValidateField()) return;
-    PopUp({
-      type: "success",
-      content: "Register successfully",
-    });
-    navigate("/login");
+
+    const data = { fullName, email, phone, password };
+    registerCustomer(data)
+      .then((res) => {
+        // console.log(res);
+        PopUp({
+          type: "success",
+          content: res.data.message,
+        });
+        navigate("/login");
+      })
+      .catch((err) => {
+        // console.log(err);
+        PopUp({
+          type: "error",
+          content: err.response.data.message,
+        });
+      });
+
   };
   return (
     <div className="container" id="auth-container">
