@@ -3,19 +3,19 @@ const Footer = () => {
     <footer className="pt-4">
       <section className="support d-flex flex-wrap gap-4 justify-content-center align-items-center my-4">
         <div className="text-uppercase">
-          <i className="fa-solid fa-circle-check fa-2xl text-primary" /> 
+          <i className="fa-solid fa-circle-check fa-2xl text-primary me-1" /> 
           genuine product
         </div>
         <div className="text-uppercase">
-          <i className="fa-solid fa-cart-shopping fa-2xl text-primary" /> 
+          <i className="fa-solid fa-cart-shopping fa-2xl text-primary me-1" /> 
           free shipping
         </div>
         <div className="text-uppercase">
-          <i className="fa-solid fa-phone-volume fa-2xl text-primary" /> 
+          <i className="fa-solid fa-phone-volume fa-2xl text-primary me-1" /> 
           1900.1502
         </div>
         <div className="text-uppercase">
-          <i className="fa-solid fa-arrows-rotate fa-2xl text-primary" /> 
+          <i className="fa-solid fa-arrows-rotate fa-2xl text-primary me-1" /> 
           easy return
         </div>
       </section>

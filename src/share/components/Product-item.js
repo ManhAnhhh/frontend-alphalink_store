@@ -1,28 +1,40 @@
 import {GetImageProduct} from "../utilities";
 import { Link } from "react-router-dom";
 const ProductItem = (props) => {
-  const {_id: id, name, accessories, price, discount, star, sold, img, is_stock } =
-    props.product;
+  const {
+    _id: id,
+    name,
+    accessories,
+    price,
+    discount,
+    star,
+    sold,
+    img,
+    is_stock,
+  } = props.product;
   return (
     <>
       <div className="discount-percent">
         <p className="fs-14">{`-${discount}%`}</p>
       </div>
       <div className="img-item">
-        <Link to={`/product-detail/${id}`}>
-          <img src={GetImageProduct(img[0])} alt={name} />
-        </Link>
+        <img src={GetImageProduct(img[0])} alt={name} />
       </div>
-      <h5 className="name-item pt-2">{name}</h5>
+      <h5 className="name-item pt-2">
+        <Link to={`/product-detail/${id}`} className="text-decoration-none">
+          {name}
+        </Link>
+      </h5>
+
       <div className="desc-item fs-12">
         <p>{accessories}</p>
       </div>
       <div className="review d-flex justify-content-between my-1">
         <div className="rate">
-          {Array.from({ length: star }).map((e,i) => (
+          {Array.from({ length: star }).map((e, i) => (
             <i key={i} className="fa fa-star text-warning" />
           ))}
-          {Array.from({ length: 5 - star}).map((e,i) => (
+          {Array.from({ length: 5 - star }).map((e, i) => (
             <i key={i + 100} className="fa-regular fa-star text-black-50" />
           ))}
         </div>

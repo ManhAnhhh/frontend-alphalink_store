@@ -1,14 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
-import { GetImageProduct, PopUp } from "../../share/utilities";
-import { getProductByID, getCategories } from "../../services/Api";
+import {
+  GetImageProduct,
+  GetImageCustomer,
+  GetImageProductReview,
+  PopUp,
+  convertDate,
+} from "../../share/utilities";
+import {
+  getProductByID,
+  getCategories,
+  getCommentsByIdProduct,
+} from "../../services/Api";
 import { useParams } from "react-router-dom";
 import Slider from "react-slick";
 import { CustomNextArrow, CustomePrevArrow } from "../../share/utilities";
+
 const ProductDetail = () => {
   const [categories, setCategories] = useState([]);
   const [colorChoosed, setColorChoosed] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState({});
+  const [comments, setComments] = useState([]);
   const { id } = useParams();
 
   //? config slick carousel
@@ -52,6 +64,7 @@ const ProductDetail = () => {
       setQuantity(product.stock);
       return;
     }
+    setQuantity(Number(value));
   };
 
   const handleQuantity = (state) => {
@@ -80,7 +93,9 @@ const ProductDetail = () => {
 
   useEffect(() => {
     getProductByID(id, {}).then(({ data }) => setProduct(data.data));
+    getCommentsByIdProduct(id).then(({ data }) => setComments(data.data));
   }, [id]);
+
   useEffect(() => {
     getCategories().then(({ data }) => setCategories(data.data));
   }, [product.category_id]);
@@ -149,7 +164,7 @@ const ProductDetail = () => {
                 <div className="review d-flex gap-4">
                   <div className="rate">
                     {Array.from({ length: product.star }).map((e, i) => (
-                      <i key={i} className="fa fa-star text-warning" />
+                      <i key={i + 10} className="fa fa-star text-warning" />
                     ))}
                     {Array.from({ length: 5 - product.star }).map((e, i) => (
                       <i
@@ -162,7 +177,6 @@ const ProductDetail = () => {
                 </div>
                 <div className="price-item d-flex gap-4">
                   <p className="discount text-secondary text-decoration-line-through">
-                    {" "}
                     $ {product.price}
                   </p>
                   <p className="price text-danger fw-bold">
@@ -201,8 +215,8 @@ const ProductDetail = () => {
                     <button onClick={() => handleQuantity(1)}>+</button>
                   </div>
                   <div className="my-1 d-flex justify-content-between align-items-center flex-wrap">
-                    {/* success */}
                     {product.is_stock ? (
+                      /* success */
                       <p className="text-success fw-bold mb-0">
                         <i
                           style={{ color: "#198754" }}
@@ -242,117 +256,104 @@ const ProductDetail = () => {
               <div id="reviews">
                 <p className="title text-uppercase">PRODUCT REVIEWS</p>
                 <div className="comments">
-                  <div className="item d-flex gap-3">
-                    <div className="img-item">
-                      <img
-                        className="img-fluid"
-                        src=" /img/linhh.png"
-                        alt="acer"
-                      />
+                  {comments.length === 0 ? (
+                    <div className="text-center no-comment">
+                      <p className="py-2 m-0">No customer reviews</p>
                     </div>
-                    <div className="content-item w-100">
-                      <p>
-                        <strong>Manh Anh</strong>
-                      </p>
-                      <div className="rate">
-                        <i className="fa fa-star text-warning" />
-                        <i className="fa fa-star text-warning" />
-                        <i className="fa fa-star text-warning" />
-                        <i className="fa fa-star text-warning" />
-                        <i className="fa-regular fa-star text-black-50" />
+                  ) : (
+                    comments.map((comment) => {
+                      return (
+                        <div key={comment._id} className="item d-flex gap-3">
+                          <div>
+                            <div className="img-item">
+                              <img
+                                src={GetImageCustomer(comment.picture)}
+                                alt={GetImageCustomer(comment.picture)}
+                              />
+                            </div>
+                          </div>
+                          <div className="content-item w-100">
+                            <p className="m-0">
+                              <strong>{comment.fullName}</strong>
+                            </p>
+                            <div className="rate">
+                              {Array.from({ length: comment.star }).map(
+                                (e, i) => (
+                                  <i
+                                    key={i * Math.random()}
+                                    className="fa fa-star text-warning"
+                                  />
+                                )
+                              )}
+                              {Array.from({ length: 5 - comment.star }).map(
+                                (e, i) => (
+                                  <i
+                                    key={(i + 100) * Math.random()}
+                                    className="fa-regular fa-star text-black-50"
+                                  />
+                                )
+                              )}
+                            </div>
+                            <div className="date fs-12">
+                              {convertDate(comment.createdAt)}
+                            </div>
+                            <div className="text">
+                              <p className="fs-14">{comment.content}</p>
+                            </div>
+                            <div className="d-flex gap-2">
+                              {comment.product_review_images.map((item) => (
+                                <div className="img-details">
+                                  <img
+                                    className="img-fluid"
+                                    src={GetImageProductReview(item)}
+                                    alt={GetImageProductReview(item)}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+
+                  {comments.length !== 0 && (
+                    <div
+                      id="pagination"
+                      className="d-flex justify-content-center align-items-center"
+                    >
+                      <div className="pagination-item">
+                        <a href="#">
+                          <i
+                            className="fa-solid fa-chevron-left"
+                            aria-hidden="true"
+                          />
+                        </a>
                       </div>
-                      <div className="date fs-14">06 / 08 / 2024</div>
-                      <div className="text">
-                        <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Totam laboriosam quaerat, quibusdam nulla
-                          accusantium, nobis sed architecto magni ullam earum
-                          repellendus amet perspiciatis repudiandae molestiae
-                          minus non autem error. Exercitationem!
-                        </p>
+                      <div className="pagination-item">
+                        <a href="#">1</a>
                       </div>
-                      <div className="img-details">
-                        <img
-                          className="img-fluid"
-                          src=" /img/linhh.png"
-                          alt="acer"
-                        />
+                      <div className="pagination-item">
+                        <a href="#">2</a>
                       </div>
-                    </div>
-                  </div>
-                  <div className="item d-flex gap-3">
-                    <div className="img-item">
-                      <img
-                        className="img-fluid"
-                        src=" /img/linhh.png"
-                        alt="acer"
-                      />
-                    </div>
-                    <div className="content-item w-100">
-                      <p>
-                        <strong>Manh Anh</strong>
-                      </p>
-                      <div className="rate">
-                        <i className="fa fa-star text-warning" />
-                        <i className="fa fa-star text-warning" />
-                        <i className="fa fa-star text-warning" />
-                        <i className="fa fa-star text-warning" />
-                        <i className="fa-regular fa-star text-black-50" />
+                      <div className="pagination-item">...</div>
+                      <div className="pagination-item">
+                        <a href="#">3</a>
                       </div>
-                      <div className="date fs-14">06 / 08 / 2024</div>
-                      <div className="text">
-                        <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Totam laboriosam quaerat, quibusdam nulla
-                          accusantium, nobis sed architecto magni ullam earum
-                          repellendus amet perspiciatis repudiandae molestiae
-                          minus non autem error. Exercitationem!
-                        </p>
+                      <div className="pagination-item">
+                        <a href="#">4</a>
                       </div>
-                      <div className="img-details">
-                        <img
-                          className="img-fluid"
-                          src=" /img/linhh.png"
-                          alt="acer"
-                        />
+                      <div className="pagination-item">
+                        <a href="#">
+                          {" "}
+                          <i
+                            className="fa-solid fa-chevron-right"
+                            aria-hidden="true"
+                          />
+                        </a>
                       </div>
                     </div>
-                  </div>
-                  <div
-                    id="pagination"
-                    className="d-flex justify-content-center align-items-center"
-                  >
-                    <div className="pagination-item">
-                      <a href="#">
-                        <i
-                          className="fa-solid fa-chevron-left"
-                          aria-hidden="true"
-                        />
-                      </a>
-                    </div>
-                    <div className="pagination-item">
-                      <a href="#">1</a>
-                    </div>
-                    <div className="pagination-item">
-                      <a href="#">2</a>
-                    </div>
-                    <div className="pagination-item">...</div>
-                    <div className="pagination-item">
-                      <a href="#">3</a>
-                    </div>
-                    <div className="pagination-item">
-                      <a href="#">4</a>
-                    </div>
-                    <div className="pagination-item">
-                      <a href="#">
-                        {" "}
-                        <i
-                          className="fa-solid fa-chevron-right"
-                          aria-hidden="true"
-                        />
-                      </a>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

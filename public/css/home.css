@@ -182,24 +182,29 @@ nav {
   background-color: var(--light-color);
 }
 
-.nav-item:hover>a {
+.nav-item:hover>a,
+.nav-item:hover>span {
   color: var(--main-color) !important;
 }
 
-.nav-item:hover {
-  background: #e5f1fe;
-  box-shadow: 0px 8px 24px 0px rgba(0, 41, 87, 0.1);
+@media (min-width: 992px) {
+  .nav-item:hover {
+    background: #e5f1fe;
+    box-shadow: 0px 8px 24px 0px rgba(0, 41, 87, 0.1);
+  }
 }
+
 
 .nav-link {
   padding: 8px 16px !important;
   border-radius: var(--radius-l);
 }
+
 .nav-link.active {
   background: #e5f1fe;
   box-shadow: 0px 8px 24px 0px rgba(0, 41, 87, 0.1);
   color: var(--main-color) !important;
-  
+
 }
 
 .nav-link.active>a {
@@ -212,6 +217,7 @@ nav {
 main #banner {
   margin: 8px 0;
 }
+
 main #banner .carousel-item img {
   height: 100%;
   aspect-ratio: 1200 / 375;
@@ -229,6 +235,7 @@ main #banner .sub-carousel div img {
 main #banner img {
   border-radius: var(--radius-m);
 }
+
 /*! end-banner */
 
 /*! adv */
@@ -243,7 +250,7 @@ main #banner img {
 
 /*! end-adv */
 
-main{
+main {
   margin: 8px 0;
 }
 
@@ -278,10 +285,15 @@ main{
   border-radius: var(--radius-m);
 }
 
+#best-seler .slick-carousel .name-item a,
+#feature-products .name-item a {
+  color: var(--dark-color);
+}
+
 #best-seler .slick-carousel .name-item,
 #best-seler .slick-carousel .desc-item p,
 #feature-products .name-item,
-#feature-products .name-item #feature-products .desc-item p {
+#feature-products .desc-item p {
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -291,8 +303,8 @@ main{
   cursor: pointer;
 }
 
-#best-seler .slick-carousel .name-item:hover,
-#feature-products .name-item:hover {
+#best-seler .slick-carousel .name-item:hover a,
+#feature-products .name-item:hover a {
   color: var(--btn-hover);
   transition: color 0.2s linear;
 }
@@ -306,7 +318,6 @@ main{
 #feature-products .img-item img {
   width: 100%;
   aspect-ratio: 679/486;
-  cursor: pointer;
 }
 
 /* Zoom-in on hover */
@@ -412,14 +423,16 @@ footer .logo-footer {
 .slick-slider .slick-arrow {
   border-radius: 50%;
   transition: all 0.2s ease;
-  
-  
+
+
 }
+
 .slick-slider .slick-prev {
   z-index: 2;
   left: 0;
 
 }
+
 .slick-slider .slick-next {
   right: 0;
 }
