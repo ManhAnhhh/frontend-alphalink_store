@@ -1,9 +1,9 @@
 import { PopUp } from "../../share/utilities";
 import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { loginCustomer } from "../../services/Api";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, loginFalse } from "../../redux/reducers/auth";
 const Login = () => {
   const dispatch = useDispatch();
@@ -17,6 +17,14 @@ const Login = () => {
   };
   const [objectInputs, setObjectInputs] = useState(defaultObjectInputs);
   const navigate = useNavigate();
+  
+  const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn)
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+      return;
+    }
+  },[navigate, isLoggedIn])
 
   const isValidField = () => {
     setObjectInputs(defaultObjectInputs);

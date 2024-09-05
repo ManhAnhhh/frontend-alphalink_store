@@ -1,4 +1,15 @@
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 const Payment = () => {
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/");
+      return;
+    }
+  }, [navigate, isLoggedIn]);
   return (
     <section id="payment">
       <div className="container-fluid">
@@ -80,7 +91,7 @@ const Payment = () => {
                         <img
                           className="img-fluid"
                           src=" /img/products/acer1.jpg"
-                          alt = "acer"
+                          alt="acer"
                         />
                       </div>
                       <div>
@@ -123,7 +134,7 @@ const Payment = () => {
                         <img
                           className="img-fluid"
                           src=" /img/products/acer1.jpg"
-                          alt = "acer"
+                          alt="acer"
                         />
                       </div>
                       <div>

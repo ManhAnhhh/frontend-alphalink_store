@@ -13,7 +13,6 @@ const Header = () => {
     navigate("/login");
   };
   const customer = useSelector((state) => state.auth.login.currentCustomer);
-  console.log(customer);
   const handleLogout = () => {
     dispatch(loggedOut());
     PopUp({

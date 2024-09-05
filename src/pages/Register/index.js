@@ -1,7 +1,8 @@
 import { useNavigate, Link } from "react-router-dom";
 import { PopUp } from "../../share/utilities";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { registerCustomer } from "../../services/Api";
+import { useSelector } from "react-redux";
 const Register = () => {
   const inputRef = useRef(null);
   const navigate = useNavigate();
@@ -99,6 +100,15 @@ const Register = () => {
     }
     return true;
   };
+
+  const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+      return;
+    }
+  }, [navigate, isLoggedIn]);
+
   const handleRegister = (e) => {
     e.preventDefault();
     if (!isValidateField()) return;
@@ -120,7 +130,6 @@ const Register = () => {
           content: err.response.data.message,
         });
       });
-
   };
   return (
     <div className="container" id="auth-container">
