@@ -13,5 +13,5 @@ export const getCategory = (id, config) => Http.get(`categories/${id}`, config);
 export const registerCustomer = (config) =>
   Http.post("customers/register", config);
 export const loginCustomer = (config) => Http.post("customers/login", config);
-
+export const getCustomers = (config) => Http.get("customers", config);
 

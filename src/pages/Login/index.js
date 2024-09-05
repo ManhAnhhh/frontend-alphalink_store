@@ -2,9 +2,15 @@ import { PopUp } from "../../share/utilities";
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import { loginCustomer } from "../../services/Api";
+
+import { useDispatch } from "react-redux";
+import { loginSuccess, loginFalse } from "../../redux/reducers/auth";
 const Login = () => {
+  const dispatch = useDispatch();
+
   const [emailLogin, setEmailLogin] = useState("");
   const [passwordLogin, setPasswordLogin] = useState("");
+
   const defaultObjectInputs = {
     isValidEmail: true,
     isValidPassword: true,
@@ -45,10 +51,17 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!isValidField()) return;
+
     const data = { email: emailLogin, password: passwordLogin };
     loginCustomer(data)
       .then((res) => {
-        // console.log(res);
+        dispatch(
+          loginSuccess({
+            email: res.data.data.email,
+            fullName: res.data.data.fullName,
+            phone: res.data.data.phone,
+          })
+        );
         PopUp({
           type: "success",
           content: res.data.message,
@@ -57,6 +70,7 @@ const Login = () => {
       })
       .catch((err) => {
         // console.log(err);
+        dispatch(loginFalse());
         PopUp({
           type: "error",
           content: err.response.data.message,

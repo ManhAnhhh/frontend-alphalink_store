@@ -121,6 +121,36 @@ header,
   font-size: clamp(0.875rem, 2vw + 0.5rem, 1rem);
   margin: 0 !important;
 }
+#helper .full-name {
+  cursor: pointer;
+}
+#helper .full-name:hover .sub-menu{
+  display: block;
+}
+
+#helper .full-name .sub-menu {
+  background-color: var(--light-color);
+  display: none;
+  list-style-type: none;
+  z-index: 9999999;
+  border-radius: var(--radius-m);
+}
+
+#helper .full-name .sub-menu li:hover a {
+  background-color: var(--border-color);
+  color: var(--main-color)
+}
+
+#helper .full-name .sub-menu>li>a {
+  display: inline-block;
+  min-width: 200px;
+  transition: color 0.2s ease-in-out;
+  border-radius: var(--radius-m);
+  padding: 8px 4px;
+  color: var(--dark-color);
+  text-decoration: none;
+}
+
 
 #main-header #search {
   width: 100%;
