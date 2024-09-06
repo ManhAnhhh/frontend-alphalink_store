@@ -30,7 +30,7 @@ const Footer = () => {
               />
             </div>
             <div className="col-lg-3 col-md-6 col-sm-6">
-              <div className="text-uppercase fs-5 fw-bold">Contact us</div>
+              <div className="title text-uppercase fs-5 fw-bold">Contact us</div>
               <ul>
                 <li className="fs-14">
                   <i className="fa-solid fa-location-dot fa-xl text-white me-2" />
@@ -47,7 +47,7 @@ const Footer = () => {
               </ul>
             </div>
             <div className="col-lg-3 col-md-6 col-sm-6 ps-lg-4">
-              <div className="text-uppercase fs-5 fw-bold">Social Network</div>
+              <div className="title text-uppercase fs-5 fw-bold">Social Network</div>
               <ul>
                 <li className="fs-14">
                   <i className="fa-brands fa-facebook fa-xl text-white me-1" />
@@ -64,7 +64,7 @@ const Footer = () => {
               </ul>
             </div>
             <div className="col-lg-3 col-md-6 col-sm-6">
-              <div className="text-uppercase fs-5 fw-bold">
+              <div className="title text-uppercase fs-5 fw-bold">
                 Support - Services
               </div>
               <ul>

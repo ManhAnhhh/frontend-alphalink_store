@@ -5,6 +5,7 @@ export const getProductsByCategory = (id, config) =>
   Http.get(`categories/${id}/products`, config);
 export const getProductByID = (id, config) =>
   Http.get(`products/${id}`, config);
+export const getProductsByCategoryName = (id, config) => Http.get(`products/category/${id}`);
 export const getCommentsByIdProduct = (id, config) => Http.get(`products/${id}/comments`, config);
 
 export const getCategories = (config) => Http.get("categories", config);

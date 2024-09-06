@@ -2,8 +2,15 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loggedOut } from "../../../redux/reducers/auth";
-import { PopUp } from "../../utilities";
+import { GetImageProduct, PopUp } from "../../utilities";
+import { useState, useEffect, useRef } from "react";
+import { getProducts } from "../../../services/Api";
 const Header = () => {
+  const suggestBoxRef = useRef(null);
+  const [keyword, setKeyword] = useState("");
+  const [products, setProducts] = useState([]);
+  const [searchProducts, setSearchProducts] = useState([]);
+  const [isShowSuggestBox, setIsShowSuggestBox] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const register = () => {
@@ -20,6 +27,70 @@ const Header = () => {
       content: "Logout successfully",
     });
   };
+
+  useEffect(() => {
+    getProducts().then(({ data }) => setProducts(data.data));
+  }, [keyword]);
+
+  useEffect(() => {
+    // Lắng nghe sự kiện nhấp chuột toàn trang
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      // Gỡ sự kiện khi component bị hủy
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleOnClickProduct = (product) => {
+    navigate(`/product-detail/${product._id}`, {
+      state: { product },
+    });
+    setIsShowSuggestBox(false);
+    // setKeyword("");
+  };
+  const handleInput = (value) => {
+    setKeyword(value);
+    if (value === "" || value === " ") {
+      setIsShowSuggestBox(false);
+      return;
+    }
+    const isProduct = products.some((product) =>
+      product.name.toLowerCase().includes(value.toLowerCase())
+    );
+    if (isProduct) {
+      setIsShowSuggestBox(true);
+      setSearchProducts(() => {
+        const results = products.filter((product) =>
+          product.name.toLowerCase().includes(value.toLowerCase())
+        );
+        return results.sort((a, b) => b.sold - a.sold);
+      });
+    } else {
+      setIsShowSuggestBox(false);
+    }
+  };
+
+  const searchItems = (e) => {
+    e.preventDefault();
+    setIsShowSuggestBox(false);
+    return navigate(`/search?keyword=${keyword}`);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setIsShowSuggestBox(false);
+      return navigate(`/search?keyword=${keyword}`);
+    }
+  };
+
+  const handleClickOutside = (e) => {
+    // Kiểm tra xem có click ra ngoài suggest-search hay không
+    if (suggestBoxRef.current && !suggestBoxRef.current.contains(e.target)) {
+      setIsShowSuggestBox(false); // Ẩn hộp gợi ý khi bấm ra ngoài
+    }
+  };
+
   return (
     <header>
       <section id="helper">
@@ -38,8 +109,10 @@ const Header = () => {
                     customer.fullName.lastIndexOf(" ") + 1
                   )}
                 </span>
-                <span className="d-none d-sm-inline-block">Hello, {customer.fullName} </span>
-                
+                <span className="d-none d-sm-inline-block">
+                  Hello, {customer.fullName}{" "}
+                </span>
+
                 <i className="fa-solid fa-chevron-down fa-2xs ms-1" />
               </p>
 
@@ -72,17 +145,60 @@ const Header = () => {
                 />
               </Link>
             </div>
-            <div className="search-box col-lg-5 col-md-6 col-sm-12 mb-4 mb-md-0 d-flex justify-content-center">
+            <div className="search-box position-relative col-lg-5 col-md-6 col-sm-12 mb-4 mb-md-0 d-flex justify-content-center">
               <input
+                value={keyword}
                 id="search"
                 className="input py-2 px-3"
                 type="search"
                 name="search"
                 placeholder="Search . . ."
+                onChange={(e) => handleInput(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
-              <button id="btn-search" className="py-1 btn-custom" type="button">
+              <button
+                id="btn-search"
+                className="py-1 btn-custom"
+                type="button"
+                onClick={searchItems}
+              >
                 Search
               </button>
+              {isShowSuggestBox && (
+                <div id="suggest-search" className="position-absolute" ref={suggestBoxRef}>
+                  {searchProducts.map((product, index) => {
+                    return (
+                      index < 5 && (
+                        <div
+                          key={product._id}
+                          className="item d-flex gap-2"
+                          onClick={() => handleOnClickProduct(product)}
+                        >
+                          <div className="img-item d-flex align-items-center">
+                            <img
+                              src={GetImageProduct(product.img[0])}
+                              alt={GetImageProduct(product.img[0])}
+                            />
+                          </div>
+                          <div className="info-item w-100">
+                            <p className="m-0 fw-bold">{product.name}</p>
+                            <p className="m-0 fs-14">
+                              <span className="text-decoration-line-through me-2">
+                                $ {product.price}
+                              </span>
+                              <span className="text-danger fw-bold">
+                                ${" "}
+                                {product.price -
+                                  (product.price * product.discount) / 100}
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      )
+                    );
+                  })}
+                </div>
+              )}
             </div>
             <div className="col-lg-3 col-md-6 col-sm-12 icon-home d-flex gap-4 justify-content-center">
               {customer ? (

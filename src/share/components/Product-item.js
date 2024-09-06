@@ -1,4 +1,4 @@
-import {GetImageProduct} from "../utilities";
+import { GetImageProduct } from "../utilities";
 import { Link } from "react-router-dom";
 const ProductItem = (props) => {
   const {
@@ -14,9 +14,8 @@ const ProductItem = (props) => {
   } = props.product;
   return (
     <>
-      <div className="discount-percent">
-        <p className="fs-14">{`-${discount}%`}</p>
-      </div>
+      <p className="fs-14 discount-percent">{`-${discount}%`}</p>
+
       <div className="img-item">
         <img src={GetImageProduct(img[0])} alt={name} />
       </div>
