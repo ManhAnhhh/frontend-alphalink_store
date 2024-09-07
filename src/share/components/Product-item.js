@@ -17,7 +17,9 @@ const ProductItem = (props) => {
       <p className="fs-14 discount-percent">{`-${discount}%`}</p>
 
       <div className="img-item">
-        <img src={GetImageProduct(img[0])} alt={name} />
+        <Link to={`/product-detail/${id}`} className="text-decoration-none text-center">
+          <img src={GetImageProduct(img[0])} alt={name} />
+        </Link>
       </div>
       <h5 className="name-item pt-2">
         <Link to={`/product-detail/${id}`} className="text-decoration-none">

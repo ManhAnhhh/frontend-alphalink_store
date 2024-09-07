@@ -6,19 +6,82 @@ import {
   getCategory,
   getProductsByCategory,
 } from "../../services/Api";
+import { PopUp } from "../../share/utilities";
 const Category = () => {
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const [isCollapsedFilters, setIsCollapsedFilters] = useState(false);
   const [category, setCategory] = useState("");
   const [productsByCategory, setProductsByCategory] = useState([]);
+  const [highestPrice, setHighestPrice] = useState(0);
   const [categories, setCategories] = useState([]);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
+
+  const handleMinPriceChange = (value) => {
+    setMinPrice(value);
+  };
+  const handleMaxPriceChange = (value) => {
+    setMaxPrice(value);
+  };
   const handleFilters = () => {
     setIsCollapsedFilters(!isCollapsedFilters);
   };
-
+  const checkPrice = () => {
+    const min = Number(minPrice);
+    const max = Number(maxPrice);
+    if (min === 0 || max === 0) {
+      PopUp({
+        type: "error",
+        content: "Please select a price",
+      });
+      return false;
+    }
+    if (Number.isNaN(min) || Number.isNaN(max)) {
+      PopUp({
+        type: "error",
+        content: "Value must be a number",
+      });
+      return false;
+    }
+    if (min < 0) {
+      setMinPrice(0);
+      PopUp({
+        type: "error",
+        content: "Value must be more than 0",
+      });
+      return false;
+    }
+    if (max > highestPrice) {
+      setMaxPrice(highestPrice);
+      PopUp({
+        type: "error",
+        content: `Value must be less than ${highestPrice}`,
+      });
+      return false;
+    }
+    if (min > max) {
+      PopUp({
+        type: "error",
+        content: `Invalid value`,
+      });
+      return false;
+    }
+    return true;
+  };
+  const handleApplyPrice = (e) => {
+    e.preventDefault();
+    if (!checkPrice()) return;
+    setProductsByCategory((prev) => {
+      return prev.filter(
+        (product) =>
+          product.price - (product.price * product.dicount) / 100 <= maxPrice &&
+          product.price - (product.price * product.dicount) / 100 >= minPrice
+      );
+    });
+  };
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -43,21 +106,36 @@ const Category = () => {
   useEffect(() => {
     getCategory(id, {}).then(({ data }) => setCategory(data.data));
 
-    getProductsByCategory(id).then(({ data }) =>
-      setProductsByCategory(data.data)
-    );
+    getProductsByCategory(id).then(({ data }) => {
+      setProductsByCategory(data.data);
+      setHighestPrice(() =>
+        data.data.reduce(
+          (a, b, index, arr1) =>
+            a < b.price - (b.price * b.discount) / 100
+              ? b.price - (b.price * b.discount) / 100
+              : a,
+          data.data[0].price -
+            (data.data[0].price * data.data[0].discount) / 100
+        )
+      );
+    });
   }, [id]);
 
   useEffect(() => {
     getCategories().then(({ data }) => setCategories(data.data));
   }, []);
-  
-  const categoryParent = categories.find(cat => cat._id === category.parent_id)
+
+  const categoryParent = categories.find(
+    (cat) => cat._id === category.parent_id
+  );
+
   return (
     <>
       <section className="breadcrumb-custom">
         <div className="container-fluid">
-          <p>{`home / ${categoryParent?.name ? `${categoryParent.name} / ` : ''}${category.name} (${productsByCategory.length}) products`}</p>
+          <p>{`home / ${
+            categoryParent?.name ? `${categoryParent.name} / ` : ""
+          }${category.name} (${productsByCategory.length}) products`}</p>
         </div>
       </section>
       <section id="category">
@@ -120,32 +198,46 @@ const Category = () => {
                           id="type-currency"
                           className="me-0 me-md-auto"
                         >
-                          <option value="vnd">VND</option>
                           <option value="dollar">$</option>
+                          <option value="vnd">VND</option>
                         </select>
-                        <div className="minus-custom">−</div>
+                        <div className="minus-custom">-</div>
                       </div>
                       <div className="filter-item">
                         <p className="fs-14">
                           <span>Highest price: &nbsp; </span>
-                          <strong className="text-danger">100000000đ</strong>
+                          <strong className="text-danger">
+                            $ {highestPrice}
+                          </strong>
                         </p>
                         <div className="d-flex justify-content-between align-items-center">
                           <div className="value d-flex justify-content-center align-item-center gap-2">
                             <input
+                              value={minPrice}
                               className="min-value"
                               type="text"
                               placeholder="MIN"
+                              onChange={(e) =>
+                                handleMinPriceChange(e.target.value)
+                              }
                             />
-                            <div className="minus-custom">−</div>
+                            <div className="minus-custom">-</div>
                             <input
+                              value={maxPrice}
                               className="max-value"
                               type="text"
                               placeholder="MAX"
+                              onChange={(e) =>
+                                handleMaxPriceChange(e.target.value)
+                              }
                             />
                           </div>
                         </div>
-                        <button type="button" className="btn-price btn-custom">
+                        <button
+                          type="button"
+                          className="btn-price btn-custom"
+                          onClick={handleApplyPrice}
+                        >
                           APPLY
                         </button>
                       </div>

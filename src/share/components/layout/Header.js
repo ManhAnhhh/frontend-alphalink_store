@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loggedOut } from "../../../redux/reducers/auth";
-import { GetImageProduct, PopUp } from "../../utilities";
+import { GetImageProduct, GetImageCustomer, PopUp } from "../../utilities";
 import { useState, useEffect, useRef } from "react";
-import { getProducts } from "../../../services/Api";
+import { getProducts, getCustomers } from "../../../services/Api";
 const Header = () => {
   const suggestBoxRef = useRef(null);
   const [keyword, setKeyword] = useState("");
+  const [customerLogin, setCustomerLogin] = useState({});
   const [products, setProducts] = useState([]);
   const [searchProducts, setSearchProducts] = useState([]);
   const [isShowSuggestBox, setIsShowSuggestBox] = useState(false);
@@ -28,6 +29,15 @@ const Header = () => {
     });
   };
 
+  useEffect(() => {
+    if (customer) {
+      getCustomers().then(({ data }) => {
+        setCustomerLogin(() => {
+          return data.data.find((cus) => cus.email === customer.email);
+        });
+      });
+    }
+  }, [customer]);
   useEffect(() => {
     getProducts().then(({ data }) => setProducts(data.data));
   }, [keyword]);
@@ -73,6 +83,14 @@ const Header = () => {
 
   const searchItems = (e) => {
     e.preventDefault();
+    if (keyword === "" || keyword === " ") {
+      PopUp({
+        type: "warning",
+        position: "top-center",
+        content: "Please enter a search keyword",
+      });
+      return;
+    }
     setIsShowSuggestBox(false);
     return navigate(`/search?keyword=${keyword}`);
   };
@@ -90,7 +108,6 @@ const Header = () => {
       setIsShowSuggestBox(false); // Ẩn hộp gợi ý khi bấm ra ngoài
     }
   };
-
   return (
     <header>
       <section id="helper">
@@ -102,21 +119,20 @@ const Header = () => {
             <p>Vietnamese</p>
           </div>
           {customer && (
-            <div className="full-name position-relative">
+            <div className="full-name d-flex align-items-center gap-2 position-relative">
+              <div className="img-customer d-none d-sm-inline-block">
+                <img
+                  src={GetImageCustomer(customerLogin.picture)}
+                  alt={customerLogin._id}
+                />
+              </div>
               <p>
-                <span className="d-none d-sm-inline-block circle me-1">
-                  {customer.fullName.charAt(
-                    customer.fullName.lastIndexOf(" ") + 1
-                  )}
-                </span>
-                <span className="d-none d-sm-inline-block">
-                  Hello, {customer.fullName}{" "}
-                </span>
-
+                <span className="d-none d-sm-inline-block me-1">Hello,</span>
+                <span>{customer.fullName}</span>
                 <i className="fa-solid fa-chevron-down fa-2xs ms-1" />
               </p>
 
-              <ul className="sub-menu position-absolute top-100 end-0">
+              <ul className="sub-menu p-0 p-2 position-absolute top-100 end-0 border border-1">
                 <li>
                   <a href="#">My Account</a>
                 </li>
@@ -165,7 +181,11 @@ const Header = () => {
                 Search
               </button>
               {isShowSuggestBox && (
-                <div id="suggest-search" className="position-absolute" ref={suggestBoxRef}>
+                <div
+                  id="suggest-search"
+                  className="position-absolute"
+                  ref={suggestBoxRef}
+                >
                   {searchProducts.map((product, index) => {
                     return (
                       index < 5 && (

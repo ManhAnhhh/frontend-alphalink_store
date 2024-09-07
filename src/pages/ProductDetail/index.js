@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   GetImageProduct,
   GetImageCustomer,
@@ -12,36 +12,28 @@ import {
   getCommentsByIdProduct,
 } from "../../services/Api";
 import { useParams } from "react-router-dom";
-import Slider from "react-slick";
-import { CustomNextArrow, CustomePrevArrow } from "../../share/utilities";
 
 const ProductDetail = () => {
   const [categories, setCategories] = useState([]);
+  const [imgShow, setImgShow] = useState(0);
   const [colorChoosed, setColorChoosed] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState({});
   const [comments, setComments] = useState([]);
   const { id } = useParams();
 
-  //? config slick carousel
-  const [nav1, setNav1] = useState(null);
-  const [nav2, setNav2] = useState(null);
-  let sliderRef1 = useRef(null);
-  let sliderRef2 = useRef(null);
   useEffect(() => {
-    setNav1(sliderRef1);
-    setNav2(sliderRef2);
-  }, []);
+    getProductByID(id, {}).then(({ data }) => setProduct(data.data));
+    getCommentsByIdProduct(id).then(({ data }) => setComments(data.data));
+  }, [id]);
 
-  const settings = {
-    infinite: true,
-    speed: 2000,
-    autoplaySpeed: 2000,
-    autoplay: false,
-    nextArrow: <CustomNextArrow />,
-    prevArrow: <CustomePrevArrow />,
-  };
-  //? end config slick carousel
+  useEffect(() => {
+    getCategories().then(({ data }) => setCategories(data.data));
+  }, [product.category_id]);
+  const category = categories.find((cat) => cat._id === product.category_id);
+  const categoryParent = categories.find(
+    (cat) => cat._id === category.parent_id
+  );
 
   const handleColorsProduct = (index) => {
     setColorChoosed(index);
@@ -91,19 +83,14 @@ const ProductDetail = () => {
     }
   };
 
-  useEffect(() => {
-    getProductByID(id, {}).then(({ data }) => setProduct(data.data));
-    getCommentsByIdProduct(id).then(({ data }) => setComments(data.data));
-  }, [id]);
+  const handleImgMove = (index) => {
+    setImgShow(index);
+  };
+  const handleImgLeave = () => {
+    setImgShow(0);
+  };
 
-  useEffect(() => {
-    getCategories().then(({ data }) => setCategories(data.data));
-  }, [product.category_id]);
-  const category = categories.find((cat) => cat._id === product.category_id);
-  const categoryParent = categories.find(
-    (cat) => cat._id === category.parent_id
-  );
-
+  console.log(product);
   return (
     <>
       <section className="breadcrumb-custom">
@@ -117,49 +104,32 @@ const ProductDetail = () => {
       <section id="product-details">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-lg-4 col-md-5 col-12">
-              <div className="wrapper-img-product h-100 slider-container">
-                <div className="img-product">
-                  <Slider
-                    asNavFor={nav2}
-                    ref={(slider) => (sliderRef1 = slider)}
-                    className="main-img"
-                    {...settings}
-                  >
-                    {product?.img?.map((item) => (
-                      <div key={item}>
-                        <img src={GetImageProduct(item)} alt={product.name} />
-                      </div>
-                    ))}
-                  </Slider>
-                  <hr />
-                  <Slider
-                    asNavFor={nav1}
-                    ref={(slider) => (sliderRef2 = slider)}
-                    slidesToShow={3}
-                    swipeToSlide={true}
-                    focusOnSelect={true}
-                    className="sub-img mt-4"
-                    {...settings}
-                  >
-                    {product?.img?.map(
-                      (item, index) =>
-                        index !== 0 && (
-                          <div key={item}>
-                            <img
-                              src={GetImageProduct(item)}
-                              alt={product.name}
-                              className="img-fluid"
-                            />
-                          </div>
-                        )
-                    )}
-                  </Slider>
+            <div className="col-xl-5 col-lg-6 col-md-5 col-12">
+              <div className="img-product d-flex h-100 flex-column flex-sm-row flex-column-reverse">
+                <div className="sub-img d-flex flex-wrap justify-content-center justify-content-sm-start flex-row flex-sm-column ">
+                  {product?.img?.map((item, index) => (
+                    <div
+                      className="item mx-2 mx-sm-0"
+                      key={item}
+                      onMouseMove={() => handleImgMove(index)}
+                      onMouseLeave={handleImgLeave}
+                    >
+                      <img src={GetImageProduct(item)} alt={product.name} />
+                    </div>
+                  ))}
+                </div>
+                <div className="main-img flex-fill text-center">
+                  {product?.img?.length > 0 && (
+                    <img
+                      src={GetImageProduct(product.img[imgShow])}
+                      alt="true"
+                    />
+                  )}
                 </div>
               </div>
             </div>
-            <div className="col-lg-8 col-md-7 col-12 mt-2 mt-md-0">
-              <div className="content h-100 mt-4 mt-md-0">
+            <div className="col-xl-7 col-lg-6 col-md-7 col-12 mt-2 mt-md-0">
+              <div className="content h-100 mt-2 mt-md-0">
                 <h2>{product.name}</h2>
                 <div className="review d-flex gap-4">
                   <div className="rate">

@@ -10,6 +10,7 @@ const Search = () => {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("keyword");
   const [products, setProducts] = useState([]);
+  const [highestPrice, setHighestPrice] = useState(0);
   const [total, setTotal] = useState(0);
   const [isCollapsedFilters, setIsCollapsedFilters] = useState(false);
   const [windowSize, setWindowSize] = useState({
@@ -47,15 +48,36 @@ const Search = () => {
       if (category !== undefined) {
         await getProductsByCategoryName(category._id).then(({ data }) => {
           setTotal(data.total);
+          setHighestPrice(() =>
+            data.data.reduce(
+              (a, b, index, arr1) =>
+                a < b.price - (b.price * b.discount) / 100
+                  ? b.price - (b.price * b.discount) / 100
+                  : a,
+              data.data[0].price -
+                (data.data[0].price * data.data[0].discount) / 100
+            )
+          );
           setProducts(data.data);
         });
-      }
-      else {
+      } else {
         await getProducts().then(({ data }) => {
           setTotal(data.total);
-          setProducts(data.data.filter((p) =>
-            p.name.toLowerCase().includes(keyword.toLowerCase())
-          ));
+          setHighestPrice(() =>
+            data.data.reduce(
+              (a, b, index, arr1) =>
+                a < b.price - (b.price * b.discount) / 100
+                  ? b.price - (b.price * b.discount) / 100
+                  : a,
+              data.data[0].price -
+                (data.data[0].price * data.data[0].discount) / 100
+            )
+          );
+          setProducts(
+            data.data.filter((p) =>
+              p.name.toLowerCase().includes(keyword.toLowerCase())
+            )
+          );
         });
       }
     };
@@ -79,9 +101,9 @@ const Search = () => {
           </p>
         </div>
       </section>
-      <section id="category">
+      <section id="search">
         <div className="container-fluid">
-          <div className="title-category mb-3 text-uppercase">
+          <div className="title-search mb-3 text-uppercase">
             <h4>{keyword}</h4>
           </div>
           <div className="items">
@@ -139,15 +161,15 @@ const Search = () => {
                           id="type-currency"
                           className="me-0 me-md-auto"
                         >
-                          <option value="vnd">VND</option>
                           <option value="dollar">$</option>
+                          <option value="vnd">VND</option>
                         </select>
                         <div className="minus-custom">−</div>
                       </div>
                       <div className="filter-item">
                         <p className="fs-14">
                           <span>Highest price: &nbsp; </span>
-                          <strong className="text-danger">100000000đ</strong>
+                          <strong className="text-danger">$ {highestPrice}</strong>
                         </p>
                         <div className="d-flex justify-content-between align-items-center">
                           <div className="value d-flex justify-content-center align-item-center gap-2">
