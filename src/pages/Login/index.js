@@ -5,9 +5,9 @@ import { loginCustomer } from "../../services/Api";
 
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, loginFalse } from "../../redux/reducers/auth";
+import { updateCart } from "../../redux/reducers/cart";
 const Login = () => {
   const dispatch = useDispatch();
-
   const [emailLogin, setEmailLogin] = useState("");
   const [passwordLogin, setPasswordLogin] = useState("");
 
@@ -17,14 +17,14 @@ const Login = () => {
   };
   const [objectInputs, setObjectInputs] = useState(defaultObjectInputs);
   const navigate = useNavigate();
-  
-  const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn)
+
+  const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/");
       return;
     }
-  },[navigate, isLoggedIn])
+  }, [navigate, isLoggedIn]);
 
   const isValidField = () => {
     setObjectInputs(defaultObjectInputs);
@@ -65,11 +65,13 @@ const Login = () => {
       .then((res) => {
         dispatch(
           loginSuccess({
+            id: res.data.data.id,
             email: res.data.data.email,
             fullName: res.data.data.fullName,
             phone: res.data.data.phone,
           })
         );
+        dispatch(updateCart(res.data.data.cart));
         PopUp({
           type: "success",
           content: res.data.message,

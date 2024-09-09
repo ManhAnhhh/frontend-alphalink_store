@@ -12,8 +12,10 @@ import {
   getCommentsByIdProduct,
 } from "../../services/Api";
 import { useParams } from "react-router-dom";
-
+import { useAddToCart } from "../../share/CustomHook/useAddToCart";
+import { useSelector } from "react-redux";
 const ProductDetail = () => {
+  const addToCart = useAddToCart();
   const [categories, setCategories] = useState([]);
   const [imgShow, setImgShow] = useState(0);
   const [colorChoosed, setColorChoosed] = useState(0);
@@ -21,7 +23,9 @@ const ProductDetail = () => {
   const [product, setProduct] = useState({});
   const [comments, setComments] = useState([]);
   const { id } = useParams();
-
+  const customerId = useSelector(
+    (state) => state.auth.login.currentCustomer?.id
+  );
   useEffect(() => {
     getProductByID(id, {}).then(({ data }) => setProduct(data.data));
     getCommentsByIdProduct(id).then(({ data }) => setComments(data.data));
@@ -90,7 +94,6 @@ const ProductDetail = () => {
     setImgShow(0);
   };
 
-  console.log(product);
   return (
     <>
       <section className="breadcrumb-custom">
@@ -208,7 +211,12 @@ const ProductDetail = () => {
                 </div>
                 {/* add-to-cart */}
                 <div className="d-flex gap-4">
-                  <button className="btn-custom btn-items">
+                  <button
+                    className="btn-custom btn-items"
+                    onClick={() =>
+                      addToCart(customerId, product, quantity, colorChoosed)
+                    }
+                  >
                     <i className="fa-solid fa-cart-shopping fa-lg text-white" />
                     &nbsp; Add to cart
                   </button>

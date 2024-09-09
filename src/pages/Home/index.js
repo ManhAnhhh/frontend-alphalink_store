@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import ProductItem from "../../share/components/Product-item";
 import { CustomNextArrow, CustomePrevArrow } from "../../share/utilities";
 import { getProducts } from "../../services/Api";
-
 const Home = () => {
   const [bestSeller, setBestSeller] = useState([]);
   const [featureProducts, setfeatureProducts] = useState([]);

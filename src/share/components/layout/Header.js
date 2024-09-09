@@ -21,6 +21,7 @@ const Header = () => {
     navigate("/login");
   };
   const customer = useSelector((state) => state.auth.login.currentCustomer);
+  const totalProducsIncart = useSelector((state) => state.cart.items.length);
   const handleLogout = () => {
     dispatch(loggedOut());
     PopUp({
@@ -28,7 +29,6 @@ const Header = () => {
       content: "Logout successfully",
     });
   };
-
   useEffect(() => {
     if (customer) {
       getCustomers().then(({ data }) => {
@@ -38,6 +38,7 @@ const Header = () => {
       });
     }
   }, [customer]);
+
   useEffect(() => {
     getProducts().then(({ data }) => setProducts(data.data));
   }, [keyword]);
@@ -229,9 +230,14 @@ const Header = () => {
                     </i>
                   </div>
 
-                  <div className="cart-icon py-1 mx-2">
+                  <div
+                    className="cart-icon py-1 mx-2"
+                    onClick={() => navigate(`/customer/${customer.id}/cart`)}
+                  >
                     <i className="fa-solid fa-cart-shopping fa-2xl">
-                      <span className="badge-custom badge-top-right">1</span>
+                      <span className="badge-custom badge-top-right">
+                        {totalProducsIncart}
+                      </span>
                     </i>
                   </div>
                 </>

@@ -1,6 +1,14 @@
 import { GetImageProduct } from "../utilities";
+import { getProductByID } from "../../services/Api";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useAddToCart } from "../CustomHook/useAddToCart";
 const ProductItem = (props) => {
+  const addToCart = useAddToCart();
+  const customerID = useSelector(
+    (state) => state.auth.login.currentCustomer?.id
+  );
   const {
     _id: id,
     name,
@@ -12,12 +20,23 @@ const ProductItem = (props) => {
     img,
     is_stock,
   } = props.product;
+
+  const [product, setProduct] = useState({});
+  useEffect(() => {
+    getProductByID(id).then(({ data }) => {
+      setProduct(data.data);
+    });
+  }, [id]);
+
   return (
     <>
       <p className="fs-14 discount-percent">{`-${discount}%`}</p>
 
       <div className="img-item">
-        <Link to={`/product-detail/${id}`} className="text-decoration-none text-center">
+        <Link
+          to={`/product-detail/${id}`}
+          className="text-decoration-none text-center"
+        >
           <img src={GetImageProduct(img[0])} alt={name} />
         </Link>
       </div>
@@ -76,7 +95,10 @@ const ProductItem = (props) => {
             <i style="color: #dc3545; " class="fa-solid fa-heart fa-2xl"></i>
           </div> */}
       </div>
-      <button className="btn-add-to-cart btn-custom my-2 w-100">
+      <button
+        className="btn-add-to-cart btn-custom my-2 w-100"
+        onClick={() => addToCart(customerID, product)}
+      >
         Add to cart
       </button>
     </>

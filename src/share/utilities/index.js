@@ -16,7 +16,7 @@ export const PopUp = ({
   // type[loading, info, success, warning, error]
   type = "info",
   position = "top-right",
-  autoClose = 3000,
+  autoClose = 2000,
   theme = "light",
   content,
 }) => {
@@ -59,3 +59,8 @@ export const convertDate = (dateString) => {
 
   return date.toLocaleDateString("en-US", options);
 };
+
+export const HandlePriceWithDiscount = (price, discount) => {
+  return (parseFloat(price) - parseFloat((price * discount)) / 100).toFixed(2);
+};
+

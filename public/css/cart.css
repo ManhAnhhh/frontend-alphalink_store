@@ -28,6 +28,10 @@
   border-bottom: 2px solid var(--border-color);
 }
 
+#cart-items thead .select-all {
+  min-width: 120px;
+}
+
 #cart-items tbody tr {
   border-bottom: 1px solid var(--border-color);
 }
@@ -37,23 +41,49 @@
   padding: 8px;
 }
 
-#cart .btn-delete-selected {
+#cart .btn-update {
   padding: 4px 12px;
-  border-radius:  var(--radius-m);
+  border-radius: var(--radius-m);
 }
-#cart .btn-delete-selected:hover {
-  background-color: var(--red-color) !important;
-  color: var(--light-color)!important;
+
+#cart .btn-update:hover {
+  background-color: var(--primary-color) !important;
+  color: var(--light-color) !important;
   transition: background-color 0.5s ease-in-out;
 }
 
-#cart-items .item .img-item {
+#cart .btn-delete-selected {
+  padding: 4px 12px;
+  border-radius: var(--radius-m);
+}
+
+#cart .btn-delete-selected:hover {
+  background-color: var(--red-color) !important;
+  color: var(--light-color) !important;
+  transition: background-color 0.5s ease-in-out;
+}
+
+#cart-items .item .img-item img {
   width: 100px;
 }
 
-#cart-items .item>div:nth-child(2) {
+#cart-items .item>div:nth-child(2) .name  {
+  margin-bottom: 0 !important;
   min-width: 180px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  /* Số dòng giới hạn */
 }
+
+#cart-items .item>div:nth-child(2) .name:hover  {
+  color: var(--main-color);
+  cursor: pointer;
+  transition: color 0.4s linear;
+}
+
 
 #cart-items .quantity button {
   padding: 8px 14px;
@@ -71,7 +101,12 @@
   background-color: var(--light-color);
 }
 
-#cart-items .delete-item:hover i {
+#cart-items .delete-item i {
+  display: inline-block;
+  padding: 16px;
+}
+
+#cart-items .delete-item i:hover {
   cursor: pointer;
   color: var(--main-color);
   transition: color 0.4s ease-in-out;
@@ -80,6 +115,17 @@
 /*! confirm-cart */
 #confirm {
   margin: 16px 0;
+}
+
+#confirm .return-home-icon i {
+  transition: transform 600ms cubic-bezier(0.25, 0.1, 0.25, 1), color 1000ms;
+  padding: 4px;
+}
+
+#confirm .return-home-icon i:hover {
+  transform: rotate(-360deg);
+  color: var(--main-color);
+  cursor: pointer;
 }
 
 #confirm>div>div {
@@ -114,6 +160,7 @@
     width: 164px;
   }
 }
+
 #confirm .voucher:focus {
   border-color: var(--main-color);
 }
@@ -123,6 +170,14 @@
   margin: 0 16px;
   padding: 4px 16px;
 }
-#confirm .btn-buy {
-  padding: 6px 32px;
+
+@media screen and (width >=576px) {
+  #confirm .btn-buy {
+    min-width: 88.53px;
+  }
+}
+
+#confirm .custom-tooltip span {
+  color: #fff!important;
+  background-color: #fff!important;
 }

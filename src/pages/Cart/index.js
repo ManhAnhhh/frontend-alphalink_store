@@ -1,15 +1,104 @@
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { deleteCartItem } from "../../services/Api";
+import { GetImageProduct } from "../../share/utilities";
+import { HandlePriceWithDiscount } from "../../share/utilities";
+import Swal from "sweetalert2";
+import { updateCart } from "../../redux/reducers/cart";
+
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+
 const Cart = () => {
+  const dispatch = useDispatch();
+
+  const [deleveryPrice, setDeleveryPrice] = useState(15);
+  const [discountCodePrice, setDiscountCodePrice] = useState(0);
+  const [totalPriceInCart, setTotalPriceInCart] = useState(0);
+  const [total, setTotal] = useState(0);
+  const customerLogin = useSelector(
+    (state) => state.auth.login.currentCustomer
+  );
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
+  const cart = useSelector((state) => state.cart.items);
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/");
       return;
     }
   }, [navigate, isLoggedIn]);
+
+  useEffect(() => {
+    setTotalPriceInCart(() =>
+      cart
+        ?.reduce(
+          (total, item) =>
+            total +
+            HandlePriceWithDiscount(item.price, item.discount) * item.qty,
+          0
+        )
+        .toFixed(2)
+    );
+    setDeleveryPrice(() => {
+      return cart?.length > 3 ? 0 : 15;
+    });
+  }, [cart]);
+
+  useEffect(() => {
+    const result =
+      Number(totalPriceInCart) +
+      Number(deleveryPrice) +
+      Number(discountCodePrice);
+    setTotal(parseFloat(result).toFixed(2));
+  }, [totalPriceInCart, deleveryPrice, discountCodePrice]);
+
+  const handleDeleteItem = (prd_id, colorIndex) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+        deleteCartItem(
+          { customerId: customerLogin.id, productId: prd_id },
+          { colorIndex }
+        )
+          .then(({ data }) => {
+            dispatch(updateCart(data.data));
+          })
+          .catch((err) => {
+            //console.log(err);
+          });
+      }
+    });
+  };
+  if (cart.length <= 0) {
+    return (
+      <div className="container-fluid ">
+        <div className="m-0 text-center pt-3 pb-2 bg-white rounded">
+          <p>No items in cart</p>
+          <button
+            className="mx-auto btn-custom mb-3"
+            type="button"
+            onClick={() => navigate("/")}
+          >
+            Return Home
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
     <>
       <section id="cart">
@@ -21,7 +110,7 @@ const Cart = () => {
             <table id="cart-items" className="w-100">
               <thead className="text-center">
                 <tr>
-                  <th className="d-flex align-items-center gap-2 justify-content-center">
+                  <th className="d-flex align-items-center gap-2 justify-content-center select-all">
                     <input type="checkbox" name="select-all" id="select-all" />
                     <label className="text-capitalize" htmlFor="select-all">
                       select all
@@ -30,10 +119,16 @@ const Cart = () => {
                   <th>Products</th>
                   <th>Quantity</th>
                   <th>Price</th>
-                  <th>
+                  <th className="text-nowrap">
                     <button
                       type="button"
-                      className="btn-delete-selected bg-danger-subtle border border-danger"
+                      className="btn-update bg-primary-subtle border border-primary mx-1"
+                    >
+                      Update
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-delete-selected bg-danger-subtle border border-danger mx-1"
                     >
                       Delete
                     </button>
@@ -41,136 +136,160 @@ const Cart = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="text-center">
-                    <input type="checkbox" name="item-1" id="item-1" />
-                  </td>
-                  <td className="item d-flex gap-3 align-items-center">
-                    <div className="img-item">
-                      <img
-                        className="img-fluid"
-                        src="/img/products/acer1.jpg"
-                        alt="acer"
-                      />
-                    </div>
-                    <div>
-                      <p className="name">
-                        <b>Acer Aspire Go 15 Slim Laptop</b>
-                      </p>
-                      <div className="info d-flex my-1 fs-12">
-                        <p className="discount text-secondary me-2">
-                          <del>$1000</del>
-                        </p>
-                        <p className="price text-danger fw-bold me-4">$1639</p>
-                        <p className="color">
-                          Color: <b>Black</b>
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="d-flex quantity justify-content-center">
-                      <button>&minus;</button>
-                      <input type="number" min={1} defaultValue={1} />
-                      <button>+</button>
-                    </div>
-                  </td>
-                  <td className="price text-danger fw-bold text-center">
-                    $1639
-                  </td>
-                  <td className="text-center delete-item">
-                    <i className="fa-solid fa-trash-can" />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-center">
-                    <input type="checkbox" name="item-1" id="item-1" />
-                  </td>
-                  <td className="item d-flex gap-3 align-items-center">
-                    <div className="img-item">
-                      <img
-                        className="img-fluid"
-                        src=" /img/products/acer1.jpg"
-                        alt=""
-                      />
-                    </div>
-                    <div>
-                      <p className="name">
-                        <b>Acer Aspire Go 15 Slim Laptop</b>
-                      </p>
-                      <div className="info d-flex my-1 fs-12">
-                        <p className="discount text-secondary me-2">
-                          <del>$1000</del>
-                        </p>
-                        <p className="price text-danger fw-bold me-4">$1639</p>
-                        <p className="color">
-                          Color: <b>Black</b>
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="d-flex quantity justify-content-center">
-                      <button>−</button>
-                      <input type="number" min={1} defaultValue={1} />
-                      <button>+</button>
-                    </div>
-                  </td>
-                  <td className="price text-danger fw-bold text-center">
-                    $1639
-                  </td>
-                  <td className="text-center delete-item">
-                    <i className="fa-solid fa-trash-can" />
-                  </td>
-                </tr>
+                {cart?.map((item) => {
+                  return (
+                    <tr key={item._id}>
+                      <td className="text-center">
+                        <input type="checkbox" name="item-1" id="item-1" />
+                      </td>
+                      <td className="item d-flex gap-3 align-items-center">
+                        <div className="img-item">
+                          <img
+                            src={GetImageProduct(item.img[0])}
+                            alt={GetImageProduct(item.img[0])}
+                          />
+                        </div>
+                        <div>
+                          <p
+                            className="name fw-bold"
+                            onClick={() =>
+                              navigate(`/product-detail/${item.prd_id}`)
+                            }
+                          >
+                            {item.name}
+                          </p>
+                          <div className="info d-flex my-1 fs-12 text-nowrap">
+                            <p className="discount text-secondary me-2">
+                              <del>$ {item.price}</del>
+                            </p>
+                            <p className="price text-danger fw-bold me-4">
+                              ${" "}
+                              {HandlePriceWithDiscount(
+                                item.price,
+                                item.discount
+                              )}
+                            </p>
+                            <p className="color">
+                              Color: <b>{item.color[item.colorIndex]}</b>
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="d-flex quantity justify-content-center">
+                          <button>&minus;</button>
+                          <input
+                            type="number"
+                            min={1}
+                            defaultValue={item.qty}
+                          />
+                          <button>+</button>
+                        </div>
+                      </td>
+                      <td className="price text-danger fw-bold text-center text-nowrap">
+                        ${" "}
+                        {(
+                          HandlePriceWithDiscount(item.price, item.discount) *
+                          item.qty
+                        ).toFixed(2)}
+                      </td>
+                      <td className="text-center delete-item">
+                        <i
+                          className="fa-solid fa-trash-can"
+                          onClick={() =>
+                            handleDeleteItem(item.prd_id, item.colorIndex)
+                          }
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </div>
       </section>
+
       <section id="confirm">
         <div className="container-fluid">
-          <div className="d-flex align-items-center justify-content-center flex-wrap gap-4">
-            <p>
-              <b>Buy 3 more item to get free shipping</b>
-            </p>
-            <div className="d-flex">
-              <input type="text" className="voucher" placeholder="Voucher" />
-              <button
-                type="button"
-                className="btn-custom btn-apply text-uppercase"
+          <div className="d-flex justify-content-between flex-wrap">
+            <div className="d-flex flex-fill fa-2xl return-home-icon align-items-center justify-content-center p-4 p-lg-0">
+              <OverlayTrigger
+                key={"bottom"}
+                placement={"bottom"}
+                overlay={
+                  <Tooltip id={`tooltip-${"bottom"}`} className="fw-bold">
+                    <span>Return Home</span>
+                  </Tooltip>
+                }
               >
-                APPLY
-              </button>
+                <i
+                  onClick={() => navigate("/")}
+                  className="fa-solid fa-arrow-rotate-left"
+                ></i>
+              </OverlayTrigger>
             </div>
-          </div>
-          <div className="d-flex align-items-center justify-content-center flex-wrap gap-2 gap-lg-5">
-            <div className="text-center">
-              <p>
-                Total: &nbsp;
-                <span className="text-danger fw-bold">$1639</span>
-              </p>
-              <p>(1 item)</p>
+            <div>
+              <div className="d-flex align-items-center justify-content-center justify-content-lg-between flex-wrap gap-2 gap-lg-4 mb-2 ">
+                <p className="mb-0">
+                  <b>Buy more 3 items to get free shipping</b>
+                </p>
+                <div className="d-flex">
+                  <input
+                    type="text"
+                    className="voucher"
+                    placeholder="Voucher"
+                  />
+                  <button
+                    type="button"
+                    className="btn-custom btn-apply text-uppercase"
+                  >
+                    APPLY
+                  </button>
+                </div>
+              </div>
+              <div className="d-flex align-items-center justify-content-center justify-content-md-between flex-wrap gap-2 gap-lg-5">
+                <div className="text-center">
+                  <p className="mb-0">
+                    Total: &nbsp;
+                    <span className="text-danger fw-bold">
+                      $ {totalPriceInCart}
+                    </span>
+                  </p>
+                  <p className="mb-0">
+                    (
+                    {cart.length === 1
+                      ? `${cart.length} item`
+                      : `${cart.length} items`}
+                    )
+                  </p>
+                </div>
+                <div className="fs-4">
+                  <p className="mb-0">+</p>
+                </div>
+                <div className="text-center">
+                  <p className="mb-0">Delivery</p>
+                  <p className="text-danger fw-bold mb-0">$ {deleveryPrice}</p>
+                </div>
+                <div className="fs-4">
+                  <p className="mb-0">+</p>
+                </div>
+                <div className="text-center">
+                  <p className="mb-0">Discount</p>
+                  <p className="text-danger fw-bold mb-0">
+                    $ {discountCodePrice}
+                  </p>
+                </div>
+                <p className="fs-4">=</p>
+                <p className="text-danger fw-bold mb-0">$ {total}</p>
+                <button
+                  type="button"
+                  className="btn-custom btn-buy text-uppercase"
+                >
+                  Buy
+                </button>
+              </div>
             </div>
-            <div className="fs-4">
-              <p>+</p>
-            </div>
-            <div className="text-center">
-              <p>Delivery</p>
-              <p className="text-danger fw-bold">$1</p>
-            </div>
-            <div className="fs-4">
-              <p>+</p>
-            </div>
-            <div className="text-center">
-              <p>Discount</p>
-              <p className="text-danger fw-bold">$0</p>
-            </div>
-            <p className="fs-4">=</p>
-            <p className="text-danger fw-bold">$1640</p>
-            <button type="button" className="btn-custom btn-buy text-uppercase">
-              Buy
-            </button>
           </div>
         </div>
       </section>

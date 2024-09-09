@@ -13,7 +13,7 @@ const publicRoutes = [
   { path: "/login", element: <Login /> },
   { path: "/product-detail/:id", element: <ProductDetail /> },
   { path: "/category/:id", element: <Category /> },
-  { path: "/cart", element: <Cart /> },
+  { path: "/customer/:id/cart", element: <Cart /> },
   { path: "/payment", element: <Payment /> },
   { path: "/success", element: <Success /> },
   { path: "/search", element: <Search /> },
