@@ -20,5 +20,7 @@ export const getCustomers = (config) => Http.get("customers", config);
 
 export const addToCart = ({ customerId, productId }, config) =>
   Http.post(`customer/${customerId}/add-to-cart/${productId}`, config);
+export const updateCartItems = (customerId, config) =>
+  Http.post(`customer/${customerId}/update-cart/`, config);
 export const deleteCartItem = ({ customerId, productId }, config) =>
   Http.post(`customer/${customerId}/delete-cart/${productId}`, config);

@@ -1,3 +1,21 @@
+/* Hide Arrows From Number Input */
+/* Chrome, Safari, Edge, Opera */
+#cart input::-webkit-outer-spin-button,
+#cart input::-webkit-inner-spin-button {
+  -webkit-appearance: button !important;
+  margin: 0;
+}
+
+#cart #cart input[type=number] {
+  outline: auto;
+}
+
+/* Firefox */
+#cart input[type=number] {
+  -moz-appearance: button;
+  appearance: button;
+}
+
 #cart .title-cart {
   background-color: var(--light-color);
   border-top-left-radius: var(--radius-m);
@@ -41,10 +59,17 @@
   padding: 8px;
 }
 
-#cart .btn-update {
+#cart .btn-update,
+#cart .btn-no-update {
   padding: 4px 12px;
   border-radius: var(--radius-m);
 }
+
+#cart .btn-no-update {
+  opacity: .8;
+  cursor: not-allowed;
+}
+
 
 #cart .btn-update:hover {
   background-color: var(--primary-color) !important;
@@ -67,7 +92,7 @@
   width: 100px;
 }
 
-#cart-items .item>div:nth-child(2) .name  {
+#cart-items .item>div:nth-child(2) .name {
   margin-bottom: 0 !important;
   min-width: 180px;
   overflow: hidden;
@@ -78,27 +103,16 @@
   /* Số dòng giới hạn */
 }
 
-#cart-items .item>div:nth-child(2) .name:hover  {
+#cart-items .item>div:nth-child(2) .name:hover {
   color: var(--main-color);
   cursor: pointer;
   transition: color 0.4s linear;
 }
 
-
-#cart-items .quantity button {
-  padding: 8px 14px;
-}
-
-#cart-items .quantity input {
-  outline: none;
-  width: 40px;
+#cart-items input.qty {
+  border: none;
+  width: 60px;
   text-align: center;
-}
-
-#cart-items .quantity button,
-#cart-items .quantity input {
-  border: 1px solid var(--border-color);
-  background-color: var(--light-color);
 }
 
 #cart-items .delete-item i {
@@ -178,6 +192,6 @@
 }
 
 #confirm .custom-tooltip span {
-  color: #fff!important;
-  background-color: #fff!important;
+  color: #fff !important;
+  background-color: #fff !important;
 }

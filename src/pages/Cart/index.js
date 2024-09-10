@@ -1,7 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { deleteCartItem } from "../../services/Api";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  deleteCartItem,
+  getProducts,
+  updateCartItems,
+} from "../../services/Api";
 import { GetImageProduct } from "../../share/utilities";
 import { HandlePriceWithDiscount } from "../../share/utilities";
 import Swal from "sweetalert2";
@@ -11,24 +15,31 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
 const Cart = () => {
+  const params = useParams();
   const dispatch = useDispatch();
-
   const [deleveryPrice, setDeleveryPrice] = useState(15);
+  const [isUpdateActive, setIsUpdateActive] = useState(true);
   const [discountCodePrice, setDiscountCodePrice] = useState(0);
   const [totalPriceInCart, setTotalPriceInCart] = useState(0);
+  const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
+  const customerId = params.id;
   const customerLogin = useSelector(
     (state) => state.auth.login.currentCustomer
   );
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
-  const cart = useSelector((state) => state.cart.items);
+  let cart = useSelector((state) => state.cart.items);
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/");
       return;
     }
   }, [navigate, isLoggedIn]);
+
+  useEffect(() => {
+    getProducts().then(({ data }) => setProducts(data.data));
+  }, []);
 
   useEffect(() => {
     setTotalPriceInCart(() =>
@@ -80,9 +91,61 @@ const Cart = () => {
           .catch((err) => {
             //console.log(err);
           });
+        setIsUpdateActive(true);
       }
     });
   };
+
+  const handleChangeQuantityItem = (id, value, colorIndex) => {
+    if (value === "" && value.length === 0) {
+      handleDeleteItem(id, colorIndex);
+      setIsUpdateActive(false);
+      return;
+    }
+    if (value < 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid quantity",
+      });
+      setIsUpdateActive(false);
+      return;
+    }
+    const product = products.find((p) => p._id === id);
+    if (value >= product.stock) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid quantity",
+        text: `Quantity must be less than ${product.stock}`
+      });
+      setIsUpdateActive(false);
+      return;
+    }
+    setIsUpdateActive(true);
+    cart = cart.map((item) => {
+      if (item.prd_id === id && item.colorIndex === colorIndex) {
+        return { ...item, qty: Number(value) };
+      }
+      return item;
+    });
+  };
+
+  const handleUpdateCart = () => {
+    updateCartItems(customerId, { cart }).then(({ data }) => {
+      dispatch(updateCart(data.data));
+      Swal.fire({
+        icon: "success",
+        title: "Update Cart Successfully",
+      });
+    });
+  };
+
+  const handleNoUpdateCart = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Invalid Value Item Cart",
+    });
+  };
+
   if (cart.length <= 0) {
     return (
       <div className="container-fluid ">
@@ -120,12 +183,24 @@ const Cart = () => {
                   <th>Quantity</th>
                   <th>Price</th>
                   <th className="text-nowrap">
-                    <button
-                      type="button"
-                      className="btn-update bg-primary-subtle border border-primary mx-1"
-                    >
-                      Update
-                    </button>
+                    {isUpdateActive ? (
+                      <button
+                        onClick={handleUpdateCart}
+                        type="button"
+                        className="btn-update bg-primary-subtle border border-primary mx-1"
+                      >
+                        Update
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleNoUpdateCart}
+                        type="button"
+                        className="btn-no-update bg-secondary-subtle border border-secondary mx-1"
+                      >
+                        Update
+                      </button>
+                    )}
+
                     <button
                       type="button"
                       className="btn-delete-selected bg-danger-subtle border border-danger mx-1"
@@ -175,16 +250,20 @@ const Cart = () => {
                           </div>
                         </div>
                       </td>
-                      <td>
-                        <div className="d-flex quantity justify-content-center">
-                          <button>&minus;</button>
-                          <input
-                            type="number"
-                            min={1}
-                            defaultValue={item.qty}
-                          />
-                          <button>+</button>
-                        </div>
+                      <td className="text-center">
+                        <input
+                          onChange={(e) =>
+                            handleChangeQuantityItem(
+                              item.prd_id,
+                              e.target.value,
+                              item.colorIndex
+                            )
+                          }
+                          className="qty"
+                          type="number"
+                          min={1}
+                          defaultValue={item.qty}
+                        />
                       </td>
                       <td className="price text-danger fw-bold text-center text-nowrap">
                         ${" "}
