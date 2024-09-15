@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const Payment = () => {
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/");

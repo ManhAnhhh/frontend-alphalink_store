@@ -101,7 +101,7 @@ const Register = () => {
     return true;
   };
 
-  const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/");

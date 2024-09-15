@@ -25,11 +25,11 @@ const Cart = () => {
   const [total, setTotal] = useState(0);
   const customerId = params.id;
   const customerLogin = useSelector(
-    (state) => state.auth.login.currentCustomer
+    (state) => state.Auth.login.currentCustomer
   );
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
-  let cart = useSelector((state) => state.cart.items);
+  const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
+  let cart = useSelector((state) => state.Cart.items);
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/");
@@ -97,7 +97,7 @@ const Cart = () => {
   };
 
   const handleChangeQuantityItem = (id, value, colorIndex) => {
-    if (value === "" && value.length === 0) {
+    if ((value === "" && value.length === 0) || value === 0) {
       handleDeleteItem(id, colorIndex);
       setIsUpdateActive(false);
       return;
@@ -115,7 +115,7 @@ const Cart = () => {
       Swal.fire({
         icon: "error",
         title: "Invalid quantity",
-        text: `Quantity must be less than ${product.stock}`
+        text: `Quantity must be less than ${product.stock}`,
       });
       setIsUpdateActive(false);
       return;
@@ -146,7 +146,7 @@ const Cart = () => {
     });
   };
 
-  if (cart.length <= 0) {
+  if (cart?.length <= 0 || !cart) {
     return (
       <div className="container-fluid ">
         <div className="m-0 text-center pt-3 pb-2 bg-white rounded">
@@ -215,7 +215,11 @@ const Cart = () => {
                   return (
                     <tr key={item._id}>
                       <td className="text-center">
-                        <input type="checkbox" name="item-1" id="item-1" />
+                        <input
+                          type="checkbox"
+                          name={`cbo-${item._id}`}
+                          id={`cbo-${item._id}`}
+                        />
                       </td>
                       <td className="item d-flex gap-3 align-items-center">
                         <div className="img-item">
@@ -259,6 +263,7 @@ const Cart = () => {
                               item.colorIndex
                             )
                           }
+                          name={`qty-${item.prd_id}`}
                           className="qty"
                           type="number"
                           min={1}
@@ -318,6 +323,7 @@ const Cart = () => {
                     type="text"
                     className="voucher"
                     placeholder="Voucher"
+                    name="voucher"
                   />
                   <button
                     type="button"

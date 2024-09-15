@@ -24,7 +24,7 @@ const ProductDetail = () => {
   const [comments, setComments] = useState([]);
   const { id } = useParams();
   const customerId = useSelector(
-    (state) => state.auth.login.currentCustomer?.id
+    (state) => state.Auth.login.currentCustomer?.id
   );
   useEffect(() => {
     getProductByID(id, {}).then(({ data }) => setProduct(data.data));
@@ -304,7 +304,6 @@ const ProductDetail = () => {
                         <a href="#">
                           <i
                             className="fa-solid fa-chevron-left"
-                            aria-hidden="true"
                           />
                         </a>
                       </div>
@@ -326,7 +325,6 @@ const ProductDetail = () => {
                           {" "}
                           <i
                             className="fa-solid fa-chevron-right"
-                            aria-hidden="true"
                           />
                         </a>
                       </div>

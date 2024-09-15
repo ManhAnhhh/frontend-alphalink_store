@@ -1,0 +1,78 @@
+#heart-modal .modal-title {
+  text-align: center;
+  color: var(--main-color);
+  background-color: var(--light-color);
+  padding: 0.5rem;
+  font-weight: bold;
+}
+#heart-modal .wrapper-table {
+  background-color: var(--light-color);
+  padding: 16px;
+  border-radius: var(--radius-m);
+}
+
+#modal-heart-body thead {
+  border-bottom: 2px solid var(--border-color);
+}
+
+#modal-heart-body thead .select-all {
+  min-width: 120px;
+}
+
+#modal-heart-body .btn-delete-selected {
+  padding: 4px 12px;
+  border-radius: var(--radius-m);
+}
+
+#modal-heart-body .btn-delete-selected:hover {
+  background-color: var(--red-color) !important;
+  color: var(--light-color) !important;
+  transition: background-color 0.5s ease-in-out;
+}
+
+#modal-heart-body tbody tr {
+  border-bottom: 1px solid var(--border-color);
+}
+
+#modal-heart-body td,
+#modal-heart-body th {
+  padding: 8px;
+}
+
+#modal-heart-body .item .img-item img {
+  width: 100px;
+}
+
+#modal-heart-body .item>div:nth-child(2) .name {
+  margin-bottom: 0 !important;
+  min-width: 180px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  /* Số dòng giới hạn */
+}
+
+#modal-heart-body .item>div:nth-child(2) .name:hover {
+  color: var(--main-color);
+  cursor: pointer;
+  transition: color 0.4s linear;
+}
+
+#modal-heart-body input.qty {
+  border: none;
+  width: 60px;
+  text-align: center;
+}
+
+#modal-heart-body .delete-item i {
+  display: inline-block;
+  padding: 16px;
+}
+
+#modal-heart-body .delete-item i:hover {
+  cursor: pointer;
+  color: var(--red-color);
+  transition: color 0.4s ease-in-out;
+}

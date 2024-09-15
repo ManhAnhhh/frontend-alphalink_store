@@ -5,7 +5,7 @@ import { updateCart } from "../../redux/reducers/cart";
 
 export const useAddToCart = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
 
   const addProductToCart = (customerId, product, qty = 1, colorIndex = 0) => {
     // Kiểm tra người dùng đã đăng nhập hay chưa

@@ -1,8 +1,18 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import auth from "./reducers/auth";
-import cart from "./reducers/cart";
+import authReducer from "./reducers/auth";
+import cartReducer from "./reducers/cart";
+import heartReducer from "./reducers/heart";
 
 // dùng react-persist để lưu dữ liệu vào store sau khi refresh lại trang thì không mất dữ liệu
 // trừ khi dispatch(loggerOut())
@@ -11,14 +21,36 @@ const persistConfig = {
   storage,
 };
 
-const persistedAuthReducer = persistReducer(persistConfig, auth);
-const persistedCartReducer = persistReducer(persistConfig, cart);
+const cartPersistConfig = {
+  key: "Cart",
+  storage,
+};
+
+const heartPersistConfig = {
+  key: "Heart",
+  storage,
+};
+
+const authPersistConfig = {
+  key: "Auth",
+  storage,
+};
+
+const rootReducer = combineReducers({
+  Auth: persistReducer(authPersistConfig, authReducer),
+  Cart: persistReducer(cartPersistConfig, cartReducer),
+  Heart: persistReducer(heartPersistConfig, heartReducer),
+});
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: {
-    auth: persistedAuthReducer,
-    cart: persistedCartReducer,
-  },
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export const persistor = persistStore(store);

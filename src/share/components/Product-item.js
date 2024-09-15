@@ -1,14 +1,20 @@
 import { GetImageProduct } from "../utilities";
-import { getProductByID } from "../../services/Api";
+import { getProductByID, addHeartItem } from "../../services/Api";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAddToCart } from "../CustomHook/useAddToCart";
+import { useDispatch } from "react-redux";
+import { updateHeart } from "../../redux/reducers/heart";
+import Swal from "sweetalert2";
 const ProductItem = (props) => {
+  const dispatch = useDispatch();
+  const [isHeart, setIsHeart] = useState(false);
   const addToCart = useAddToCart();
-  const customerID = useSelector(
-    (state) => state.auth.login.currentCustomer?.id
+  const customerId = useSelector(
+    (state) => state.Auth.login.currentCustomer?.id
   );
+  const heartItem = useSelector((state) => state?.Heart?.items);
   const {
     _id: id,
     name,
@@ -19,7 +25,18 @@ const ProductItem = (props) => {
     sold,
     img,
     is_stock,
+    color,
   } = props.product;
+
+  useEffect(() => {
+    setIsHeart(() => {
+      const isItem = heartItem?.some((item) => item?.prd_id === id);
+      if (isItem) {
+        return true;
+      }
+      return false;
+    });
+  }, [isHeart, heartItem, id]);
 
   const [product, setProduct] = useState({});
   useEffect(() => {
@@ -27,6 +44,38 @@ const ProductItem = (props) => {
       setProduct(data.data);
     });
   }, [id]);
+
+  const addToHeart = () => {
+    const data = {
+      prd_id: id,
+      price,
+      discount,
+      name,
+      img,
+      color,
+      is_stock,
+    };
+    addHeartItem({ customerId, productId: id }, data)
+      .then(({ data }) => {
+        let title;
+        if (data.message === "Add to heart successfully") {
+          title = "Product added to my list successfully";
+        } else if (data.message === "Product is existed") {
+          title = "Removed product from my list";
+        }
+        // if (res.)
+        Swal.fire({
+          icon: "success",
+          title: title,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        dispatch(updateHeart(data.data));
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
+  };
 
   return (
     <>
@@ -87,17 +136,20 @@ const ProductItem = (props) => {
           </p>
         )}
 
-        <div className="heart-icon py-1 mx-2">
-          <i className="fa-regular fa-heart fa-2xl me-1" />
+        <div className="heart-icon py-1 mx-2" onClick={() => addToHeart()}>
+          {isHeart ? (
+            <i
+              style={{ color: "#dc3545" }}
+              className="fa-solid fa-heart fa-2xl me-1"
+            />
+          ) : (
+            <i className="fa-regular fa-heart fa-2xl me-1" />
+          )}
         </div>
-        {/* when clicking tym */}
-        {/* <div class="heart-icon py-1 mx-2">
-            <i style="color: #dc3545; " class="fa-solid fa-heart fa-2xl"></i>
-          </div> */}
       </div>
       <button
         className="btn-add-to-cart btn-custom my-2 w-100"
-        onClick={() => addToCart(customerID, product)}
+        onClick={() => addToCart(customerId, product)}
       >
         Add to cart
       </button>

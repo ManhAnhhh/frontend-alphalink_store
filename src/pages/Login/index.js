@@ -2,10 +2,10 @@ import { PopUp } from "../../share/utilities";
 import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { loginCustomer } from "../../services/Api";
-
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, loginFalse } from "../../redux/reducers/auth";
 import { updateCart } from "../../redux/reducers/cart";
+import { updateHeart } from "../../redux/reducers/heart";
 const Login = () => {
   const dispatch = useDispatch();
   const [emailLogin, setEmailLogin] = useState("");
@@ -18,7 +18,7 @@ const Login = () => {
   const [objectInputs, setObjectInputs] = useState(defaultObjectInputs);
   const navigate = useNavigate();
 
-  const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/");
@@ -72,6 +72,7 @@ const Login = () => {
           })
         );
         dispatch(updateCart(res.data.data.cart));
+        dispatch(updateHeart(res.data.data.heart));
         PopUp({
           type: "success",
           content: res.data.message,

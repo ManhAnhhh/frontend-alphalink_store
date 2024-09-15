@@ -70,7 +70,6 @@
   cursor: not-allowed;
 }
 
-
 #cart .btn-update:hover {
   background-color: var(--primary-color) !important;
   color: var(--light-color) !important;
@@ -122,7 +121,7 @@
 
 #cart-items .delete-item i:hover {
   cursor: pointer;
-  color: var(--main-color);
+  color: var(--red-color);
   transition: color 0.4s ease-in-out;
 }
 
