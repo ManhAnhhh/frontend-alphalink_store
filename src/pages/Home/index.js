@@ -1,8 +1,9 @@
 import Slider from "react-slick";
 import { useState, useEffect } from "react";
 import ProductItem from "../../share/components/Product-item";
-import { CustomNextArrow, CustomePrevArrow } from "../../share/utilities";
+import { CustomNextArrow, CustomePrevArrow, LOADING_TIME } from "../../share/utilities";
 import { getProducts } from "../../services/Api";
+import HomeSkeleton from "../../share/components/Skeleton/HomeSkeleton";
 const Home = () => {
   const [bestSeller, setBestSeller] = useState([]);
   const [featureProducts, setfeatureProducts] = useState([]);
@@ -43,6 +44,7 @@ const Home = () => {
       },
     ],
   };
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getProducts().then(({ data }) => {
@@ -51,10 +53,15 @@ const Home = () => {
       });
       setfeatureProducts(() => {
         return data.data.filter((products) => products.is_feature === true);
-      })
+      });
+      setTimeout(() => {
+        setIsLoading(false); // Sau 3 giây, đặt lại giá trị là true
+      }, LOADING_TIME);
     });
   }, []);
-
+  if (isLoading) {
+    return <HomeSkeleton />;
+  }
   return (
     <>
       <section id="best-seler">
@@ -62,7 +69,7 @@ const Home = () => {
           <h2 className="text-uppercase title-product">Best seller</h2>
           <Slider {...settings} className="slick-carousel">
             {bestSeller.map((product, i) => (
-              <div key={i} className="wrapper px-2 px-lg-1 ">
+              <div key={i} className="px-2 px-lg-1 ">
                 <div className="item">
                   <ProductItem product={product} />
                 </div>
@@ -76,7 +83,10 @@ const Home = () => {
           <h2 className="text-uppercase title-product">Feature products</h2>
           <div className="items row">
             {featureProducts.map((product, i) => (
-              <div key={i} className="col-xxl-2 col-lg-3 col-md-4 col-sm-6 my-2">
+              <div
+                key={i}
+                className="col-xxl-2 col-lg-3 col-md-4 col-sm-6 my-2"
+              >
                 <div className="item">
                   <ProductItem product={product} />
                 </div>

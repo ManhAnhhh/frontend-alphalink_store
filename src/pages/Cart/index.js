@@ -6,19 +6,21 @@ import {
   getProducts,
   updateCartItems,
 } from "../../services/Api";
-import { GetImageProduct } from "../../share/utilities";
+import { GetImageProduct, LOADING_TIME } from "../../share/utilities";
 import { HandlePriceWithDiscount } from "../../share/utilities";
 import Swal from "sweetalert2";
 import { updateCart } from "../../redux/reducers/cart";
 
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import CartSkeleton from "../../share/components/Skeleton/CartSkeleton";
 
 const Cart = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const [deleveryPrice, setDeleveryPrice] = useState(15);
   const [isUpdateActive, setIsUpdateActive] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [discountCodePrice, setDiscountCodePrice] = useState(0);
   const [totalPriceInCart, setTotalPriceInCart] = useState(0);
   const [products, setProducts] = useState([]);
@@ -39,6 +41,10 @@ const Cart = () => {
 
   useEffect(() => {
     getProducts().then(({ data }) => setProducts(data.data));
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, LOADING_TIME);
   }, []);
 
   useEffect(() => {
@@ -162,6 +168,7 @@ const Cart = () => {
       </div>
     );
   }
+  if (isLoading) return <CartSkeleton />;
   return (
     <>
       <section id="cart">

@@ -7,10 +7,13 @@ import {
   getProductsByCategory,
 } from "../../services/Api";
 import { PopUp } from "../../share/utilities";
+import { LOADING_TIME } from "../../share/utilities";
+import CategorySkeleton from "../../share/components/Skeleton/CategorySkeleton";
 const Category = () => {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [isCollapsedFilters, setIsCollapsedFilters] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [category, setCategory] = useState("");
   const [productsByCategory, setProductsByCategory] = useState([]);
   const [highestPrice, setHighestPrice] = useState(0);
@@ -104,6 +107,7 @@ const Category = () => {
 
   const { id } = useParams();
   useEffect(() => {
+    setIsLoading(true);
     getCategory(id, {}).then(({ data }) => setCategory(data.data));
 
     getProductsByCategory(id).then(({ data }) => {
@@ -119,6 +123,10 @@ const Category = () => {
         )
       );
     });
+
+    setTimeout(() => {
+      setIsLoading(false); // Sau 3 giây, đặt lại giá trị là true
+    }, LOADING_TIME);
   }, [id]);
 
   useEffect(() => {
@@ -128,7 +136,7 @@ const Category = () => {
   const categoryParent = categories.find(
     (cat) => cat._id === category.parent_id
   );
-
+  if (isLoading) return <CategorySkeleton />;
   return (
     <>
       <section className="breadcrumb-custom">
@@ -173,7 +181,7 @@ const Category = () => {
                   <div className="d-flex d-md-block justify-content-start justify-content-sm-around flex-wrap">
                     <div className="brand">
                       <p className="filter-name">
-                        Brand <span className="minus-custom">−</span>
+                        Brand <span className="minus-custom">&minus;</span>
                       </p>
                       <div className="filter-item">
                         <div className="d-flex align-items-center">
@@ -201,7 +209,7 @@ const Category = () => {
                           <option value="dollar">$</option>
                           <option value="vnd">VND</option>
                         </select>
-                        <div className="minus-custom">-</div>
+                        <div className="minus-custom">&minus;</div>
                       </div>
                       <div className="filter-item">
                         <p className="fs-14">
@@ -221,7 +229,7 @@ const Category = () => {
                                 handleMinPriceChange(e.target.value)
                               }
                             />
-                            <div className="minus-custom">-</div>
+                            <div className="minus-custom">&minus;</div>
                             <input
                               value={maxPrice}
                               className="max-value"
@@ -244,10 +252,38 @@ const Category = () => {
                     </div>
                     <div className="rates">
                       <p className="filter-name">
-                        Rates <span className="minus-custom">−</span>
+                        Rates <span className="minus-custom">&minus;</span>
                       </p>
                       <div className="filter-item">
-                        <div className="rate-item">
+                        {Array(5)
+                          .fill(0)
+                          .map((rate, index) => (
+                            <div
+                              key={`rate-${5 - index}`}
+                              className="rate-item"
+                            >
+                              <input
+                                type="checkbox"
+                                name={`rate-${5 - index}`}
+                                id={`rate-${5 - index}`}
+                              />
+                              <label htmlFor={`rate-${5 - index}`}>
+                                {Array(5)
+                                  .fill(0)
+                                  .map((item, i) => (
+                                    <i
+                                      className={`fa-star ${
+                                        i < 5 - index
+                                          ? "fa text-warning"
+                                          : "fa-regular text-black-50"
+                                      }`}
+                                    />
+                                  ))}
+                              </label>
+                              <span className="ps-4">({5 - index})</span>
+                            </div>
+                          ))}
+                        {/* <div className="rate-item">
                           <input type="checkbox" name="rate-5" id="rate-5" />
                           <label htmlFor="rate-5">
                             <i className="fa fa-star text-warning" />
@@ -301,7 +337,7 @@ const Category = () => {
                             <i className="fa-regular fa-star text-black-50" />
                             <span className="ps-4">(1)</span>
                           </label>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>

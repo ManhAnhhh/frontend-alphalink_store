@@ -64,3 +64,5 @@ export const HandlePriceWithDiscount = (price, discount) => {
   return (parseFloat(price) - parseFloat((price * discount)) / 100).toFixed(2);
 };
 
+export const LOADING_TIME = 3000;
+

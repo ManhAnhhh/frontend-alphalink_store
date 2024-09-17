@@ -5,6 +5,7 @@ import {
   GetImageProductReview,
   PopUp,
   convertDate,
+  LOADING_TIME,
 } from "../../share/utilities";
 import {
   getProductByID,
@@ -14,11 +15,13 @@ import {
 import { useParams } from "react-router-dom";
 import { useAddToCart } from "../../share/CustomHook/useAddToCart";
 import { useSelector } from "react-redux";
+import ProductDetailsSkeleton from "../../share/components/Skeleton/ProductDetailsSkeleton";
 const ProductDetail = () => {
   const addToCart = useAddToCart();
   const [categories, setCategories] = useState([]);
   const [imgShow, setImgShow] = useState(0);
   const [colorChoosed, setColorChoosed] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState({});
   const [comments, setComments] = useState([]);
@@ -29,6 +32,10 @@ const ProductDetail = () => {
   useEffect(() => {
     getProductByID(id, {}).then(({ data }) => setProduct(data.data));
     getCommentsByIdProduct(id).then(({ data }) => setComments(data.data));
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, LOADING_TIME);
   }, [id]);
 
   useEffect(() => {
@@ -94,6 +101,8 @@ const ProductDetail = () => {
     setImgShow(0);
   };
 
+  if (isLoading) return <ProductDetailsSkeleton />;
+
   return (
     <>
       <section className="breadcrumb-custom">
@@ -136,15 +145,18 @@ const ProductDetail = () => {
                 <h2>{product.name}</h2>
                 <div className="review d-flex gap-4">
                   <div className="rate">
-                    {Array.from({ length: product.star }).map((e, i) => (
-                      <i key={i + 10} className="fa fa-star text-warning" />
-                    ))}
-                    {Array.from({ length: 5 - product.star }).map((e, i) => (
-                      <i
-                        key={i + 100}
-                        className="fa-regular fa-star text-black-50"
-                      />
-                    ))}
+                    {Array(5)
+                      .fill(0)
+                      .map((e, i) => (
+                        <i
+                          key={e + "_" + i}
+                          className={`${
+                            i < product.star
+                              ? "fa fa-star text-warning"
+                              : "fa-regular fa-star text-black-50"
+                          }`}
+                        />
+                      ))}
                   </div>
                   <div className="sold fw-bold">Sold: {product.sold}</div>
                 </div>
@@ -302,9 +314,7 @@ const ProductDetail = () => {
                     >
                       <div className="pagination-item">
                         <a href="#">
-                          <i
-                            className="fa-solid fa-chevron-left"
-                          />
+                          <i className="fa-solid fa-chevron-left" />
                         </a>
                       </div>
                       <div className="pagination-item">
@@ -323,9 +333,7 @@ const ProductDetail = () => {
                       <div className="pagination-item">
                         <a href="#">
                           {" "}
-                          <i
-                            className="fa-solid fa-chevron-right"
-                          />
+                          <i className="fa-solid fa-chevron-right" />
                         </a>
                       </div>
                     </div>
