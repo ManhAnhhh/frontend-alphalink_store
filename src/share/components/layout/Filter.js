@@ -16,6 +16,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
     height: window.innerHeight,
   });
 
+  // dùng kiểu cũ còn h sẽ dùng useSearchParams của react-router-dom (xem Search page)
   const searchParams = new URLSearchParams(location.search);
 
   useEffect(() => {
@@ -48,17 +49,6 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
   useEffect(() => {
     handleNavigate();
 
-    // if (checkedList.length > 0 && minPrice && maxPrice) toStr = "&";
-
-    // navigate(
-    //   `${location.pathname}${location.search === "" ? "?" : location.search}${
-    //     checkedList.length === 0 ? "" : "star=" + checkedList + toStr
-    //   }${
-    //     minPrice && maxPrice
-    //       ? "minPrice=" + minPrice + "&maxPrice=" + maxPrice
-    //       : ""
-    //   }`
-    // );
     // Nếu muốn không cần nhấn apply mà vẫn đạt được value
     // trong min max thì thêm dependencies: maxPrice, minPrice
     // nhưng khi star đc check thì nó tự apply price mà k cần nhấn apply
@@ -80,8 +70,6 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
     }
     navigate(`${location.pathname}?${searchParams.toString()}`);
   };
-
-  //! nen để filter lên location hết, và nếu apply giá tiền đc onclick thì cái shortBy làm sai.
 
   const handleCheckBox = (index) => {
     setCheckedList((pre) => {
@@ -145,6 +133,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
     checkedInputRefs.current.forEach((element) => {
       element.checked = false;
     });
+    searchParams.delete("sortBy");
   };
   return (
     <article id="filters" className="col-xl-3 col-lg-4 col-md-5">

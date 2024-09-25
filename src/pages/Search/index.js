@@ -12,7 +12,8 @@ import Filter from "../../share/components/layout/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSearchFilterPrd } from "../../redux/reducers/filterProduct";
 const Search = () => {
-  const [searchParams] = useSearchParams();
+  let [searchParams, setSearchParams] = useSearchParams();
+
   const keyword = searchParams.get("keyword");
   const [products, setProducts] = useState([]);
   const [highestPrice, setHighestPrice] = useState(0);
@@ -28,7 +29,6 @@ const Search = () => {
     return state.FilterPrd.search.items;
   });
 
-  //! search chua lam dc teo nao xong
   useEffect(() => {
     setIsLoading(true);
     const fetchData = async () => {
@@ -70,7 +70,6 @@ const Search = () => {
     setTimeout(() => {
       setIsLoading(false);
     }, LOADING_TIME);
-    console.log("object1");
   }, [keyword]);
 
   useEffect(() => {
@@ -86,7 +85,6 @@ const Search = () => {
           );
         });
       } else {
-        console.log("object2");
         newPrd = products.filter((item) => {
           const finalPrice = HandlePriceWithDiscount(item.price, item.discount);
           return finalPrice >= minPrice && finalPrice <= maxPrice;
@@ -103,7 +101,39 @@ const Search = () => {
       }
     }
     dispatch(updateSearchFilterPrd(newPrd));
+    setSelectedOption("default");
+    searchParams.delete("sortBy");
+    setSearchParams(searchParams);
   }, [minPrice, maxPrice, star.length, products]);
+
+  const handleSelectValue = (value) => {
+    setSelectedOption(value);
+    let sortBy = "";
+    if (value === "default") {
+      dispatch(updateSearchFilterPrd(productsByFilter));
+      searchParams.delete("sortBy");
+    } else if (value === "low") {
+      sortBy = "low-to-high";
+      const newPrd = [...productsByFilter].sort((a, b) => {
+        return (
+          HandlePriceWithDiscount(a.price, a.discount) -
+          HandlePriceWithDiscount(b.price, b.discount)
+        );
+      });
+      dispatch(updateSearchFilterPrd(newPrd));
+    } else {
+      sortBy = "high-to-low";
+      const newPrd = [...productsByFilter].sort((a, b) => {
+        return (
+          HandlePriceWithDiscount(b.price, b.discount) -
+          HandlePriceWithDiscount(a.price, a.discount)
+        );
+      });
+      dispatch(updateSearchFilterPrd(newPrd));
+    }
+    if (value !== "default") searchParams.set("sortBy", sortBy);
+    setSearchParams(searchParams);
+  };
   if (isLoading) {
     return (
       <div className="text-center my-4">
@@ -157,6 +187,8 @@ const Search = () => {
                     star={star}
                     minPrice={minPrice}
                     maxPrice={maxPrice}
+                    selectedOption={selectedOption}
+                    handleSelectValue={handleSelectValue}
                   />
                 )}
 
@@ -196,13 +228,28 @@ const Search = () => {
     </>
   );
 };
-const Items = ({ prds, minPrice, maxPrice, star }) => {
+const Items = ({
+  prds,
+  minPrice,
+  maxPrice,
+  star,
+  selectedOption,
+  handleSelectValue,
+}) => {
   return (
     <>
       <div className="d-flex mt-2 mt-md-0 justify-content-between sort-by">
         <div className="d-flex ">
           <p className="fw-bold m-0">Sort by:</p>
-          <select name="sort-by-price" id="sort-by-price">
+          <select
+            name="sort-by-price"
+            id="sort-by-price"
+            value={selectedOption}
+            onChange={(e) => handleSelectValue(e.target.value)}
+          >
+            <option className="text-capitalize" value="default">
+              Default
+            </option>
             <option className="text-capitalize" value="low">
               Low To High
             </option>

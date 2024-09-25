@@ -90,19 +90,22 @@ const Category = () => {
       }
     }
     dispatch(updateCatFilterPrd(newPrd));
+    setSelectedOption("default");
+    searchParams.delete("sortBy");
+    setSearchParams(searchParams);
   }, [minPrice, maxPrice, star.length, productsByCategory]);
 
   const categoryParent = categories.find(
     (cat) => cat._id === category.parent_id
   );
   const handleSelectValue = (value) => {
-    let order = "default";
     setSelectedOption(value);
+    let sortBy = "";
     if (value === "default") {
-      setSearchParams({ order });
-      dispatch(updateCatFilterPrd(productsByCategory));
+      dispatch(updateCatFilterPrd(productsByFilter));
+      searchParams.delete("sortBy");
     } else if (value === "low") {
-      order = "desc";
+      sortBy = "low-to-high";
       const newPrd = [...productsByFilter].sort((a, b) => {
         return (
           HandlePriceWithDiscount(a.price, a.discount) -
@@ -110,9 +113,8 @@ const Category = () => {
         );
       });
       dispatch(updateCatFilterPrd(newPrd));
-      setSearchParams({ order });
     } else {
-      order = "asc";
+      sortBy = "high-to-low";
       const newPrd = [...productsByFilter].sort((a, b) => {
         return (
           HandlePriceWithDiscount(b.price, b.discount) -
@@ -120,8 +122,9 @@ const Category = () => {
         );
       });
       dispatch(updateCatFilterPrd(newPrd));
-      setSearchParams({ order });
     }
+    if (value !== "default") searchParams.set("sortBy", sortBy);
+    setSearchParams(searchParams);
   };
 
   if (isLoading) return <CategorySkeleton />;
