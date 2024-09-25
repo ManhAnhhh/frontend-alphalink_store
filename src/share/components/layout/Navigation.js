@@ -15,6 +15,9 @@ const Navigation = () => {
   return (
     <nav className="navbar navbar-expand-lg">
       <div className="container-fluid">
+        <NavLink className="navbar-brand fw-medium nav-item" to="/">
+          Home
+        </NavLink>
         <button
           className="navbar-toggler my-2 ms-auto"
           type="button"
@@ -25,11 +28,6 @@ const Navigation = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbar">
           <ul className="navbar-nav">
-            <li className="nav-item rounded-pill">
-              <NavLink className="nav-link fw-medium" to="/">
-                Home
-              </NavLink>
-            </li>
             {categoriesParent.map((category) => {
               return categories.some(
                 (cat) => category._id === cat.parent_id

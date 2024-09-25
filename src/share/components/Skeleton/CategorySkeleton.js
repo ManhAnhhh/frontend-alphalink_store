@@ -74,8 +74,8 @@ const CategorySkeleton = () => {
                       <div className="filter-item">
                         {Array(5)
                           .fill(0)
-                          .map((_) => (
-                            <div className="rate-item">
+                          .map((_, i) => (
+                            <div className="rate-item" key={i}>
                               <div className="d-flex gap-3">
                                 <Skeleton width={20} />
                                 <Skeleton width={100} />
@@ -97,7 +97,10 @@ const CategorySkeleton = () => {
                   {Array(3)
                     .fill(0)
                     .map((_) => (
-                      <div className="col-xxl-3 col-xl-4 col-sm-6 col-12 my-2">
+                      <div
+                        key={Math.random() * 10}
+                        className="col-xxl-3 col-xl-4 col-sm-6 col-12 my-2"
+                      >
                         <PrdItemSkeleton />
                       </div>
                     ))}
@@ -109,7 +112,7 @@ const CategorySkeleton = () => {
                   {Array(5)
                     .fill(0)
                     .map((_) => (
-                      <div className="pagination-item">
+                      <div className="pagination-item" key={Math.random()}>
                         <Skeleton
                           circle
                           width={20}

@@ -1,7 +1,11 @@
 import Slider from "react-slick";
 import { useState, useEffect } from "react";
 import ProductItem from "../../share/components/Product-item";
-import { CustomNextArrow, CustomePrevArrow, LOADING_TIME } from "../../share/utilities";
+import {
+  CustomNextArrow,
+  CustomePrevArrow,
+  LOADING_TIME,
+} from "../../share/utilities";
 import { getProducts } from "../../services/Api";
 import HomeSkeleton from "../../share/components/Skeleton/HomeSkeleton";
 const Home = () => {
@@ -47,17 +51,19 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getProducts().then(({ data }) => {
-      setBestSeller(() => {
-        return data.data.filter((products) => products.sold >= 100);
-      });
-      setfeatureProducts(() => {
-        return data.data.filter((products) => products.is_feature === true);
-      });
-      setTimeout(() => {
-        setIsLoading(false); // Sau 3 giây, đặt lại giá trị là true
-      }, LOADING_TIME);
-    });
+    getProducts()
+      .then(({ data }) => {
+        setBestSeller(() => {
+          return data.data.filter((products) => products.sold >= 100);
+        });
+        setfeatureProducts(() => {
+          return data.data.filter((products) => products.is_feature === true);
+        });
+        setTimeout(() => {
+          setIsLoading(false); // Sau 3 giây, đặt lại giá trị là true
+        }, LOADING_TIME);
+      })
+      .catch((err) => setIsLoading(false));
   }, []);
   if (isLoading) {
     return <HomeSkeleton />;

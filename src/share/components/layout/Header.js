@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loggedOut } from "../../../redux/reducers/auth";
 import Swal from "sweetalert2";
@@ -20,7 +20,8 @@ import { updateHeart } from "../../../redux/reducers/heart";
 
 const Header = () => {
   const suggestBoxRef = useRef(null);
-  const [keyword, setKeyword] = useState("");
+  let [searchParams] = useSearchParams();
+  const [keyword, setKeyword] = useState(searchParams.get("keyword") || "");
   const [customerLogin, setCustomerLogin] = useState({});
   const [products, setProducts] = useState([]);
   const [searchProducts, setSearchProducts] = useState([]);
@@ -93,7 +94,7 @@ const Header = () => {
       setTimeout(() => {
         setIsLoadingSubMenu(false);
       }, 1500);
-      
+
       setSearchProducts(() => {
         const results = products.filter((product) =>
           product.name.toLowerCase().includes(value.toLowerCase())
@@ -121,6 +122,14 @@ const Header = () => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
+      if (keyword === "" || keyword === " ") {
+        PopUp({
+          type: "warning",
+          position: "top-center",
+          content: "Please enter a search keyword",
+        });
+        return;
+      }
       setIsShowSuggestBox(false);
       return navigate(`/search?keyword=${keyword}`);
     }
@@ -240,7 +249,7 @@ const Header = () => {
                                     $ {product.price}
                                   </span>
                                   <span className="text-danger fw-bold">
-                                    $ {" "}
+                                    ${" "}
                                     {HandlePriceWithDiscount(
                                       product.price,
                                       product.discount

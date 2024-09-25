@@ -1,4 +1,4 @@
-import { GetImageProduct } from "../utilities";
+import { GetImageProduct, HandlePriceWithDiscount } from "../utilities";
 import { getProductByID, addHeartItem } from "../../services/Api";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -79,7 +79,9 @@ const ProductItem = (props) => {
 
   return (
     <>
-      <p className="fs-14 discount-percent">{`-${discount}%`}</p>
+      {discount !== 0 && (
+        <p className="fs-14 discount-percent">{`-${discount}%`}</p>
+      )}
 
       <div className="img-item">
         <Link
@@ -110,12 +112,14 @@ const ProductItem = (props) => {
         <div className="sold fw-bold">Sold: {sold}</div>
       </div>
       <div className="price-item d-flex justify-content-between my-1">
-        <p className="price-decreased text-danger fw-bold">
-          $ {price - (price * discount) / 100}
+        <p className="price-decreased text-danger fw-bold mb-0">
+          $ {HandlePriceWithDiscount(price, discount)}
         </p>
-        <p className="price text-secondary text-decoration-line-through">
-          $ {price}
-        </p>
+        {product.discount !== 0 && (
+          <p className="price text-secondary text-decoration-line-through mb-0">
+            $ {product.price}
+          </p>
+        )}
       </div>
       <div className="stock-item my-1 d-flex justify-content-between align-items-center">
         {is_stock ? (

@@ -16,12 +16,17 @@ import { useParams } from "react-router-dom";
 import { useAddToCart } from "../../share/CustomHook/useAddToCart";
 import { useSelector } from "react-redux";
 import ProductDetailsSkeleton from "../../share/components/Skeleton/ProductDetailsSkeleton";
+import Modal from "react-bootstrap/Modal";
+
 const ProductDetail = () => {
   const addToCart = useAddToCart();
   const [categories, setCategories] = useState([]);
   const [imgShow, setImgShow] = useState(0);
   const [colorChoosed, setColorChoosed] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [showImgModal, setShowImgModal] = useState(false);
+  const [urlImgShowModal, setUrlImgShowModal] = useState("");
+
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState({});
   const [comments, setComments] = useState([]);
@@ -97,8 +102,10 @@ const ProductDetail = () => {
   const handleImgMove = (index) => {
     setImgShow(index);
   };
-  const handleImgLeave = () => {
-    setImgShow(0);
+
+  const handleOnclickImg = (url) => {
+    setShowImgModal(true);
+    setUrlImgShowModal(url);
   };
 
   if (isLoading) return <ProductDetailsSkeleton />;
@@ -124,7 +131,7 @@ const ProductDetail = () => {
                       className="item mx-2 mx-sm-0"
                       key={item}
                       onMouseMove={() => handleImgMove(index)}
-                      onMouseLeave={handleImgLeave}
+                      // onMouseLeave={() => setImgShow(0)}
                     >
                       <img src={GetImageProduct(item)} alt={product.name} />
                     </div>
@@ -134,7 +141,10 @@ const ProductDetail = () => {
                   {product?.img?.length > 0 && (
                     <img
                       src={GetImageProduct(product.img[imgShow])}
-                      alt="true"
+                      alt={GetImageProduct(product.img[imgShow])}
+                      onClick={() =>
+                        handleOnclickImg(GetImageProduct(product.img[imgShow]))
+                      }
                     />
                   )}
                 </div>
@@ -161,10 +171,12 @@ const ProductDetail = () => {
                   <div className="sold fw-bold">Sold: {product.sold}</div>
                 </div>
                 <div className="price-item d-flex gap-4">
-                  <p className="discount text-secondary text-decoration-line-through">
-                    $ {product.price}
-                  </p>
-                  <p className="price text-danger fw-bold">
+                  {product.discount !== 0 && (
+                    <p className="price text-secondary text-decoration-line-through mb-0">
+                      {product.price}
+                    </p>
+                  )}
+                  <p className="price text-danger fw-bold mb-0">
                     $ {product.price - (product.price * product.discount) / 100}
                   </p>
                 </div>
@@ -175,7 +187,7 @@ const ProductDetail = () => {
                     {product?.color?.map((item, index) => (
                       <button
                         onClick={() => handleColorsProduct(index)}
-                        key={index}
+                        key={"color" + index}
                         className={`btn-color my-2 my-lg-0 text-capitalize ${
                           colorChoosed === index && "active"
                         }`}
@@ -257,8 +269,14 @@ const ProductDetail = () => {
                           <div>
                             <div className="img-item">
                               <img
+                                style={{ cursor: "pointer" }}
                                 src={GetImageCustomer(comment.picture)}
                                 alt={GetImageCustomer(comment.picture)}
+                                onClick={() =>
+                                  handleOnclickImg(
+                                    GetImageCustomer(comment.picture)
+                                  )
+                                }
                               />
                             </div>
                           </div>
@@ -292,11 +310,20 @@ const ProductDetail = () => {
                             </div>
                             <div className="d-flex gap-2">
                               {comment.product_review_images.map((item) => (
-                                <div className="img-details">
+                                <div
+                                  className="img-details"
+                                  key={"rv-img" + item}
+                                >
                                   <img
+                                    style={{ cursor: "pointer" }}
                                     className="img-fluid"
                                     src={GetImageProductReview(item)}
                                     alt={GetImageProductReview(item)}
+                                    onClick={() =>
+                                      handleOnclickImg(
+                                        GetImageProductReview(item)
+                                      )
+                                    }
                                   />
                                 </div>
                               ))}
@@ -344,6 +371,24 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
+      <Modal
+        size="lg"
+        show={showImgModal}
+        onHide={() => setShowImgModal(false)}
+      >
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          <div className="text-center">
+            <img
+              className="img-fluid"
+              style={{ maxWidth: "70%" }}
+              src={urlImgShowModal}
+              alt={urlImgShowModal}
+            />
+          </div>
+        </Modal.Body>
+      </Modal>
+      ;
     </>
   );
 };

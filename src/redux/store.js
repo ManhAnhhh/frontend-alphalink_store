@@ -13,13 +13,10 @@ import storage from "redux-persist/lib/storage";
 import authReducer from "./reducers/auth";
 import cartReducer from "./reducers/cart";
 import heartReducer from "./reducers/heart";
+import filterProduct from "./reducers/filterProduct";
 
 // dùng react-persist để lưu dữ liệu vào store sau khi refresh lại trang thì không mất dữ liệu
 // trừ khi dispatch(loggerOut())
-const persistConfig = {
-  key: "alphalink_store",
-  storage,
-};
 
 const cartPersistConfig = {
   key: "Cart",
@@ -40,11 +37,12 @@ const rootReducer = combineReducers({
   Auth: persistReducer(authPersistConfig, authReducer),
   Cart: persistReducer(cartPersistConfig, cartReducer),
   Heart: persistReducer(heartPersistConfig, heartReducer),
+  FilterPrd: filterProduct,
 });
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

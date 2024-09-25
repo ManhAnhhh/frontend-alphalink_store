@@ -19,6 +19,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
+
+  // check user đã đăng nhập hay chưa
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/");

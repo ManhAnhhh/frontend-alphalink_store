@@ -61,8 +61,8 @@ export const convertDate = (dateString) => {
 };
 
 export const HandlePriceWithDiscount = (price, discount) => {
-  return (parseFloat(price) - parseFloat((price * discount)) / 100).toFixed(2);
+  const total = price - (price * discount) / 100;
+  return parseFloat(total.toFixed(2));
 };
 
 export const LOADING_TIME = 3000;
-

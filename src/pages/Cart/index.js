@@ -32,6 +32,8 @@ const Cart = () => {
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
   let cart = useSelector((state) => state.Cart.items);
+
+  // check user đã đăng nhập hay chưa
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/");
@@ -40,11 +42,14 @@ const Cart = () => {
   }, [navigate, isLoggedIn]);
 
   useEffect(() => {
-    getProducts().then(({ data }) => setProducts(data.data));
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, LOADING_TIME);
+    getProducts()
+      .then(({ data }) => {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, LOADING_TIME);
+        setProducts(data.data);
+      })
+      .catch(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {

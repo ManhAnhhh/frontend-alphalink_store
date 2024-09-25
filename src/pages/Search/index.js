@@ -6,83 +6,112 @@ import {
   getProducts,
   getProductsByCategoryName,
 } from "../../services/Api";
+import { LOADING_TIME, HandlePriceWithDiscount } from "../../share/utilities";
+import { ClipLoader } from "react-spinners";
+import Filter from "../../share/components/layout/Filter";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSearchFilterPrd } from "../../redux/reducers/filterProduct";
 const Search = () => {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("keyword");
   const [products, setProducts] = useState([]);
   const [highestPrice, setHighestPrice] = useState(0);
   const [total, setTotal] = useState(0);
-  const [isCollapsedFilters, setIsCollapsedFilters] = useState(false);
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [selectedOption, setSelectedOption] = useState("default");
+  const dispatch = useDispatch();
+  const star = searchParams.get("star")?.split(",") || [];
+  const minPrice = searchParams.get("minPrice");
+  const maxPrice = searchParams.get("maxPrice");
+  const productsByFilter = useSelector((state) => {
+    return state.FilterPrd.search.items;
   });
 
-  const handleFilters = () => {
-    setIsCollapsedFilters(!isCollapsedFilters);
-  };
+  //! search chua lam dc teo nao xong
   useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-      if (windowSize.width >= 768) {
-        setIsCollapsedFilters(false);
-      }
-    };
-
-    // Lắng nghe sự kiện resize
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup để gỡ bỏ listener khi component unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [windowSize.width]);
-  useEffect(() => {
+    setIsLoading(true);
     const fetchData = async () => {
       const category = await getCategories().then(({ data }) =>
-        data.data.find((c) => c.name.toLowerCase() === keyword.toLowerCase())
+        data.data.find((c) => c?.name?.toLowerCase() === keyword?.toLowerCase())
       );
       if (category !== undefined) {
         await getProductsByCategoryName(category._id).then(({ data }) => {
           setTotal(data.total);
           setHighestPrice(() =>
-            data.data.reduce(
-              (a, b, index, arr1) =>
-                a < b.price - (b.price * b.discount) / 100
-                  ? b.price - (b.price * b.discount) / 100
-                  : a,
-              data.data[0].price -
-                (data.data[0].price * data.data[0].discount) / 100
+            Math.max(
+              ...data.data.map((item) =>
+                HandlePriceWithDiscount(item.price, item.discount)
+              )
             )
           );
           setProducts(data.data);
+          dispatch(updateSearchFilterPrd(data.data));
         });
       } else {
         await getProducts().then(({ data }) => {
           setTotal(data.total);
           setHighestPrice(() =>
-            data.data.reduce(
-              (a, b, index, arr1) =>
-                a < b.price - (b.price * b.discount) / 100
-                  ? b.price - (b.price * b.discount) / 100
-                  : a,
-              data.data[0].price -
-                (data.data[0].price * data.data[0].discount) / 100
+            Math.max(
+              ...data.data.map((item) =>
+                HandlePriceWithDiscount(item.price, item.discount)
+              )
             )
           );
-          setProducts(
-            data.data.filter((p) =>
-              p.name.toLowerCase().includes(keyword.toLowerCase())
-            )
+          const newPrd = data.data.filter((p) =>
+            p?.name?.toLowerCase().includes(keyword?.toLowerCase())
           );
+          setProducts(newPrd);
+          dispatch(updateSearchFilterPrd(newPrd));
         });
       }
     };
     fetchData();
+    setTimeout(() => {
+      setIsLoading(false);
+    }, LOADING_TIME);
+    console.log("object1");
   }, [keyword]);
+
+  useEffect(() => {
+    let newPrd;
+    if (minPrice && maxPrice) {
+      if (star.length > 0) {
+        newPrd = products.filter((item) => {
+          const finalPrice = HandlePriceWithDiscount(item.price, item.discount);
+          return (
+            finalPrice >= minPrice &&
+            finalPrice <= maxPrice &&
+            star.includes((5 - item.star).toString())
+          );
+        });
+      } else {
+        console.log("object2");
+        newPrd = products.filter((item) => {
+          const finalPrice = HandlePriceWithDiscount(item.price, item.discount);
+          return finalPrice >= minPrice && finalPrice <= maxPrice;
+        });
+      }
+    } else if (!minPrice && !maxPrice) {
+      if (star.length === 0) {
+        newPrd = products;
+        dispatch(updateSearchFilterPrd(newPrd));
+      } else {
+        newPrd = products.filter((item) =>
+          star.includes((5 - item.star).toString())
+        );
+      }
+    }
+    dispatch(updateSearchFilterPrd(newPrd));
+  }, [minPrice, maxPrice, star.length, products]);
+  if (isLoading) {
+    return (
+      <div className="text-center my-4">
+        <ClipLoader color="#fff" size={42} />
+      </div>
+    );
+  }
+
   if (products.length === 0) {
     return (
       <div className="container-fluid text-center">
@@ -108,178 +137,28 @@ const Search = () => {
           </div>
           <div className="items">
             <div className="row">
-              <article id="filters" className="col-xl-3 col-lg-4 col-md-5">
-                <div
-                  style={{
-                    height: isCollapsedFilters ? "48px" : "auto",
-                    overflow: "hidden",
-                  }}
-                >
-                  <p className="d-flex justify-content-between align-items-center">
-                    Filters
-                    <span className="right-left d-none d-md-block">
-                      <i className="fa-solid fa-right-left" />
-                    </span>
-                    <span
-                      className="chevron d-block d-md-none"
-                      onClick={handleFilters}
-                    >
-                      <i
-                        className={`fa-solid ${
-                          isCollapsedFilters
-                            ? "fa-chevron-down"
-                            : "fa-chevron-up"
-                        }`}
-                      ></i>
-                    </span>
-                  </p>
-                  <div className="d-flex d-md-block justify-content-start justify-content-sm-around flex-wrap">
-                    <div className="brand">
-                      <p className="filter-name">
-                        Brand <span className="minus-custom">−</span>
-                      </p>
-                      <div className="filter-item">
-                        <div className="d-flex align-items-center">
-                          <input type="checkbox" name="apple" id="apple" />
-                          <label className="text-capitalize" htmlFor="apple">
-                            &nbsp; Apple
-                          </label>
-                        </div>
-                        <div className="d-flex align-items-center">
-                          <input type="checkbox" name="dell" id="dell" />
-                          <label className="text-capitalize" htmlFor="dell">
-                            &nbsp; dell
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="price">
-                      <div className="filter-name">
-                        <p className="m-0">Price</p>
-                        <select
-                          name="type-currency"
-                          id="type-currency"
-                          className="me-0 me-md-auto"
-                        >
-                          <option value="dollar">$</option>
-                          <option value="vnd">VND</option>
-                        </select>
-                        <div className="minus-custom">−</div>
-                      </div>
-                      <div className="filter-item">
-                        <p className="fs-14">
-                          <span>Highest price: &nbsp; </span>
-                          <strong className="text-danger">$ {highestPrice}</strong>
-                        </p>
-                        <div className="d-flex justify-content-between align-items-center">
-                          <div className="value d-flex justify-content-center align-item-center gap-2">
-                            <input
-                              className="min-value"
-                              type="text"
-                              placeholder="MIN"
-                            />
-                            <div className="minus-custom">−</div>
-                            <input
-                              className="max-value"
-                              type="text"
-                              placeholder="MAX"
-                            />
-                          </div>
-                        </div>
-                        <button type="button" className="btn-price btn-custom">
-                          APPLY
-                        </button>
-                      </div>
-                    </div>
-                    <div className="rates">
-                      <p className="filter-name">
-                        Rates <span className="minus-custom">−</span>
-                      </p>
-                      <div className="filter-item">
-                        <div className="rate-item">
-                          <input type="checkbox" name="rate-5" id="rate-5" />
-                          <label htmlFor="rate-5">
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa fa-star text-warning" />
-                            <span className="ps-4">(5)</span>
-                          </label>
-                        </div>
-                        <div className="rate-item">
-                          <input type="checkbox" name="rate-4" id="rate-4" />
-                          <label htmlFor="rate-4">
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa-regular fa-star text-black-50" />
-                            <span className="ps-4">(4)</span>
-                          </label>
-                        </div>
-                        <div className="rate-item">
-                          <input type="checkbox" name="rate-3" id="rate-3" />
-                          <label htmlFor="rate-3">
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa-regular fa-star text-black-50" />
-                            <i className="fa-regular fa-star text-black-50" />
-                            <span className="ps-4">(3)</span>
-                          </label>
-                        </div>
-                        <div className="rate-item">
-                          <input type="checkbox" name="rate-2" id="rate-2" />
-                          <label htmlFor="rate-2">
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa-regular fa-star text-black-50" />
-                            <i className="fa-regular fa-star text-black-50" />
-                            <i className="fa-regular fa-star text-black-50" />
-                            <span className="ps-4">(2)</span>
-                          </label>
-                        </div>
-                        <div className="rate-item">
-                          <input type="checkbox" name="rate-1" id="rate-1" />
-                          <label htmlFor="rate-1">
-                            <i className="fa fa-star text-warning" />
-                            <i className="fa-regular fa-star text-black-50" />
-                            <i className="fa-regular fa-star text-black-50" />
-                            <i className="fa-regular fa-star text-black-50" />
-                            <i className="fa-regular fa-star text-black-50" />
-                            <span className="ps-4">(1)</span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
+              <Filter
+                highestPrice={highestPrice}
+                minValue={minPrice}
+                maxValue={maxPrice}
+                star={star}
+              />
+
               <article id="products" className="col-xl-9 col-lg-8 col-md-7">
-                <div className="sort-by d-flex mt-2 mt-md-0">
-                  <p className="fw-bold m-0">Sort by:</p>
-                  <select name="sort-by-price" id="sort-by-price">
-                    <option className="text-capitalize" value="low">
-                      Low To High
-                    </option>
-                    <option className="text-capitalize" value="high">
-                      High To Low
-                    </option>
-                  </select>
-                </div>
-                <div className="items row">
-                  {products.map((product) => (
-                    <div
-                      key={product._id}
-                      className="col-xxl-3 col-xl-4 col-sm-6 col-12 my-2"
-                    >
-                      <div className="item">
-                        <ProductItem product={product} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                {productsByFilter.length === 0 || keyword === "" ? (
+                  <div className="text-center">
+                    <p className="bg-white p-4 rounded">
+                      No products found for Filter
+                    </p>
+                  </div>
+                ) : (
+                  <Items
+                    prds={productsByFilter}
+                    star={star}
+                    minPrice={minPrice}
+                    maxPrice={maxPrice}
+                  />
+                )}
 
                 <div
                   id="pagination"
@@ -317,5 +196,40 @@ const Search = () => {
     </>
   );
 };
-
+const Items = ({ prds, minPrice, maxPrice, star }) => {
+  return (
+    <>
+      <div className="d-flex mt-2 mt-md-0 justify-content-between sort-by">
+        <div className="d-flex ">
+          <p className="fw-bold m-0">Sort by:</p>
+          <select name="sort-by-price" id="sort-by-price">
+            <option className="text-capitalize" value="low">
+              Low To High
+            </option>
+            <option className="text-capitalize" value="high">
+              High To Low
+            </option>
+          </select>
+        </div>
+        {star.length === 0 && !maxPrice && !minPrice ? null : (
+          <div style={{ color: "#0d6efd" }}>
+            {prds.length} Results for Filter
+          </div>
+        )}
+      </div>
+      <div className="items row">
+        {prds?.map((product) => (
+          <div
+            key={product._id}
+            className="col-xxl-3 col-xl-4 col-sm-6 col-12 my-2"
+          >
+            <div className="item">
+              <ProductItem product={product} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+};
 export default Search;
