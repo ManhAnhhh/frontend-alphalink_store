@@ -14,6 +14,7 @@ import {
   getProducts,
   getCustomers,
   deleteHeartItem,
+  deleteManyHeartItem,
 } from "../../../services/Api";
 import Modal from "react-bootstrap/Modal";
 import { updateHeart } from "../../../redux/reducers/heart";
@@ -328,12 +329,14 @@ const Header = () => {
 };
 
 const HeartModal = (props) => {
+  const [checkedListItems, setCheckedListItems] = useState([]);
+  const { heart, handleClose } = props;
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const customerId = useSelector(
     (state) => state.Auth.login.currentCustomer.id
   );
-  const navigate = useNavigate();
-  const { heart, handleClose } = props;
+
   const handleClickNameItem = (prd_id) => {
     handleClose();
     navigate(`/product-detail/${prd_id}`);
@@ -349,11 +352,7 @@ const HeartModal = (props) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
+        setCheckedListItems((prev) => prev.filter((item) => item !== prd_id));
         deleteHeartItem({ customerId, productId: prd_id })
           .then(({ data }) => {
             dispatch(updateHeart(data.data));
@@ -361,16 +360,91 @@ const HeartModal = (props) => {
           .catch((err) => {
             //console.log(err);
           });
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
       }
     });
   };
+
+  const handleCheckedItemCart = (e) => {
+    const isChecked = e.target.checked;
+    const value = e.target.value;
+    if (isChecked) {
+      setCheckedListItems((prev) => [...prev, value]);
+    } else {
+      setCheckedListItems((prev) => prev.filter((item) => item !== value));
+    }
+  };
+
+  const handleCheckedAll = (e) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      setCheckedListItems(heart.map((item) => item.prd_id));
+    } else setCheckedListItems([]);
+  };
+
+  const handleDeleteManyItems = (e) => {
+    e.preventDefault();
+    if (checkedListItems.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "No item selected",
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteManyHeartItem(customerId, checkedListItems)
+          .then(({ data }) => {
+            dispatch(updateHeart(data.data));
+            Swal.fire({
+              icon: "success",
+              title: "Delete Items Successfully",
+            });
+            setCheckedListItems([]);
+          })
+          .catch((err) =>
+            Swal.fire({
+              icon: "success",
+              title: "Error deleting",
+              text: err.message || err,
+            })
+          );
+      }
+    });
+  };
+
+  if (heart.length === 0) {
+    return (
+      <div className="text-center">No item in my favorite products list</div>
+    );
+  }
+
   return (
     <table id="modal-heart-body" className="w-100">
       <thead className="text-center">
         <tr>
           <th className="d-flex align-items-center gap-2 justify-content-center">
-            <input type="checkbox" name="select-all" id="select-all" />
-            <label className="text-capitalize" htmlFor="select-all">
+            <input
+              checked={checkedListItems.length === heart.length}
+              type="checkbox"
+              name="select-all-heart"
+              id="select-all-heart"
+              onChange={handleCheckedAll}
+            />
+            <label className="text-capitalize" htmlFor="select-all-heart">
               select all
             </label>
           </th>
@@ -378,7 +452,12 @@ const HeartModal = (props) => {
           <th>
             <button
               type="button"
-              className="btn-delete-selected bg-danger-subtle border border-danger mx-1"
+              className={`border mx-1 ${
+                checkedListItems.length > 0
+                  ? "btn-delete-selected bg-danger-subtle border-danger"
+                  : "btn-not-delete-selected bg-secondary-subtle border-secondary"
+              }`}
+              onClick={handleDeleteManyItems}
             >
               Delete
             </button>
@@ -386,11 +465,18 @@ const HeartModal = (props) => {
         </tr>
       </thead>
       <tbody>
-        {heart?.map((item) => {
+        {heart?.map((item, index) => {
           return (
-            <tr>
+            <tr key={item._id}>
               <td className="text-center">
-                <input type="checkbox" name="item-1" id="item-1" />
+                <input
+                  checked={checkedListItems.includes(item.prd_id)}
+                  value={item.prd_id}
+                  type="checkbox"
+                  name={`chk-heart-${index}`}
+                  id={`chk-heart-${index}`}
+                  onChange={handleCheckedItemCart}
+                />
               </td>
               <td className="item d-flex gap-3 align-items-center">
                 <div className="img-item">

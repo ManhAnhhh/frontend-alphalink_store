@@ -5,6 +5,7 @@ import {
   deleteCartItem,
   getProducts,
   updateCartItems,
+  deleteManyCartItem,
 } from "../../services/Api";
 import { GetImageProduct, LOADING_TIME } from "../../share/utilities";
 import { HandlePriceWithDiscount } from "../../share/utilities";
@@ -24,6 +25,7 @@ const Cart = () => {
   const [discountCodePrice, setDiscountCodePrice] = useState(0);
   const [totalPriceInCart, setTotalPriceInCart] = useState(0);
   const [products, setProducts] = useState([]);
+  const [checkedListItems, setCheckedListItems] = useState([]);
   const [total, setTotal] = useState(0);
   const customerId = params.id;
   const customerLogin = useSelector(
@@ -75,7 +77,7 @@ const Cart = () => {
       Number(discountCodePrice);
     setTotal(parseFloat(result).toFixed(2));
   }, [totalPriceInCart, deleveryPrice, discountCodePrice]);
-
+  console.log(checkedListItems);
   const handleDeleteItem = (prd_id, colorIndex) => {
     Swal.fire({
       title: "Are you sure?",
@@ -87,11 +89,6 @@ const Cart = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
         deleteCartItem(
           { customerId: customerLogin.id, productId: prd_id },
           { colorIndex }
@@ -102,7 +99,15 @@ const Cart = () => {
           .catch((err) => {
             //console.log(err);
           });
+        setCheckedListItems((prev) =>
+          prev.filter((item) => item !== `${prd_id}&${colorIndex}`)
+        );
         setIsUpdateActive(true);
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
       }
     });
   };
@@ -157,6 +162,73 @@ const Cart = () => {
     });
   };
 
+  const handleCheckedItemCart = (e) => {
+    const isChecked = e.target.checked;
+    const value = e.target.value;
+    if (isChecked) {
+      setCheckedListItems((prev) => [...prev, value]);
+    } else {
+      setCheckedListItems((prev) => prev.filter((item) => item !== value));
+    }
+  };
+
+  const handleCheckedAll = (e) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      setCheckedListItems(
+        cart.map((item) => `${item.prd_id}&${item.colorIndex}`)
+      );
+    } else setCheckedListItems([]);
+  };
+
+  const handleDeleteManyItems = (e) => {
+    e.preventDefault();
+    if (checkedListItems.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "No item selected",
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const data = JSON.stringify(
+          checkedListItems.map((item) => {
+            return {
+              prd_id: item.slice(0, item.indexOf("&")),
+              colorIndex: item.slice(item.indexOf("&") + 1),
+            };
+          })
+        );
+        const result = JSON.parse(data);
+        deleteManyCartItem(customerId, result)
+          .then(({ data }) => {
+            dispatch(updateCart(data.data));
+            Swal.fire({
+              icon: "success",
+              title: "Delete Items Successfully",
+            });
+            setCheckedListItems([]);
+          })
+          .catch((err) =>
+            Swal.fire({
+              icon: "success",
+              title: "Error deleting",
+              text: err.message || err,
+            })
+          );
+      }
+    });
+  };
   if (cart?.length <= 0 || !cart) {
     return (
       <div className="container-fluid ">
@@ -173,6 +245,7 @@ const Cart = () => {
       </div>
     );
   }
+
   if (isLoading) return <CartSkeleton />;
   return (
     <>
@@ -186,8 +259,17 @@ const Cart = () => {
               <thead className="text-center">
                 <tr>
                   <th className="d-flex align-items-center gap-2 justify-content-center select-all">
-                    <input type="checkbox" name="select-all" id="select-all" />
-                    <label className="text-capitalize" htmlFor="select-all">
+                    <input
+                      checked={checkedListItems.length === cart.length}
+                      type="checkbox"
+                      name="select-all-cart"
+                      id="select-all-cart"
+                      onChange={handleCheckedAll}
+                    />
+                    <label
+                      className="text-capitalize"
+                      htmlFor="select-all-cart"
+                    >
                       select all
                     </label>
                   </th>
@@ -215,7 +297,12 @@ const Cart = () => {
 
                     <button
                       type="button"
-                      className="btn-delete-selected bg-danger-subtle border border-danger mx-1"
+                      className={`border mx-1 ${
+                        checkedListItems.length > 0
+                          ? "btn-delete-selected bg-danger-subtle border-danger"
+                          : "btn-not-delete-selected bg-secondary-subtle border-secondary"
+                      }`}
+                      onClick={handleDeleteManyItems}
                     >
                       Delete
                     </button>
@@ -228,9 +315,14 @@ const Cart = () => {
                     <tr key={item._id}>
                       <td className="text-center">
                         <input
+                          checked={checkedListItems.includes(
+                            `${item.prd_id}&${item.colorIndex}`
+                          )}
+                          value={`${item.prd_id}&${item.colorIndex}`}
                           type="checkbox"
                           name={`cbo-${item._id}`}
                           id={`cbo-${item._id}`}
+                          onChange={handleCheckedItemCart}
                         />
                       </td>
                       <td className="item d-flex gap-3 align-items-center">

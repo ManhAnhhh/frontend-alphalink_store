@@ -76,9 +76,11 @@
   transition: background-color 0.5s ease-in-out;
 }
 
-#cart .btn-delete-selected {
+#cart .btn-delete-selected,
+#cart .btn-not-delete-selected {
   padding: 4px 12px;
   border-radius: var(--radius-m);
+  transition: all 0.5s ease-in-out;
 }
 
 #cart .btn-delete-selected:hover {

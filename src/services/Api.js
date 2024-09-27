@@ -24,8 +24,12 @@ export const updateCartItems = (customerId, config) =>
   Http.post(`customer/${customerId}/update-cart/`, config);
 export const deleteCartItem = ({ customerId, productId }, config) =>
   Http.post(`customer/${customerId}/delete-cart/${productId}`, config);
+export const deleteManyCartItem = (customerId, config) =>
+  Http.post(`customer/${customerId}/delete-many-cart`, config);
 
 export const addHeartItem = ({ customerId, productId }, config) =>
   Http.post(`customer/${customerId}/add-to-heart/${productId}`, config);
 export const deleteHeartItem = ({ customerId, productId }, config) =>
   Http.post(`customer/${customerId}/delete-heart-item/${productId}`, config);
+export const deleteManyHeartItem = (customerId, config) =>
+  Http.post(`customer/${customerId}/delete-many-heart-item`, config);

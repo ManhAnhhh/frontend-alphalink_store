@@ -5,6 +5,7 @@
   padding: 0.5rem;
   font-weight: bold;
 }
+
 #heart-modal .wrapper-table {
   background-color: var(--light-color);
   padding: 16px;
@@ -19,9 +20,11 @@
   min-width: 120px;
 }
 
-#modal-heart-body .btn-delete-selected {
+#modal-heart-body .btn-delete-selected,
+#modal-heart-body .btn-not-delete-selected {
   padding: 4px 12px;
   border-radius: var(--radius-m);
+  transition: all 0.5s ease-in-out;
 }
 
 #modal-heart-body .btn-delete-selected:hover {
