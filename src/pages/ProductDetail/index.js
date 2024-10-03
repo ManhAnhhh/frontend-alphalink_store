@@ -12,13 +12,14 @@ import {
   getCategories,
   getCommentsByIdProduct,
 } from "../../services/Api";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAddToCart } from "../../share/CustomHook/useAddToCart";
 import { useSelector } from "react-redux";
 import ProductDetailsSkeleton from "../../share/components/Skeleton/ProductDetailsSkeleton";
 import Modal from "react-bootstrap/Modal";
 
 const ProductDetail = () => {
+  const navigate = useNavigate();
   const addToCart = useAddToCart();
   const [categories, setCategories] = useState([]);
   const [imgShow, setImgShow] = useState(0);
@@ -108,6 +109,10 @@ const ProductDetail = () => {
     setUrlImgShowModal(url);
   };
 
+  const handleBuyNow = () => {
+    addToCart({ customerId, product, qty: quantity, colorIndex: colorChoosed });
+    navigate(`/customer/${customerId}/cart`);
+  };
   if (isLoading) return <ProductDetailsSkeleton />;
 
   return (
@@ -173,7 +178,7 @@ const ProductDetail = () => {
                 <div className="price-item d-flex gap-4">
                   {product.discount !== 0 && (
                     <p className="price text-secondary text-decoration-line-through mb-0">
-                      {product.price}
+                      $ {product.price}
                     </p>
                   )}
                   <p className="price text-danger fw-bold mb-0">
@@ -238,13 +243,23 @@ const ProductDetail = () => {
                   <button
                     className="btn-custom btn-items"
                     onClick={() =>
-                      addToCart(customerId, product, quantity, colorChoosed)
+                      addToCart({
+                        customerId,
+                        product,
+                        qty: quantity,
+                        colorIndex: colorChoosed,
+                      })
                     }
                   >
                     <i className="fa-solid fa-cart-shopping fa-lg text-white" />
                     &nbsp; Add to cart
                   </button>
-                  <button className="btn-custom btn-items">Buy now</button>
+                  <button
+                    className="btn-custom btn-items"
+                    onClick={handleBuyNow}
+                  >
+                    Buy now
+                  </button>
                 </div>
                 <div className="details mt-4">
                   <p className="mb-2">

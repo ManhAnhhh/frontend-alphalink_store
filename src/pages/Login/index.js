@@ -71,6 +71,7 @@ const Login = () => {
             email: res.data.data.email,
             fullName: res.data.data.fullName,
             phone: res.data.data.phone,
+            address: res.data.data.address,
           })
         );
         dispatch(updateCart(res.data.data.cart));

@@ -1,14 +1,18 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 import {
   deleteCartItem,
   getProducts,
   updateCartItems,
   deleteManyCartItem,
 } from "../../services/Api";
-import { GetImageProduct, LOADING_TIME } from "../../share/utilities";
-import { HandlePriceWithDiscount } from "../../share/utilities";
+import {
+  GetImageProduct,
+  LOADING_TIME,
+  HandlePriceWithDiscount,
+} from "../../share/utilities";
 import Swal from "sweetalert2";
 import { updateCart } from "../../redux/reducers/cart";
 
@@ -19,22 +23,21 @@ import CartSkeleton from "../../share/components/Skeleton/CartSkeleton";
 const Cart = () => {
   const params = useParams();
   const dispatch = useDispatch();
-  const [deleveryPrice, setDeleveryPrice] = useState(15);
   const [isUpdateActive, setIsUpdateActive] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [discountCodePrice, setDiscountCodePrice] = useState(0);
-  const [totalPriceInCart, setTotalPriceInCart] = useState(0);
+  const [total, setTotal] = useState(0);
   const [products, setProducts] = useState([]);
   const [checkedListItems, setCheckedListItems] = useState([]);
-  const [total, setTotal] = useState(0);
   const customerId = params.id;
   const customerLogin = useSelector(
     (state) => state.Auth.login.currentCustomer
   );
   const navigate = useNavigate();
+  const uniqueId = uuid();
   const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
-  let cart = useSelector((state) => state.Cart.items);
-
+  let cart = useSelector((state) => state.Cart.cart);
+  let items = [...cart.items];
   // check user đã đăng nhập hay chưa
   useEffect(() => {
     if (!isLoggedIn) {
@@ -55,29 +58,11 @@ const Cart = () => {
   }, []);
 
   useEffect(() => {
-    setTotalPriceInCart(() =>
-      cart
-        ?.reduce(
-          (total, item) =>
-            total +
-            HandlePriceWithDiscount(item.price, item.discount) * item.qty,
-          0
-        )
-        .toFixed(2)
-    );
-    setDeleveryPrice(() => {
-      return cart?.length > 3 ? 0 : 15;
-    });
-  }, [cart]);
+    const value =
+      cart.totalPriceInCart + cart.deleveryPrice + discountCodePrice;
+    setTotal(parseFloat(value).toFixed(2));
+  }, [cart.deleveryPrice, cart.totalPriceInCart, discountCodePrice]);
 
-  useEffect(() => {
-    const result =
-      Number(totalPriceInCart) +
-      Number(deleveryPrice) +
-      Number(discountCodePrice);
-    setTotal(parseFloat(result).toFixed(2));
-  }, [totalPriceInCart, deleveryPrice, discountCodePrice]);
-  console.log(checkedListItems);
   const handleDeleteItem = (prd_id, colorIndex) => {
     Swal.fire({
       title: "Are you sure?",
@@ -137,7 +122,7 @@ const Cart = () => {
       return;
     }
     setIsUpdateActive(true);
-    cart = cart.map((item) => {
+    items = items.map((item) => {
       if (item.prd_id === id && item.colorIndex === colorIndex) {
         return { ...item, qty: Number(value) };
       }
@@ -146,7 +131,7 @@ const Cart = () => {
   };
 
   const handleUpdateCart = () => {
-    updateCartItems(customerId, { cart }).then(({ data }) => {
+    updateCartItems(customerId, { cart: items }).then(({ data }) => {
       dispatch(updateCart(data.data));
       Swal.fire({
         icon: "success",
@@ -176,7 +161,7 @@ const Cart = () => {
     const isChecked = e.target.checked;
     if (isChecked) {
       setCheckedListItems(
-        cart.map((item) => `${item.prd_id}&${item.colorIndex}`)
+        items.map((item) => `${item.prd_id}&${item.colorIndex}`)
       );
     } else setCheckedListItems([]);
   };
@@ -229,7 +214,7 @@ const Cart = () => {
       }
     });
   };
-  if (cart?.length <= 0 || !cart) {
+  if (items?.length <= 0) {
     return (
       <div className="container-fluid ">
         <div className="m-0 text-center pt-3 pb-2 bg-white rounded">
@@ -260,7 +245,7 @@ const Cart = () => {
                 <tr>
                   <th className="d-flex align-items-center gap-2 justify-content-center select-all">
                     <input
-                      checked={checkedListItems.length === cart.length}
+                      checked={checkedListItems.length === items.length}
                       type="checkbox"
                       name="select-all-cart"
                       id="select-all-cart"
@@ -310,7 +295,7 @@ const Cart = () => {
                 </tr>
               </thead>
               <tbody>
-                {cart?.map((item) => {
+                {items?.map((item) => {
                   return (
                     <tr key={item._id}>
                       <td className="text-center">
@@ -442,14 +427,14 @@ const Cart = () => {
                   <p className="mb-0">
                     Total: &nbsp;
                     <span className="text-danger fw-bold">
-                      $ {totalPriceInCart}
+                      $ {cart.totalPriceInCart}
                     </span>
                   </p>
                   <p className="mb-0">
                     (
-                    {cart.length === 1
-                      ? `${cart.length} item`
-                      : `${cart.length} items`}
+                    {items.length === 1
+                      ? `${items.length} item`
+                      : `${items.length} items`}
                     )
                   </p>
                 </div>
@@ -458,7 +443,9 @@ const Cart = () => {
                 </div>
                 <div className="text-center">
                   <p className="mb-0">Delivery</p>
-                  <p className="text-danger fw-bold mb-0">$ {deleveryPrice}</p>
+                  <p className="text-danger fw-bold mb-0">
+                    $ {cart.deleveryPrice}
+                  </p>
                 </div>
                 <div className="fs-4">
                   <p className="mb-0">+</p>
@@ -474,6 +461,7 @@ const Cart = () => {
                 <button
                   type="button"
                   className="btn-custom btn-buy text-uppercase"
+                  onClick={() => navigate(`/payment/${uniqueId}`)}
                 >
                   Buy
                 </button>

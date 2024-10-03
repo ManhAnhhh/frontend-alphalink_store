@@ -17,7 +17,8 @@ import {
   deleteManyHeartItem,
 } from "../../../services/Api";
 import Modal from "react-bootstrap/Modal";
-import { updateHeart } from "../../../redux/reducers/heart";
+import { updateHeart, clearHeart } from "../../../redux/reducers/heart";
+import { clearCart } from "../../../redux/reducers/cart";
 
 const Header = () => {
   const suggestBoxRef = useRef(null);
@@ -40,9 +41,11 @@ const Header = () => {
   const customer = useSelector((state) => state.Auth.login.currentCustomer);
   const heart = useSelector((state) => state?.Heart?.items);
   const totalProducsIncart =
-    useSelector((state) => state?.Cart?.items?.length) || 0;
+    useSelector((state) => state?.Cart?.cart?.items?.length) || 0;
   const handleLogout = () => {
     dispatch(loggedOut());
+    dispatch(clearHeart());
+    dispatch(clearCart());
     PopUp({
       type: "success",
       content: "Logout successfully",
@@ -72,10 +75,8 @@ const Header = () => {
     };
   }, []);
 
-  const handleOnClickProduct = (product) => {
-    navigate(`/product-detail/${product._id}`, {
-      state: { product },
-    });
+  const handleOnClickSearchProduct = (product) => {
+    navigate(`/product-detail/${product._id}`);
     setIsShowSuggestBox(false);
     // setKeyword("");
   };
@@ -235,7 +236,9 @@ const Header = () => {
                             <div
                               key={product._id}
                               className="item d-flex gap-2"
-                              onClick={() => handleOnClickProduct(product)}
+                              onClick={() =>
+                                handleOnClickSearchProduct(product)
+                              }
                             >
                               <div className="img-item d-flex align-items-center">
                                 <img

@@ -37,6 +37,7 @@
   color: var(--main-color);
   font-weight: bold;
 }
+
 #payment .shipping-address .info {
   padding: 20px 0;
 }
@@ -50,6 +51,7 @@
   padding: 4px 8px;
 
 }
+
 #payment .shipping-address .info button.btn-change-info,
 #payment .shipping-address .info button.btn-change-info i {
   border: none;
@@ -58,7 +60,28 @@
 }
 
 #payment .order .method-of-payment {
+  padding: 8px 0;
   margin: 16px 0;
+  border-bottom: 2px solid var(--main-color);
+}
+
+#payment .order .text-note input {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-m);
+  outline: none;
+  caret-color: var(--main-color);
+  transition: border-color 0.4s ease-in-out;
+  padding: 6px 8px;
+}
+
+#payment .order .text-note input:focus {
+  border-color: var(--main-color);
+}
+
+#payment .order .method-of-payment .content,
+#payment .order .method-of-payment .content i {
+  color: var(--main-color);
+  font-weight: bold;
 }
 
 /*! products in cart */
@@ -80,16 +103,28 @@
 
 #payment .btn-delete-selected {
   padding: 4px 12px;
-  border-radius:  var(--radius-m);
+  border-radius: var(--radius-m);
 }
+
 #payment .btn-delete-selected:hover {
   background-color: var(--red-color) !important;
-  color: var(--light-color)!important;
+  color: var(--light-color) !important;
   transition: background-color 0.5s ease-in-out;
 }
 
 #payment-items .item .img-item {
   width: 100px;
+  transform: scale(.8);
+}
+
+#payment-items .item .name {
+
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  /* Số dòng giới hạn */
 }
 
 #payment-items .item>div:nth-child(2) {
@@ -135,6 +170,7 @@
   margin: 0 16px;
   padding: 4px 16px;
 }
+
 #payment .wrapper-voucher .btn-buy {
   padding: 6px 32px;
 }

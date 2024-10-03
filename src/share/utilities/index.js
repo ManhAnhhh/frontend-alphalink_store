@@ -65,4 +65,4 @@ export const HandlePriceWithDiscount = (price, discount) => {
   return parseFloat(total.toFixed(2));
 };
 
-export const LOADING_TIME = 3000;
+export const LOADING_TIME = 1500;

@@ -1,4 +1,4 @@
-import { GetImageProduct, HandlePriceWithDiscount } from "../utilities";
+import { GetImageProduct, HandlePriceWithDiscount, PopUp } from "../utilities";
 import { getProductByID, addHeartItem } from "../../services/Api";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -11,6 +11,7 @@ const ProductItem = (props) => {
   const dispatch = useDispatch();
   const [isHeart, setIsHeart] = useState(false);
   const addToCart = useAddToCart();
+  const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
   const customerId = useSelector(
     (state) => state.Auth.login.currentCustomer?.id
   );
@@ -46,6 +47,13 @@ const ProductItem = (props) => {
   }, [id]);
 
   const addToHeart = () => {
+    if (!isLoggedIn) {
+      PopUp({
+        type: "error",
+        content: "Please login to add product to your heart",
+      });
+      return;
+    }
     const data = {
       prd_id: id,
       price,
@@ -140,7 +148,7 @@ const ProductItem = (props) => {
           </p>
         )}
 
-        <div className="heart-icon py-1 mx-2" onClick={() => addToHeart()}>
+        <div className="heart-icon py-1 mx-2" onClick={addToHeart}>
           {isHeart ? (
             <i
               style={{ color: "#dc3545" }}
@@ -153,7 +161,7 @@ const ProductItem = (props) => {
       </div>
       <button
         className="btn-add-to-cart btn-custom my-2 w-100"
-        onClick={() => addToCart(customerId, product)}
+        onClick={() => addToCart({ customerId, product })}
       >
         Add to cart
       </button>

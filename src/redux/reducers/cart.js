@@ -1,7 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { HandlePriceWithDiscount } from "../../share/utilities";
 
 const initialState = {
-  items: null,
+  cart: {
+    items: [],
+    totalPriceInCart: 0,
+    deleveryPrice: 0,
+  },
 };
 
 export const cartCustomerSlice = createSlice({
@@ -9,12 +14,32 @@ export const cartCustomerSlice = createSlice({
   initialState,
   reducers: {
     updateCart: (state, action) => {
-      state.items = action.payload;
+      state.cart.items = action.payload;
+      state.cart.totalPriceInCart = action.payload
+        ?.reduce(
+          (total, item) =>
+            total +
+            HandlePriceWithDiscount(item.price, item.discount) * item.qty,
+          0
+        )
+        .toFixed(2);
+      if (action.payload.length === 0) {
+        state.cart.deleveryPrice = 0;
+      } else if (action.payload.length > 3) {
+        state.cart.deleveryPrice = 0;
+      } else {
+        state.cart.deleveryPrice = 15;
+      }
+    },
+    clearCart: (state, action) => {
+      state.cart.items = [];
+      state.cart.totalPriceInCart = 0;
+      state.cart.deleveryPrice = 0;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateCart } = cartCustomerSlice.actions;
+export const { updateCart, clearCart } = cartCustomerSlice.actions;
 
 export default cartCustomerSlice.reducer;
