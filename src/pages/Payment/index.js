@@ -1,18 +1,28 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { clearCart } from "../../redux/reducers/cart";
 import {
   GetImageProduct,
   HandlePriceWithDiscount,
 } from "../../share/utilities";
-
+import { deleteManyCartItem, order } from "../../services/Api";
+import Swal from "sweetalert2";
 const Payment = () => {
+  const methodOfPaymentArr = ["Cash", "Bank"];
   const [discountCodePrice, setDiscountCodePrice] = useState(0);
+  const [methodOfPayment, setMethodOfPayment] = useState("Cash");
+  const [note, setNote] = useState("");
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.Cart.cart);
   const customer = useSelector((state) => state.Auth.login.currentCustomer);
   const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
+
+  // chưa handle voucher
+  const voucher = "";
+
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/");
@@ -22,9 +32,68 @@ const Payment = () => {
 
   useEffect(() => {
     const value =
-      cart.totalPriceInCart + cart.deleveryPrice + discountCodePrice;
+      parseFloat(cart.totalPriceInCart) +
+      cart.deleveryPrice +
+      discountCodePrice;
     setTotal(parseFloat(value).toFixed(2));
   }, [cart.deleveryPrice, cart.totalPriceInCart, discountCodePrice]);
+  const handlePayNow = async () => {
+    if (cart.items.length === 0) {
+      await Swal.fire({
+        icon: "error",
+        title: "Cart is empty",
+        text: "Return to Home to buy products",
+      });
+      navigate("/");
+      return;
+    }
+
+    if (methodOfPayment === "Bank") {
+      await Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "This payment method is not supported yet.",
+      });
+      setMethodOfPayment("Cash");
+      return;
+    }
+
+    const items = cart.items.map((e) => {
+      return {
+        prd_id: e.prd_id,
+        colorIndex: e.colorIndex,
+        qty: e.qty,
+      };
+    });
+    const data = {
+      fullName: customer.fullName,
+      email: customer.email,
+      phone: customer.phone,
+      address: customer.address,
+      items,
+      voucher,
+      note,
+      totalPrice: parseFloat(total),
+    };
+
+    const deleteAllItemIncart = items.map((e) => {
+      return {
+        prd_id: e.prd_id,
+        colorIndex: e.colorIndex,
+      };
+    });
+
+    //? thêm vào database
+    await order(customer.id, data).then().catch();
+
+    //? xóa trong giỏ hàng cx như xóa items in cart trong database
+    await deleteManyCartItem(customer.id, deleteAllItemIncart)
+      .then(() => {
+        dispatch(clearCart());
+      })
+      .catch();
+    navigate("/success");
+  };
 
   return (
     <section id="payment">
@@ -84,7 +153,6 @@ const Payment = () => {
                       <td className="item d-flex gap-3 align-items-center">
                         <div className="img-item">
                           <img
-                            className="img-fluid"
                             src={GetImageProduct(item.img[0])}
                             alt={GetImageProduct(item.img[0])}
                           />
@@ -116,8 +184,10 @@ const Payment = () => {
                       </td>
                       <td className="price text-danger fw-bold text-center text-nowrap">
                         ${" "}
-                        {HandlePriceWithDiscount(item.price, item.discount) *
-                          item.qty}
+                        {(
+                          HandlePriceWithDiscount(item.price, item.discount) *
+                          item.qty
+                        ).toFixed(2)}
                       </td>
                     </tr>
                   ))}
@@ -126,33 +196,28 @@ const Payment = () => {
             </div>
             <div className="method-of-payment d-flex align-items-center gap-4">
               <p className="m-0 content">
-                <i class="fa-solid fa-money-check-dollar me-1"></i> Method of
-                payment:
+                <i className="fa-solid fa-money-check-dollar me-1"></i> Method
+                of payment:
               </p>
-              <div className="d-flex align-items-center gap-2">
-                <input
-                  type="radio"
-                  name="method-of-payment"
-                  value="bank"
-                  id="bank"
-                />
-                <label htmlFor="bank">Bank</label>
-              </div>
-              <div className="d-flex align-items-center gap-2">
-                <input
-                  type="radio"
-                  name="method-of-payment"
-                  value="cash"
-                  id="Cash"
-                  defaultChecked="true"
-                />
-                <label htmlFor="Cash">Cash</label>
-              </div>
+              {methodOfPaymentArr.map((item, index) => {
+                return (
+                  <div key={item} className="d-flex align-items-center gap-2">
+                    <input
+                      type="radio"
+                      name="method-of-payment"
+                      checked={methodOfPayment === item}
+                      id={item}
+                      onChange={() => setMethodOfPayment(item)}
+                    />
+                    <label htmlFor={item}>{item}</label>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="wrapper-voucher">
               <div className="d-flex align-items-center justify-content-between flex-wrap gap-4 my-4">
-                <div class="text-note">
+                <div className="text-note">
                   <label htmlFor="text-note" className="me-4">
                     Note
                   </label>
@@ -160,6 +225,8 @@ const Payment = () => {
                     id="text-note"
                     type="text"
                     placeholder="Enter text ..."
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
                   />
                 </div>
                 <div className="d-flex">
@@ -215,8 +282,9 @@ const Payment = () => {
                 <button
                   type="button"
                   className="btn-custom btn-buy text-uppercase"
+                  onClick={handlePayNow}
                 >
-                  Payment
+                  Pay Now
                 </button>
               </div>
             </div>

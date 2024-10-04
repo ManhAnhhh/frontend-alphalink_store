@@ -33,3 +33,6 @@ export const deleteHeartItem = ({ customerId, productId }, config) =>
   Http.post(`customer/${customerId}/delete-heart-item/${productId}`, config);
 export const deleteManyHeartItem = (customerId, config) =>
   Http.post(`customer/${customerId}/delete-many-heart-item`, config);
+
+export const order = (customerId, config) =>
+  Http.post(`customer/${customerId}/order`, config);

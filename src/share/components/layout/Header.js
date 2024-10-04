@@ -447,7 +447,7 @@ const HeartModal = (props) => {
               id="select-all-heart"
               onChange={handleCheckedAll}
             />
-            <label className="text-capitalize" htmlFor="select-all-heart">
+            <label className="text-capitalize text-no-wrap" htmlFor="select-all-heart">
               select all
             </label>
           </th>

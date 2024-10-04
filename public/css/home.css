@@ -522,3 +522,8 @@ footer .footer-b .title {
   width: 80%;
   margin: 0 auto;
 }
+
+/* customize input checkbox and label */
+input[type="checkbox"], label {
+  cursor: pointer;
+}

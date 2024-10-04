@@ -17,6 +17,7 @@ const Success = () => {
           <div style={{ width: "50%" }} className="mx-auto">
             <img className="img-fluid" src=" /img/success.png" alt="acer" />
           </div>
+          <button class="mx-auto btn-custom mb-3" type="button" onClick={() => navigate("/")}>Return Home</button>
         </div>
       </div>
     </section>

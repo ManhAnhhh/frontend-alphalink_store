@@ -15,7 +15,7 @@ export const cartCustomerSlice = createSlice({
   reducers: {
     updateCart: (state, action) => {
       state.cart.items = action.payload;
-      state.cart.totalPriceInCart = action.payload
+      const totalPriceInCart = action.payload
         ?.reduce(
           (total, item) =>
             total +
@@ -23,6 +23,7 @@ export const cartCustomerSlice = createSlice({
           0
         )
         .toFixed(2);
+      state.cart.totalPriceInCart = parseFloat(totalPriceInCart);
       if (action.payload.length === 0) {
         state.cart.deleveryPrice = 0;
       } else if (action.payload.length > 3) {
