@@ -14,6 +14,7 @@ const settings = {
 };
 
 const Banner = () => {
+  //? Chỉ có home page and category page là có Banner
   const location = useLocation();
   const pathUsed = ["/category"];
 
@@ -22,9 +23,7 @@ const Banner = () => {
     return pathUsed.some((path) => location.pathname.startsWith(path));
   };
 
-  if (!isCheckPath()) return;
-
-  return (
+  isCheckPath() && (
     <section id="banner" className="mb-4">
       <div className="container-fluid">
         <div className="row d-none d-sm-block">
