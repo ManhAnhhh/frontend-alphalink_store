@@ -1,12 +1,13 @@
 import { PopUp } from "../../share/utilities";
 import { useNavigate, Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { loginCustomer } from "../../services/Api";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loginSuccess, loginFalse } from "../../redux/reducers/auth";
 import { updateCart } from "../../redux/reducers/cart";
 import { updateHeart } from "../../redux/reducers/heart";
 const Login = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [emailLogin, setEmailLogin] = useState("");
   const [passwordLogin, setPasswordLogin] = useState("");
@@ -16,17 +17,6 @@ const Login = () => {
     isValidPassword: true,
   };
   const [objectInputs, setObjectInputs] = useState(defaultObjectInputs);
-  const navigate = useNavigate();
-
-  const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
-
-  // check user đã đăng nhập hay chưa
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/");
-      return;
-    }
-  }, [navigate, isLoggedIn]);
 
   const isValidField = () => {
     setObjectInputs(defaultObjectInputs);

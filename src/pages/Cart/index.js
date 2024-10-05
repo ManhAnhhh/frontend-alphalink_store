@@ -35,16 +35,8 @@ const Cart = () => {
   );
   const navigate = useNavigate();
   const uniqueId = uuid();
-  const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
   const cart = useSelector((state) => state.Cart.cart);
   let items = [...cart.items];
-  // check user đã đăng nhập hay chưa
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/");
-      return;
-    }
-  }, [navigate, isLoggedIn]);
 
   useEffect(() => {
     getProducts()
@@ -60,7 +52,7 @@ const Cart = () => {
   useEffect(() => {
     const value =
       cart.totalPriceInCart + cart.deleveryPrice + discountCodePrice;
-    setTotal(parseFloat(value).toFixed(2)); 
+    setTotal(parseFloat(value).toFixed(2));
   }, [cart.deleveryPrice, cart.totalPriceInCart, discountCodePrice]);
 
   const handleDeleteItem = (prd_id, colorIndex) => {

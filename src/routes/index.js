@@ -8,16 +8,20 @@ import NotFound from "../pages/NotFound";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Search from "../pages/Search";
-const publicRoutes = [
-  { path: "/register", element: <Register /> },
-  { path: "/login", element: <Login /> },
+
+import PrivateRoute from "./PrivateRoute";
+import LoggedRoute from "./LoggedRoute";
+
+const routesItem = [
+  { path: "/register", element: <LoggedRoute element={<Register />} /> },
+  { path: "/login", element: <LoggedRoute element={<Login />} /> },
   { path: "/product-detail/:id", element: <ProductDetail /> },
   { path: "/category/:id", element: <Category /> },
-  { path: "/customer/:id/cart", element: <Cart /> },
-  { path: "/payment/:id", element: <Payment /> },
-  { path: "/success", element: <Success /> },
+  { path: "/customer/:id/cart", element: <PrivateRoute element={<Cart />} /> },
+  { path: "/payment/:id", element: <PrivateRoute element={<Payment />} /> },
+  { path: "/success", element: <PrivateRoute element={<Success />} /> },
   { path: "/search", element: <Search /> },
   { path: "/", element: <Home /> },
   { path: "*", element: <NotFound /> },
 ];
-export default publicRoutes;
+export default routesItem;

@@ -1,4 +1,4 @@
-import publicRoutes from "./routes";
+import routesItem from "./routes";
 import { useState, useEffect } from "react";
 import { Routes, Route, BrowserRouter, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -50,7 +50,7 @@ const App = () => {
         <BrowserRouter>
           <Layout>
             <Routes>
-              {publicRoutes.map((route) => {
+              {routesItem.map((route) => {
                 return (
                   <Route
                     path={route.path}

@@ -18,17 +18,9 @@ const Payment = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.Cart.cart);
   const customer = useSelector((state) => state.Auth.login.currentCustomer);
-  const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
 
   // chưa handle voucher
   const voucher = "";
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/");
-      return;
-    }
-  }, [navigate, isLoggedIn]);
 
   useEffect(() => {
     const value =
