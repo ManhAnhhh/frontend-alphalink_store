@@ -4,7 +4,7 @@ const ProductDetailsSkeleton = () => {
     <>
       <section className="breadcrumb-custom">
         <div className="container-fluid">
-          <div className="bg-white py-1 px-2 mb-2 rounded-2">
+          <div className="bg-white py-1 px-2 mb-2 rounded-2 my-1">
             <Skeleton width={100} />
           </div>
         </div>

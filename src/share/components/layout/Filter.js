@@ -16,7 +16,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
     height: window.innerHeight,
   });
 
-  // dùng kiểu cũ còn h sẽ dùng useSearchParams của react-router-dom (xem Search page)
+  // đây là dùng kiểu cũ còn h sẽ dùng useSearchParams của react-router-dom (xem Search page)
   const searchParams = new URLSearchParams(location.search);
 
   useEffect(() => {

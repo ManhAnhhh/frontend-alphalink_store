@@ -1,5 +1,4 @@
 import Slider from "react-slick";
-import { useLocation } from "react-router-dom";
 import { CustomNextArrow, CustomePrevArrow } from "../../utilities";
 
 const settings = {
@@ -14,16 +13,7 @@ const settings = {
 };
 
 const Banner = () => {
-  //? Chỉ có home page and category page là có Banner
-  const location = useLocation();
-  const pathUsed = ["/category"];
-
-  const isCheckPath = () => {
-    if (location.pathname === "/") return true;
-    return pathUsed.some((path) => location.pathname.startsWith(path));
-  };
-
-  return isCheckPath() && (
+  return (
     <section id="banner" className="mb-4">
       <div className="container-fluid">
         <div className="row d-none d-sm-block">
