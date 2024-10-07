@@ -112,7 +112,7 @@ const Register = () => {
           type: "success",
           content: res.data.message,
         });
-        navigate("/login");
+        navigate("/customer/login");
       })
       .catch((err) => {
         // console.log(err);
@@ -227,7 +227,7 @@ const Register = () => {
             />
           </div>
           <div>
-            <Link to="/login" className="float-none me-0 mb-2 fs-14">
+            <Link to="/customer/login" className="float-none me-0 mb-2 fs-14">
               Already've an account
             </Link>
           </div>

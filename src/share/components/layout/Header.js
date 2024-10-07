@@ -32,12 +32,7 @@ const Header = () => {
   const [showHeartModal, setShowHeartModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const register = () => {
-    navigate("/register");
-  };
-  const login = () => {
-    navigate("/login");
-  };
+
   const customer = useSelector((state) => state.Auth.login.currentCustomer);
   const heart = useSelector((state) => state?.Heart?.items);
   const totalProducsIncart =
@@ -296,12 +291,15 @@ const Header = () => {
               ) : (
                 <div>
                   <button
-                    onClick={register}
+                    onClick={() => navigate("customer/register")}
                     className="btn-custom py-2 px-2 mx-2"
                   >
                     Sign Up
                   </button>
-                  <button onClick={login} className="btn-custom py-2 px-2 mx-2">
+                  <button
+                    onClick={() => navigate("customer/login")}
+                    className="btn-custom py-2 px-2 mx-2"
+                  >
                     Log in
                   </button>
                 </div>
@@ -447,7 +445,10 @@ const HeartModal = (props) => {
               id="select-all-heart"
               onChange={handleCheckedAll}
             />
-            <label className="text-capitalize text-no-wrap" htmlFor="select-all-heart">
+            <label
+              className="text-capitalize text-no-wrap"
+              htmlFor="select-all-heart"
+            >
               select all
             </label>
           </th>

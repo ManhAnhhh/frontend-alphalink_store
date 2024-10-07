@@ -120,8 +120,8 @@ const Login = () => {
           </div>
           <div>
             <input onClick={handleLogin} type="submit" value="Log in" />
-            <Link to="/forget">Forget Password?</Link>
-            <Link to="/register">Register</Link>
+            <Link to="/customer/forget">Forget Password?</Link>
+            <Link to="/customer/register">Register</Link>
           </div>
         </form>
         <div className="button">
