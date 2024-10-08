@@ -4,14 +4,16 @@ import Skeleton from "react-loading-skeleton";
 const NavigationSkeleton = () => {
   const [categoriesParent, setCategoriesParent] = useState([]);
   useEffect(() => {
-    getCategories().then((res) => {
-      setCategoriesParent(
-        res.data.data.filter((cat) => cat.parent_id === null)
-      );
-    });
+    getCategories()
+      .then((res) => {
+        setCategoriesParent(
+          res.data.data.filter((cat) => cat.parent_id === null)
+        );
+      })
+      .catch((err) => {});
   }, []);
   return (
-    <nav className="navbar navbar-expand-lg bg-white">
+    <nav className="navbar navbar-expand-lg bg-white my-1">
       <div className="container-fluid">
         <button
           className="navbar-toggler my-2 ms-auto"

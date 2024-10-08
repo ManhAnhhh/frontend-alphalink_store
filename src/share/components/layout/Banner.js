@@ -59,10 +59,10 @@ const Banner = () => {
           </div>
           <div className="sub-carousel col-lg-4 col-sm-12 d-flex flex-lg-column mt-4 mt-lg-0">
             <div>
-              <img src="/img/banner-sub1.png" alt="ac" />
+              <img className="w-100" src="/img/banner-sub1.png" alt="ac" />
             </div>
             <div>
-              <img src="/img/banner-sub2.png" alt="ac" />
+              <img className="w-100" src="/img/banner-sub2.png" alt="ac" />
             </div>
           </div>
         </div>

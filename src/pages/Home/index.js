@@ -1,16 +1,17 @@
 import Slider from "react-slick";
 import { useState, useEffect } from "react";
 import ProductItem from "../../share/components/Product-item";
-import {
-  CustomNextArrow,
-  CustomePrevArrow,
-  LOADING_TIME,
-} from "../../share/utilities";
+import { CustomNextArrow, CustomePrevArrow } from "../../share/utilities";
 import { getProducts } from "../../services/Api";
 import HomeSkeleton from "../../share/components/Skeleton/HomeSkeleton";
+import { useSelector } from "react-redux";
+
 const Home = () => {
   const [bestSeller, setBestSeller] = useState([]);
   const [featureProducts, setfeatureProducts] = useState([]);
+
+  const isLoading = useSelector((state) => state.Loading.isLoading);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -48,33 +49,31 @@ const Home = () => {
       },
     ],
   };
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getProducts()
       .then(({ data }) => {
         setBestSeller(() => {
-          return data.data.filter((products) => products.sold >= 100);
+          return data?.data?.filter((products) => products.sold >= 100);
         });
         setfeatureProducts(() => {
-          return data.data.filter((products) => products.is_feature === true);
+          return data?.data?.filter((products) => products.is_feature === true);
         });
-        setTimeout(() => {
-          setIsLoading(false); // Sau 3 giây, đặt lại giá trị là true
-        }, LOADING_TIME);
       })
-      .catch((err) => setIsLoading(false));
+      .catch((err) => {});
   }, []);
+
   if (isLoading) {
     return <HomeSkeleton />;
   }
+
   return (
     <>
       <section id="best-seler">
         <div className="container-fluid">
           <h2 className="text-uppercase title-product">Best seller</h2>
           <Slider {...settings} className="slick-carousel">
-            {bestSeller.map((product, i) => (
+            {bestSeller?.map((product, i) => (
               <div key={i} className="px-2 px-lg-1 ">
                 <div className="item">
                   <ProductItem product={product} />
@@ -88,7 +87,7 @@ const Home = () => {
         <div className="container-fluid">
           <h2 className="text-uppercase title-product">Feature products</h2>
           <div className="items row">
-            {featureProducts.map((product, i) => (
+            {featureProducts?.map((product, i) => (
               <div
                 key={i}
                 className="col-xxl-2 col-lg-3 col-md-4 col-sm-6 my-2"

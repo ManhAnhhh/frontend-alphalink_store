@@ -11,64 +11,78 @@ import { ClipLoader } from "react-spinners";
 import Filter from "../../share/components/layout/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSearchFilterPrd } from "../../redux/reducers/filterProduct";
+import CategorySkeleton from "../../share/components/Skeleton/CategorySkeleton";
+
 const Search = () => {
+  const dispatch = useDispatch();
   let [searchParams, setSearchParams] = useSearchParams();
 
-  const keyword = searchParams.get("keyword");
   const [products, setProducts] = useState([]);
   const [highestPrice, setHighestPrice] = useState(0);
   const [total, setTotal] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [isLoadingSubMenu, setIsLoadingSubMenu] = useState(true);
   const [selectedOption, setSelectedOption] = useState("default");
-  const dispatch = useDispatch();
+  
+  const keyword = searchParams.get("keyword");
   const star = searchParams.get("star")?.split(",") || [];
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
+
   const productsByFilter = useSelector((state) => {
     return state.FilterPrd.search.items;
   });
+  const isLoading = useSelector((state) => state.Loading.isLoading);
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoadingSubMenu(true);
     const fetchData = async () => {
-      const category = await getCategories().then(({ data }) =>
-        data.data.find((c) => c?.name?.toLowerCase() === keyword?.toLowerCase())
-      );
+      const category = await getCategories()
+        .then(({ data }) => {
+          return data.data.find(
+            (c) => c?.name?.toLowerCase() === keyword?.toLowerCase()
+          );
+        })
+        .catch((err) => {});
       if (category !== undefined) {
-        await getProductsByCategoryName(category._id).then(({ data }) => {
-          setTotal(data.total);
-          setHighestPrice(() =>
-            Math.max(
-              ...data.data.map((item) =>
-                HandlePriceWithDiscount(item.price, item.discount)
+        await getProductsByCategoryName(category._id)
+          .then(({ data }) => {
+            setTotal(data.total);
+            setHighestPrice(() =>
+              Math.max(
+                ...data.data.map((item) =>
+                  HandlePriceWithDiscount(item.price, item.discount)
+                )
               )
-            )
-          );
-          setProducts(data.data);
-          dispatch(updateSearchFilterPrd(data.data));
-        });
+            );
+            setProducts(data.data);
+            dispatch(updateSearchFilterPrd(data.data));
+          })
+          .catch();
       } else {
-        await getProducts().then(({ data }) => {
-          setTotal(data.total);
-          setHighestPrice(() =>
-            Math.max(
-              ...data.data.map((item) =>
-                HandlePriceWithDiscount(item.price, item.discount)
+        await getProducts()
+          .then(({ data }) => {
+            setTotal(data.total);
+            setHighestPrice(() =>
+              Math.max(
+                ...data.data.map((item) =>
+                  HandlePriceWithDiscount(item.price, item.discount)
+                )
               )
-            )
-          );
-          const newPrd = data.data.filter((p) =>
-            p?.name?.toLowerCase().includes(keyword?.toLowerCase())
-          );
-          setProducts(newPrd);
-          dispatch(updateSearchFilterPrd(newPrd));
-        });
+            );
+            const newPrd = data.data.filter((p) =>
+              p?.name?.toLowerCase().includes(keyword?.toLowerCase())
+            );
+            setProducts(newPrd);
+            dispatch(updateSearchFilterPrd(newPrd));
+          })
+          .catch((err) => {
+            // console.log(err);
+          });
       }
     };
     fetchData();
     setTimeout(() => {
-      setIsLoading(false);
+      setIsLoadingSubMenu(false);
     }, LOADING_TIME);
   }, [keyword]);
 
@@ -134,7 +148,8 @@ const Search = () => {
     if (value !== "default") searchParams.set("sortBy", sortBy);
     setSearchParams(searchParams);
   };
-  if (isLoading) {
+  
+  if (isLoadingSubMenu) {
     return (
       <div className="text-center my-4">
         <ClipLoader color="#fff" size={42} />
@@ -142,15 +157,18 @@ const Search = () => {
     );
   }
 
-  if (products.length === 0) {
+  if (products.length === 0 && !isLoading) {
     return (
       <div className="container-fluid text-center">
-        <p className="bg-white p-4 rounded">
+        <p className="bg-white p-4 rounded my-1">
           No products found for "{keyword}"
         </p>
       </div>
     );
   }
+
+  if (isLoading) return <CategorySkeleton />;
+
   return (
     <>
       <section className="breadcrumb-custom">
@@ -177,7 +195,7 @@ const Search = () => {
               <article id="products" className="col-xl-9 col-lg-8 col-md-7">
                 {productsByFilter.length === 0 || keyword === "" ? (
                   <div className="text-center">
-                    <p className="bg-white p-4 rounded">
+                    <p className="bg-white p-4 rounded my-1">
                       No products found for Filter
                     </p>
                   </div>

@@ -1,14 +1,23 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export const GetImageProduct = (imageName) => {
+  if (imageName === undefined) {
+    return "/img/error-image.png";
+  }
   return `${process.env.REACT_APP_BASE_URL}assets/uploads/products/${imageName}`;
 };
 
 export const GetImageCustomer = (imageName) => {
+  if (imageName === undefined) {
+    return "/img/error-image.png";
+  }
   return `${process.env.REACT_APP_BASE_URL}assets/uploads/customers/${imageName}`;
 };
 
 export const GetImageProductReview = (imageName) => {
+  if (imageName === undefined) {
+    return "/img/error-image.png";
+  }
   return `${process.env.REACT_APP_BASE_URL}assets/uploads/product_reviews/${imageName}`;
 };
 

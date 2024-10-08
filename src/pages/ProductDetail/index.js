@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   GetImageProduct,
   GetImageCustomer,
   GetImageProductReview,
   PopUp,
   convertDate,
-  LOADING_TIME,
 } from "../../share/utilities";
 import {
   getProductByID,
@@ -20,37 +19,43 @@ import Modal from "react-bootstrap/Modal";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const addToCart = useAddToCart();
+
   const [categories, setCategories] = useState([]);
+  const [comments, setComments] = useState([]);
   const [imgShow, setImgShow] = useState(0);
   const [colorChoosed, setColorChoosed] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
   const [showImgModal, setShowImgModal] = useState(false);
   const [urlImgShowModal, setUrlImgShowModal] = useState("");
-
-  const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState({});
-  const [comments, setComments] = useState([]);
-  const { id } = useParams();
+
+  const isLoading = useSelector((state) => state.Loading.isLoading);
   const customerId = useSelector(
     (state) => state.Auth.login.currentCustomer?.id
   );
   useEffect(() => {
-    getProductByID(id, {}).then(({ data }) => setProduct(data.data));
-    getCommentsByIdProduct(id).then(({ data }) => setComments(data.data));
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, LOADING_TIME);
+    getProductByID(id, {})
+      .then(({ data }) => setProduct(data.data))
+      .catch();
+    getCommentsByIdProduct(id)
+      .then(({ data }) => setComments(data.data))
+      .catch(() => {});
   }, [id]);
 
   useEffect(() => {
-    getCategories().then(({ data }) => setCategories(data.data));
+    getCategories()
+      .then(({ data }) => setCategories(data.data))
+      .catch(() => {});
   }, [product.category_id]);
-  const category = categories.find((cat) => cat._id === product.category_id);
-  const categoryParent = categories.find(
-    (cat) => cat._id === category.parent_id
-  );
+
+  const category = useMemo(() => {
+    categories.find((cat) => cat._id === product.category_id);
+  }, [categories, product.category_id]);
+  const categoryParent = useMemo(() => {
+    categories.find((cat) => cat._id === category.parent_id);
+  }, [categories, category.parent_id]);
 
   const handleColorsProduct = (index) => {
     setColorChoosed(index);
@@ -105,14 +110,17 @@ const ProductDetail = () => {
   };
 
   const handleOnclickImg = (url) => {
-    setShowImgModal(true);
-    setUrlImgShowModal(url);
+    try {
+      setShowImgModal(true);
+      setUrlImgShowModal(url);
+    } catch (e) {}
   };
 
   const handleBuyNow = () => {
     addToCart({ customerId, product, qty: quantity, colorIndex: colorChoosed });
     navigate(`/customer/${customerId}/cart`);
   };
+  
   if (isLoading) return <ProductDetailsSkeleton />;
 
   return (

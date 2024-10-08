@@ -1,16 +1,19 @@
 import { useEffect, useState, useRef } from "react";
 import { PopUp } from "../../utilities";
 import { useNavigate, useLocation } from "react-router-dom";
+
 const Filter = ({ highestPrice, minValue, maxValue, star }) => {
-  star = star.map((item) => Number(item));
+  const location = useLocation();
   const navigate = useNavigate();
+  const checkedInputRefs = useRef([]);
+
+  star = star.map((item) => Number(item));
 
   const [minPrice, setMinPrice] = useState(minValue || "");
   const [maxPrice, setMaxPrice] = useState(maxValue || "");
   const [isCollapsedFilters, setIsCollapsedFilters] = useState(false);
   const [checkedList, setCheckedList] = useState(star || []);
-  const checkedInputRefs = useRef([]);
-  const location = useLocation();
+
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -46,6 +49,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, [windowSize.width]);
+
   useEffect(() => {
     handleNavigate();
 
@@ -115,6 +119,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
     }
     return true;
   };
+
   const handleApplyPrice = (e) => {
     e.preventDefault();
     if (!checkPrice()) return;
@@ -135,6 +140,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
     });
     searchParams.delete("sortBy");
   };
+
   return (
     <article id="filters" className="col-xl-3 col-lg-4 col-md-5">
       <div

@@ -14,6 +14,8 @@ import authReducer from "./reducers/auth";
 import cartReducer from "./reducers/cart";
 import heartReducer from "./reducers/heart";
 import filterProduct from "./reducers/filterProduct";
+import loadingReducer from "./reducers/loading";
+
 
 // dùng react-persist để lưu dữ liệu vào store sau khi refresh lại trang thì không mất dữ liệu
 // trừ khi dispatch(loggerOut())
@@ -38,6 +40,7 @@ const rootReducer = combineReducers({
   Cart: persistReducer(cartPersistConfig, cartReducer),
   Heart: persistReducer(heartPersistConfig, heartReducer),
   FilterPrd: filterProduct,
+  Loading: loadingReducer
 });
 // const persistedReducer = persistReducer(persistConfig, rootReducer);
 

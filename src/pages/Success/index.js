@@ -1,6 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { SyncLoader } from "react-spinners";
 const Success = () => {
   const navigate = useNavigate();
+  const isLoading = useSelector((state) => state.Loading.isLoading);
+
+  if (isLoading) {
+    return (
+      <div className="bg-white d-flex justify-content-center align-items-center h-100vh p-5">
+        <SyncLoader size={20} color="#d6d7d7" />
+      </div>
+    )
+  }
 
   return (
     <section id="success">

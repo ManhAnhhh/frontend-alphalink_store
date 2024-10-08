@@ -1,6 +1,6 @@
 import { GetImageProduct, HandlePriceWithDiscount, PopUp } from "../utilities";
 import { getProductByID, addHeartItem } from "../../services/Api";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAddToCart } from "../CustomHook/useAddToCart";
@@ -41,9 +41,11 @@ const ProductItem = (props) => {
 
   const [product, setProduct] = useState({});
   useEffect(() => {
-    getProductByID(id).then(({ data }) => {
-      setProduct(data.data);
-    });
+    getProductByID(id)
+      .then(({ data }) => {
+        setProduct(data.data);
+      })
+      .catch((err) => {});
   }, [id]);
 
   const addToHeart = () => {
@@ -96,7 +98,7 @@ const ProductItem = (props) => {
           to={`/product-detail/${id}`}
           className="text-decoration-none text-center"
         >
-          <img src={GetImageProduct(img[0])} alt={name} />
+          <img src={GetImageProduct(img[0])} alt={GetImageProduct(img[0])} />
         </Link>
       </div>
       <h5 className="name-item pt-2">
@@ -169,4 +171,4 @@ const ProductItem = (props) => {
   );
 };
 
-export default ProductItem;
+export default memo(ProductItem);

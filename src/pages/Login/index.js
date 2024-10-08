@@ -1,16 +1,34 @@
 import { PopUp } from "../../share/utilities";
 import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
-import { loginCustomer } from "../../services/Api";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { getProducts, loginCustomer } from "../../services/Api";
+import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, loginFalse } from "../../redux/reducers/auth";
 import { updateCart } from "../../redux/reducers/cart";
 import { updateHeart } from "../../redux/reducers/heart";
+import AuthSkeleton from "../../share/components/Skeleton/AuthSkeleton";
+import { setLoading } from "../../redux/reducers/loading";
+
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [emailLogin, setEmailLogin] = useState("");
   const [passwordLogin, setPasswordLogin] = useState("");
+
+  const isLoading = useSelector((state) => state.Loading.isLoading);
+
+  // Mượn tạm API để setLoading cho login page khi enter url login page thì
+  // nó k set đc loading nên mất mạng nó vẫn render ra login page chứ không phải AuthSkeleton
+  useEffect(() => {
+    getProducts()
+      .then((res) => {
+        dispatch(setLoading(false));
+      })
+      .catch((err) => {
+        dispatch(setLoading(true));
+      });
+  }, [dispatch]);
 
   const defaultObjectInputs = {
     isValidEmail: true,
@@ -77,10 +95,13 @@ const Login = () => {
         dispatch(loginFalse());
         PopUp({
           type: "error",
-          content: err.response.data.message,
+          content: err?.response?.data?.message,
         });
       });
   };
+
+  if (isLoading) return <AuthSkeleton />;
+
   return (
     <div className="container" id="auth-container">
       <section id="login">

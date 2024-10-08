@@ -1,5 +1,5 @@
-import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import {
@@ -10,12 +10,10 @@ import {
 } from "../../services/Api";
 import {
   GetImageProduct,
-  LOADING_TIME,
   HandlePriceWithDiscount,
 } from "../../share/utilities";
 import Swal from "sweetalert2";
 import { updateCart } from "../../redux/reducers/cart";
-
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import CartSkeleton from "../../share/components/Skeleton/CartSkeleton";
@@ -23,30 +21,30 @@ import CartSkeleton from "../../share/components/Skeleton/CartSkeleton";
 const Cart = () => {
   const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const uniqueId = uuid();
+
   const [isUpdateActive, setIsUpdateActive] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
   const [discountCodePrice, setDiscountCodePrice] = useState(0);
   const [total, setTotal] = useState(0);
   const [products, setProducts] = useState([]);
   const [checkedListItems, setCheckedListItems] = useState([]);
-  const customerId = params.id;
+
   const customerLogin = useSelector(
     (state) => state.Auth.login.currentCustomer
   );
-  const navigate = useNavigate();
-  const uniqueId = uuid();
   const cart = useSelector((state) => state.Cart.cart);
+  const isLoading = useSelector((state) => state.Loading.isLoading);
+
+  const customerId = params.id;
   let items = [...cart.items];
 
   useEffect(() => {
     getProducts()
       .then(({ data }) => {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, LOADING_TIME);
         setProducts(data.data);
       })
-      .catch(() => setIsLoading(false));
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -206,6 +204,9 @@ const Cart = () => {
       }
     });
   };
+
+  if (isLoading) return <CartSkeleton />;
+
   if (items?.length <= 0) {
     return (
       <div className="container-fluid ">
@@ -223,10 +224,9 @@ const Cart = () => {
     );
   }
 
-  if (isLoading) return <CartSkeleton />;
   return (
     <>
-      <section id="cart">
+      <section id="cart" className="my-2">
         <div className="container-fluid">
           <div className="title-cart mb-3 text-uppercase">
             <h4>Cart</h4>

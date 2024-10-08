@@ -14,8 +14,8 @@ const CartSkeleton = () => {
                 <tr>
                   <th className="select-all">
                     <div className="d-flex gap-2 ">
-                    <Skeleton width={20} />
-                    <Skeleton width={80} />
+                      <Skeleton width={20} />
+                      <Skeleton width={80} />
                     </div>
                   </th>
                   <th>
@@ -29,8 +29,8 @@ const CartSkeleton = () => {
                   </th>
                   <th className="text-nowrap">
                     <div className="d-flex gap-2">
-                    <Skeleton width={80} />
-                    <Skeleton width={80} />
+                      <Skeleton width={80} />
+                      <Skeleton width={80} />
                     </div>
                   </th>
                 </tr>

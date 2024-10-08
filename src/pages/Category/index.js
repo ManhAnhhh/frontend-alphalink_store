@@ -1,55 +1,56 @@
 import ProductItem from "../../share/components/Product-item";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   getCategories,
   getCategory,
   getProductsByCategory,
 } from "../../services/Api";
-import { HandlePriceWithDiscount, LOADING_TIME } from "../../share/utilities";
+import { HandlePriceWithDiscount } from "../../share/utilities";
 import CategorySkeleton from "../../share/components/Skeleton/CategorySkeleton";
 import Filter from "../../share/components/layout/Filter";
 import { updateCatFilterPrd } from "../../redux/reducers/filterProduct";
 import { useSelector, useDispatch } from "react-redux";
+
 const Category = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
+
   const [selectedOption, setSelectedOption] = useState("default");
   const [category, setCategory] = useState("");
   const [categories, setCategories] = useState([]);
   const [productsByCategory, setProductsByCategory] = useState([]);
   const [highestPrice, setHighestPrice] = useState(0);
   const { id } = useParams();
+
   let [searchParams, setSearchParams] = useSearchParams();
-  const dispatch = useDispatch();
+
   const star = searchParams.get("star")?.split(",") || [];
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
+
   const productsByFilter = useSelector((state) => {
     return state.FilterPrd.category.items;
   });
+  const isLoading = useSelector((state) => state.Loading.isLoading);
+
+  useEffect(() => {
+    getCategories()
+      .then(({ data }) => setCategories(data.data))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     getCategory(id)
       .then(({ data }) => setCategory(data.data))
-      .catch(() => setIsLoading(true));
+      .catch(() => {});
 
     getProductsByCategory(id)
       .then(({ data }) => {
         setProductsByCategory(data.data);
         dispatch(updateCatFilterPrd(data.data));
       })
-      .catch(() => setIsLoading(true));
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, LOADING_TIME);
+      .catch(() => {});
   }, [id]);
-
-  useEffect(() => {
-    getCategories()
-      .then(({ data }) => setCategories(data.data))
-      .catch(() => setIsLoading(true));
-  }, []);
 
   useEffect(() => {
     setHighestPrice(() => {
@@ -95,9 +96,12 @@ const Category = () => {
     setSearchParams(searchParams);
   }, [minPrice, maxPrice, star.length, productsByCategory]);
 
-  const categoryParent = categories.find(
-    (cat) => cat._id === category.parent_id
-  );
+  const categoryParent = useMemo(() => {
+    categories.find((cat) => {
+      console.log("re-render");
+      return cat._id === category.parent_id;
+    });
+  }, [categories, category.parent_id]);
   const handleSelectValue = (value) => {
     setSelectedOption(value);
     let sortBy = "";

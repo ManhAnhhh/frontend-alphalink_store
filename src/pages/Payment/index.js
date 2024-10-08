@@ -8,14 +8,21 @@ import {
 } from "../../share/utilities";
 import { deleteManyCartItem, order } from "../../services/Api";
 import Swal from "sweetalert2";
+import PaymentSkeleton from "../../share/components/Skeleton/PaymentSkeleton";
+
 const Payment = () => {
-  const methodOfPaymentArr = ["Cash", "Bank"];
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [discountCodePrice, setDiscountCodePrice] = useState(0);
   const [methodOfPayment, setMethodOfPayment] = useState("Cash");
   const [note, setNote] = useState("");
   const [total, setTotal] = useState(0);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  const isLoading = useSelector((state) => state.Loading.isLoading);
+
+  const methodOfPaymentArr = ["Cash", "Bank"];
+
   const cart = useSelector((state) => state.Cart.cart);
   const customer = useSelector((state) => state.Auth.login.currentCustomer);
 
@@ -29,6 +36,7 @@ const Payment = () => {
       discountCodePrice;
     setTotal(parseFloat(value).toFixed(2));
   }, [cart.deleveryPrice, cart.totalPriceInCart, discountCodePrice]);
+
   const handlePayNow = async () => {
     if (cart.items.length === 0) {
       await Swal.fire({
@@ -87,8 +95,10 @@ const Payment = () => {
     navigate("/success");
   };
 
+  if (isLoading) return <PaymentSkeleton />;
+
   return (
-    <section id="payment">
+    <section id="payment" className="my-2">
       <div className="container-fluid">
         <div className="title-payment mb-3 text-uppercase">
           <h4>Payment</h4>

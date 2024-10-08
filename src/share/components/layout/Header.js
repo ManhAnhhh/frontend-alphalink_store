@@ -8,6 +8,7 @@ import {
   GetImageCustomer,
   PopUp,
   HandlePriceWithDiscount,
+  LOADING_TIME,
 } from "../../utilities";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -21,43 +22,41 @@ import { updateHeart, clearHeart } from "../../../redux/reducers/heart";
 import { clearCart } from "../../../redux/reducers/cart";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const suggestBoxRef = useRef(null);
   let [searchParams] = useSearchParams();
+
   const [keyword, setKeyword] = useState(searchParams.get("keyword") || "");
   const [customerLogin, setCustomerLogin] = useState({});
   const [products, setProducts] = useState([]);
   const [searchProducts, setSearchProducts] = useState([]);
   const [isShowSuggestBox, setIsShowSuggestBox] = useState(false);
-  const [isLoadingSubMenu, setIsLoadingSubMenu] = useState(true);
   const [showHeartModal, setShowHeartModal] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [isLoadingSubMenu, setIsLoadingSubMenu] = useState(true);
 
   const customer = useSelector((state) => state.Auth.login.currentCustomer);
   const heart = useSelector((state) => state?.Heart?.items);
+
   const totalProducsIncart =
     useSelector((state) => state?.Cart?.cart?.items?.length) || 0;
-  const handleLogout = () => {
-    dispatch(loggedOut());
-    dispatch(clearHeart());
-    dispatch(clearCart());
-    PopUp({
-      type: "success",
-      content: "Logout successfully",
-    });
-  };
+
   useEffect(() => {
     if (customer) {
-      getCustomers().then(({ data }) => {
-        setCustomerLogin(() => {
-          return data.data.find((cus) => cus.email === customer.email);
-        });
-      });
+      getCustomers()
+        .then(({ data }) => {
+          setCustomerLogin(() => {
+            return data?.data?.find((cus) => cus.email === customer.email);
+          });
+        })
+        .catch((err) => {});
     }
   }, [customer]);
 
   useEffect(() => {
-    getProducts().then(({ data }) => setProducts(data.data));
+    getProducts()
+      .then(({ data }) => setProducts(data.data))
+      .catch((err) => {});
   }, [keyword]);
 
   useEffect(() => {
@@ -70,11 +69,29 @@ const Header = () => {
     };
   }, []);
 
+  const handleClickOutside = (e) => {
+    // Kiểm tra xem có click ra ngoài suggest-search hay không
+    if (suggestBoxRef.current && !suggestBoxRef.current.contains(e.target)) {
+      setIsShowSuggestBox(false); // Ẩn hộp gợi ý khi bấm ra ngoài
+    }
+  };
+
+  const handleLogout = () => {
+    dispatch(loggedOut());
+    dispatch(clearHeart());
+    dispatch(clearCart());
+    PopUp({
+      type: "success",
+      content: "Logout successfully",
+    });
+  };
+
   const handleOnClickSearchProduct = (product) => {
     navigate(`/product-detail/${product._id}`);
     setIsShowSuggestBox(false);
     // setKeyword("");
   };
+
   const handleInput = (value) => {
     setIsLoadingSubMenu(true);
     setKeyword(value);
@@ -90,7 +107,7 @@ const Header = () => {
 
       setTimeout(() => {
         setIsLoadingSubMenu(false);
-      }, 1500);
+      }, LOADING_TIME);
 
       setSearchProducts(() => {
         const results = products.filter((product) =>
@@ -132,14 +149,8 @@ const Header = () => {
     }
   };
 
-  const handleClickOutside = (e) => {
-    // Kiểm tra xem có click ra ngoài suggest-search hay không
-    if (suggestBoxRef.current && !suggestBoxRef.current.contains(e.target)) {
-      setIsShowSuggestBox(false); // Ẩn hộp gợi ý khi bấm ra ngoài
-    }
-  };
-
   const handleClose = () => setShowHeartModal(false);
+
   return (
     <header>
       <section id="helper">
@@ -330,10 +341,14 @@ const Header = () => {
 };
 
 const HeartModal = (props) => {
-  const [checkedListItems, setCheckedListItems] = useState([]);
   const { heart, handleClose } = props;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const [checkedListItems, setCheckedListItems] = useState([]);
+
+
   const customerId = useSelector(
     (state) => state.Auth.login.currentCustomer.id
   );
@@ -342,6 +357,7 @@ const HeartModal = (props) => {
     handleClose();
     navigate(`/product-detail/${prd_id}`);
   };
+
   const HandleDeleteItem = (prd_id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -446,7 +462,7 @@ const HeartModal = (props) => {
               onChange={handleCheckedAll}
             />
             <label
-              className="text-capitalize text-no-wrap"
+              className="text-capitalize text-nowrap"
               htmlFor="select-all-heart"
             >
               select all

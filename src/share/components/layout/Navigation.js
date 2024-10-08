@@ -1,17 +1,22 @@
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getCategories } from "../../../services/Api";
+
 const Navigation = () => {
   const [categories, setCategories] = useState([]);
   const [categoriesParent, setCategoriesParent] = useState([]);
+
   useEffect(() => {
-    getCategories().then((res) => {
-      setCategoriesParent(
-        res.data.data.filter((cat) => cat.parent_id === null)
-      );
-      setCategories(res.data.data);
-    });
+    getCategories()
+      .then((res) => {
+        setCategoriesParent(
+          res.data.data.filter((cat) => cat.parent_id === null)
+        );
+        setCategories(res.data.data);
+      })
+      .catch((err) => {});
   }, []);
+  
   return (
     <nav className="navbar navbar-expand-lg">
       <div className="container-fluid">
@@ -28,8 +33,8 @@ const Navigation = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbar">
           <ul className="navbar-nav">
-            {categoriesParent.map((category) => {
-              return categories.some(
+            {categoriesParent?.map((category) => {
+              return categories?.some(
                 (cat) => category._id === cat.parent_id
               ) ? (
                 <li
@@ -46,7 +51,7 @@ const Navigation = () => {
                   </span>
                   <ul className="dropdown-menu">
                     {categories
-                      .filter((cat) => category._id === cat.parent_id)
+                      ?.filter((cat) => category._id === cat.parent_id)
                       .map((subCategory) => (
                         <li key={subCategory._id}>
                           <NavLink
