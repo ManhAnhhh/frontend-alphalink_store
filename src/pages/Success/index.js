@@ -10,7 +10,7 @@ const Success = () => {
       <div className="bg-white d-flex justify-content-center align-items-center h-100vh p-5">
         <SyncLoader size={20} color="#d6d7d7" />
       </div>
-    )
+    );
   }
 
   return (
@@ -21,7 +21,7 @@ const Success = () => {
             <img className="img-fluid" src=" /img/success.png" alt="acer" />
           </div>
           <button
-            class="mx-auto btn-custom mb-3"
+            className="mx-auto btn-custom mb-3"
             type="button"
             onClick={() => navigate("/")}
           >

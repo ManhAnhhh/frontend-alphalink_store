@@ -9,6 +9,12 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Search from "../pages/Search";
 
+import Profiles from "../pages/Account/Profiles";
+import Message from "../../src/pages/Account/Message";
+import PurchaseOrder from "../../src/pages/Account/PurchaseOrder";
+import ChangePassword from "../../src/pages/Account/ChangePassword";
+import Account from "../pages/Account";
+
 import MainLayout from "../share/components/layout/MainLayout";
 
 import PrivateRoute from "./PrivateRoute";
@@ -35,6 +41,19 @@ const authRoutes = [
   { path: "login", element: <LoggedRoute element={<Login />} /> },
 ];
 
+const accountRoutes = [
+  {
+    path: "",
+    element: <PrivateRoute element={<Account />} />,
+    children: [
+      { path: "profiles", element: <Profiles /> },
+      { path: "change_password", element: <ChangePassword /> },
+      { path: "message", element: <Message /> },
+      { path: "purchase_order", element: <PurchaseOrder /> },
+    ],
+  },
+];
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,6 +63,10 @@ const router = createBrowserRouter([
   {
     path: "/customer/",
     children: authRoutes,
+  },
+  {
+    path: "/customer/:id",
+    children: accountRoutes,
   },
 ]);
 

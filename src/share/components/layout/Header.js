@@ -177,10 +177,20 @@ const Header = () => {
 
               <ul className="sub-menu p-0 p-2 position-absolute top-100 end-0 border border-1">
                 <li>
-                  <a href="#">My Account</a>
+                  <Link
+                    to={`/customer/${customerLogin?._id}/profiles`}
+                    className="d-flex align-items-center gap-2"
+                  >
+                    My Account
+                  </Link>
                 </li>
                 <li>
-                  <a href="#">My Orders</a>
+                  <Link
+                    to={`/customer/${customerLogin?._id}/purchase_order`}
+                    className="d-flex align-items-center gap-2"
+                  >
+                    My Orders
+                  </Link>
                 </li>
                 <li>
                   <Link to="/" onClick={handleLogout}>
@@ -347,7 +357,6 @@ const HeartModal = (props) => {
   const dispatch = useDispatch();
 
   const [checkedListItems, setCheckedListItems] = useState([]);
-
 
   const customerId = useSelector(
     (state) => state.Auth.login.currentCustomer.id
