@@ -106,7 +106,7 @@ const Payment = () => {
         <div className="wrapper">
           <div className="shipping-address">
             <p className="title text-capitalize">
-              <i className="fa-solid fa-location-dot" />
+              <i className="icon fa-solid fa-location-dot" />
               &nbsp; shipping address
             </p>
             <div className="info d-flex align-items-center justify-content-between flex-wrap">
@@ -116,27 +116,27 @@ const Payment = () => {
                     <b>{customer.fullName}</b>
                   </p>
                   <p className="phone fw-14">
-                    <i className="fa-solid fa-phone-volume me-1" />
+                    <i className="icon fa-solid fa-phone-volume me-1" />
                     {customer.phone}
                   </p>
                 </div>
                 <div className="address mx-4">
                   <p className="text-capitalize fw-bold">{customer.address}</p>
                   <p className="email fw-14">
-                    <i className="fa-regular fa-envelope me-1" />
+                    <i className="icon fa-regular fa-envelope me-1" />
                     {customer.email}
                   </p>
                 </div>
               </div>
               <button type="button" className="btn-change-info ms-auto ms-md-0">
                 Change
-                <i className="fa-solid fa-gear fa-lg ms-1" />
+                <i className="icon fa-solid fa-gear fa-lg ms-1" />
               </button>
             </div>
           </div>
           <div className="order">
             <p className="title text-capitalize">
-              <i className="fa-solid fa-basket-shopping" />
+              <i className="icon fa-solid fa-basket-shopping" />
               &nbsp; order
             </p>
             <div className="wrapper-payment-item table-responsive">
@@ -198,7 +198,7 @@ const Payment = () => {
             </div>
             <div className="method-of-payment d-flex align-items-center gap-4">
               <p className="m-0 content">
-                <i className="fa-solid fa-money-check-dollar me-1"></i> Method
+                <i className="icon fa-solid fa-money-check-dollar me-1"></i> Method
                 of payment:
               </p>
               {methodOfPaymentArr.map((item, index) => {

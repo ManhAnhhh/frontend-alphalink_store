@@ -83,7 +83,8 @@
 .side-bar-bottom .side-bar-item.active,
 .side-bar-bottom .side-bar-item.active i,
 .offcanvas-body .nav-item-account:hover,
-.offcanvas-body .nav-item-account.active {
+.offcanvas-body .nav-item-account.active,
+.offcanvas-body .nav-item-account.active i {
   color: var(--main-color);
 }
 
@@ -239,3 +240,86 @@
 #profiles .custom-file-label:active {
   transform: scale(.8);
 }
+
+/*! message */
+#message .message-top,
+#message .message-bottom {
+  background-color: var(--light-color);
+}
+
+#message .message-top .search-message {
+  border: 2px solid var(--border-color);
+  padding-left: 8px;
+  transition: all .2s linear;
+}
+
+#message .message-top .search-message:focus-visible {
+  outline: none;
+  border: 2px solid var(--main-color) !important;
+}
+
+#message .divider .line {
+  height: 2px;
+  width: 100%;
+}
+
+#message .items-chat .item-chat img,
+#message .message-bottom .send-message img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+#message .items-chat .item-chat:hover {
+  background-color: #f6f5f2 !important;
+}
+
+#message .box-chat {
+  height: 400px;
+}
+
+#message .wrapper-items-chat {
+  height: 342px;
+}
+
+.message-bottom .send-message .wrapper-message-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--main-color);
+  border-radius: 50%;
+}
+
+.message-bottom .send-message .wrapper-message-icon:hover {
+  background-color: rgba(0, 0, 0, 0.03)
+}
+
+.message-bottom .send-message .wrapper-message-icon:hover i {
+  color: #0084ff;
+}
+
+#tooltip-top>.tooltip-inner {
+  background-color: #fff;
+  color: #000;
+  border-color: var(--border-color);
+}
+
+#tooltip-top>.tooltip-arrow {
+  display: none;
+}
+
+
+/* @media (max-width: 990px) {
+  main {
+    padding-left:var(--w-nav) !important;
+  }
+  aside {
+    display: block !important;
+  }
+
+  
+} */

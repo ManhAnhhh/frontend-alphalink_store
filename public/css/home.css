@@ -9,6 +9,7 @@
   --btn-hover: #0d6efd;
   --radius-m: 8px;
   --radius-l: 16px;
+  --icon-color: #B7B7B7;
 }
 
 /*? initial */
@@ -51,6 +52,21 @@ input[type=number] {
 }
 
 /*? Regeneration Code */
+
+/* i tag */
+.icon {
+  color: var(--icon-color);
+}
+
+.heart-icon i {
+  transition: color .3s ease;
+}
+
+.heart-icon:hover i {
+  color: #EF4B4B !important;
+
+}
+
 .circle {
   display: inline-block;
   border-radius: 50%;
@@ -97,6 +113,10 @@ input[type=number] {
   margin: 8px 0;
   border-radius: var(--radius-m);
   text-transform: capitalize;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .fs-12 {
@@ -524,6 +544,7 @@ footer .footer-b .title {
 }
 
 /* customize input checkbox and label */
-input[type="checkbox"], label {
+input[type="checkbox"],
+label {
   cursor: pointer;
 }

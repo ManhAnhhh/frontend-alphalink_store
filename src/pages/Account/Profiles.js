@@ -99,7 +99,7 @@ const Profiles = () => {
                   className="custom-file-label btn-custom bg-danger border border-danger"
                   htmlFor="upload-image"
                 >
-                  <i className="fa-solid fa-upload me-2 text-white" />
+                  <i className="icon fa-solid fa-upload me-2 text-white" />
                   Choose File
                 </label>
               </div>

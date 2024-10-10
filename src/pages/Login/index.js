@@ -109,7 +109,7 @@ const Login = () => {
           <h1 className="title">Log In</h1>
           <div className="icon">
             <span>
-              <i className="fa-regular fa-user fa-2xl" />
+              <i className="icon fa-regular fa-user fa-2xl" />
             </span>
             <input
               className={
@@ -125,7 +125,7 @@ const Login = () => {
           </div>
           <div className="icon">
             <span>
-              <i className="fa-solid fa-lock fa-2xl" />
+              <i className="icon fa-solid fa-lock fa-2xl" />
             </span>
             <input
               className={

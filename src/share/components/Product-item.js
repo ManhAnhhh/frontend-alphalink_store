@@ -157,7 +157,7 @@ const ProductItem = (props) => {
               className="fa-solid fa-heart fa-2xl me-1"
             />
           ) : (
-            <i className="fa-regular fa-heart fa-2xl me-1" />
+            <i className="icon fa-regular fa-heart fa-2xl me-1" />
           )}
         </div>
       </div>
