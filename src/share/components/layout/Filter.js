@@ -152,7 +152,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
         <p className="d-flex justify-content-between align-items-center">
           Filters
           <span className="right-left d-none d-md-block">
-            <i className="fa-solid fa-right-left" />
+            <i className="icon fa-solid fa-right-left" />
           </span>
           <span
             className="chevron d-block d-md-none"

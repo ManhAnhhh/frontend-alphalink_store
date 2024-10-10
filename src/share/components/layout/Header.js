@@ -172,7 +172,7 @@ const Header = () => {
               <p>
                 <span className="d-none d-sm-inline-block me-1">Hello,</span>
                 <span>{customer.fullName}</span>
-                <i className="fa-solid fa-chevron-down fa-2xs ms-1" />
+                <i className="icon fa-solid fa-chevron-down fa-2xs ms-1" />
               </p>
 
               <ul className="sub-menu p-0 p-2 position-absolute top-100 end-0 border border-1">
@@ -293,7 +293,7 @@ const Header = () => {
                     className="heart-icon py-1 mx-2"
                     onClick={() => setShowHeartModal(true)}
                   >
-                    <i className="fa-regular fa-heart fa-2xl"></i>
+                    <i className="icon fa-solid fa-heart fa-2xl"></i>
                     <span className="badge-custom badge-top-right">
                       {heart?.length || 0}
                     </span>
@@ -303,7 +303,7 @@ const Header = () => {
                     className="cart-icon py-1 mx-2"
                     onClick={() => navigate(`/customer/${customer.id}/cart`)}
                   >
-                    <i className="fa-solid fa-cart-shopping fa-2xl"></i>
+                    <i className="icon fa-solid fa-cart-shopping fa-2xl"></i>
                     <span className="badge-custom badge-top-right">
                       {totalProducsIncart}
                     </span>

@@ -153,7 +153,7 @@ const Register = () => {
           <h1 className="title">Register</h1>
           <div className="icon">
             <span>
-              <i className="fa-regular fa-user fa-2xl" />
+              <i className="icon fa-regular fa-user fa-2xl" />
             </span>
             <input
               className={
@@ -172,7 +172,7 @@ const Register = () => {
           </div>
           <div className="icon">
             <span>
-              <i className="fa-regular fa-envelope fa-2xl" />
+              <i className="icon fa-regular fa-envelope fa-2xl" />
             </span>
             <input
               className={
@@ -190,7 +190,7 @@ const Register = () => {
           </div>
           <div className="icon">
             <span>
-              <i className="fa-solid fa-phone-volume fa-2xl"></i>
+              <i className="icon fa-solid fa-phone-volume fa-2xl"></i>
             </span>
             <input
               className={
@@ -208,7 +208,7 @@ const Register = () => {
           </div>
           <div className="icon">
             <span>
-              <i className="fa-solid fa-lock fa-2xl" />
+              <i className="icon fa-solid fa-lock fa-2xl" />
             </span>
             <input
               className={
@@ -226,7 +226,7 @@ const Register = () => {
           </div>
           <div className="icon">
             <span>
-              <i className="fa-solid fa-lock fa-2xl" />
+              <i className="icon fa-solid fa-lock fa-2xl" />
             </span>
             <input
               className={

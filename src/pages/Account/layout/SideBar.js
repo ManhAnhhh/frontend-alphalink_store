@@ -22,7 +22,7 @@ const SideBar = () => {
               className="side-bar-item fw-bold text-decoration-none d-inline-block"
               to={`/customer/${customer_id}/profiles`}
             >
-              <i className="fa-regular fa-circle-user text-center me-1" />
+              <i className="icon fa-regular fa-circle-user text-center me-1" />
               My Profiles
             </NavLink>
           </li>
@@ -31,7 +31,7 @@ const SideBar = () => {
               className="side-bar-item fw-bold text-decoration-none d-inline-block"
               to={`/customer/${customer_id}/message`}
             >
-              <i className="fa-regular fa-comments text-center me-1" />
+              <i className="icon fa-regular fa-comments text-center me-1" />
               Message
             </NavLink>
           </li>
@@ -40,7 +40,7 @@ const SideBar = () => {
               className="side-bar-item fw-bold text-decoration-none d-inline-block"
               to={`/customer/${customer_id}/purchase_order`}
             >
-              <i className="fa-solid fa-cart-arrow-down text-center me-1" />
+              <i className="icon fa-solid fa-cart-arrow-down text-center me-1" />
               Purchase Order
             </NavLink>
           </li>
@@ -49,13 +49,13 @@ const SideBar = () => {
               className="side-bar-item fw-bold text-decoration-none d-inline-block"
               to={`/customer/${customer_id}/change_password`}
             >
-              <i className="fa-solid fa-lock text-center me-1" />
+              <i className="icon fa-solid fa-lock text-center me-1" />
               Change Password
             </NavLink>
           </li>
           <li>
             <span className="delete-acc d-inline-block fw-bold text-decoration-none text-danger">
-              <i className="fa-solid fa-ban text-center me-1 text-danger"></i>
+              <i className="icon fa-solid fa-ban text-center me-1 text-danger"></i>
               Delete Account
             </span>
           </li>

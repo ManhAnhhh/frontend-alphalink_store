@@ -259,7 +259,7 @@ const ProductDetail = () => {
                       })
                     }
                   >
-                    <i className="fa-solid fa-cart-shopping fa-lg text-white" />
+                    <i className="icon fa-solid fa-cart-shopping fa-lg text-white" />
                     &nbsp; Add to cart
                   </button>
                   <button
@@ -364,7 +364,7 @@ const ProductDetail = () => {
                     >
                       <div className="pagination-item">
                         <a href="#">
-                          <i className="fa-solid fa-chevron-left" />
+                          <i className="icon fa-solid fa-chevron-left" />
                         </a>
                       </div>
                       <div className="pagination-item">
@@ -383,7 +383,7 @@ const ProductDetail = () => {
                       <div className="pagination-item">
                         <a href="#">
                           {" "}
-                          <i className="fa-solid fa-chevron-right" />
+                          <i className="icon fa-solid fa-chevron-right" />
                         </a>
                       </div>
                     </div>
