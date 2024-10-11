@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import {
   GetImageProduct,
   GetImageCustomer,
@@ -49,13 +49,10 @@ const ProductDetail = () => {
       .then(({ data }) => setCategories(data.data))
       .catch(() => {});
   }, [product.category_id]);
-
-  const category = useMemo(() => {
-    categories.find((cat) => cat._id === product.category_id);
-  }, [categories, product.category_id]);
-  const categoryParent = useMemo(() => {
-    categories.find((cat) => cat._id === category.parent_id);
-  }, [categories, category.parent_id]);
+  const category = categories.find((cat) => cat._id === product.category_id);
+  const categoryParent = categories.find(
+    (cat) => cat._id === category.parent_id
+  );
 
   const handleColorsProduct = (index) => {
     setColorChoosed(index);
@@ -120,7 +117,7 @@ const ProductDetail = () => {
     addToCart({ customerId, product, qty: quantity, colorIndex: colorChoosed });
     navigate(`/customer/${customerId}/cart`);
   };
-  
+
   if (isLoading) return <ProductDetailsSkeleton />;
 
   return (

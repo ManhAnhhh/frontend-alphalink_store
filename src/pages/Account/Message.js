@@ -11,7 +11,7 @@ const Message = () => {
   
   return (
     <div id="message">
-      <div className="message-top d-flex mb-1 p-2 border-2 border-bottom rounded align-items-center flex-wrap">
+      <div className="message-top d-flex mb-1 p-2 border-2 border-bottom align-items-center flex-wrap">
         <h5
           className="fw-bold mb-0 me-4"
           style={{ color: "var(--main-color)" }}
@@ -229,7 +229,7 @@ const Message = () => {
             </label>
           </div>
           <div className="wrapper-message-icon">
-            <i class="fa-solid fa-paperclip icon"></i>
+            <i className="fa-solid fa-paperclip icon"></i>
           </div>
           <div className="flex-grow-1 position-relative mx-2">
             <input

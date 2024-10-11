@@ -15,6 +15,13 @@ import PurchaseOrder from "../../src/pages/Account/PurchaseOrder";
 import ChangePassword from "../../src/pages/Account/ChangePassword";
 import Account from "../pages/Account";
 
+import All from "../pages/Account/order_status/All";
+import Pending from "../pages/Account/order_status/Pending";
+import Processing from "../pages/Account/order_status/Processing";
+import SuccessOrder from "../pages/Account/order_status/Success";
+import Canceled from "../pages/Account/order_status/Canceled";
+import Shipping from "../pages/Account/order_status/Shipping";
+
 import MainLayout from "../share/components/layout/MainLayout";
 
 import PrivateRoute from "./PrivateRoute";
@@ -49,7 +56,19 @@ const accountRoutes = [
       { path: "profiles", element: <Profiles /> },
       { path: "change_password", element: <ChangePassword /> },
       { path: "message", element: <Message /> },
-      { path: "purchase_order", element: <PurchaseOrder /> },
+      {
+        path: "purchase_order",
+        element: <PurchaseOrder />,
+        children: [
+          { path: "all", element: <All /> },
+          { path: "pending", element: <Pending /> },
+          { path: "processing", element: <Processing /> },
+          { path: "shipping", element: <Shipping /> },
+          { path: "success", element: <SuccessOrder /> },
+          { path: "pending", element: <Pending /> },
+          { path: "canceled", element: <Canceled /> },
+        ],
+      },
     ],
   },
 ];

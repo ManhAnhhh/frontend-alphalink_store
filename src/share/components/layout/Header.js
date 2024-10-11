@@ -186,7 +186,7 @@ const Header = () => {
                 </li>
                 <li>
                   <Link
-                    to={`/customer/${customerLogin?._id}/purchase_order`}
+                    to={`/customer/${customerLogin?._id}/purchase_order/all`}
                     className="d-flex align-items-center gap-2"
                   >
                     My Orders

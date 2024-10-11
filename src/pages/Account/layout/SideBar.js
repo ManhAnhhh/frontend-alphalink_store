@@ -1,7 +1,10 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const SideBar = () => {
+  const location = useLocation();
+  const isPurchasePath = location.pathname.includes("purchase");
+
   const customer_id = useSelector(
     (state) => state.Auth.login.currentCustomer.id
   );
@@ -37,8 +40,10 @@ const SideBar = () => {
           </li>
           <li>
             <NavLink
-              className="side-bar-item fw-bold text-decoration-none d-inline-block"
-              to={`/customer/${customer_id}/purchase_order`}
+              className={`side-bar-item fw-bold text-decoration-none d-inline-block ${
+                isPurchasePath && "active"
+              } `}
+              to={`/customer/${customer_id}/purchase_order/all`}
             >
               <i className="icon fa-solid fa-cart-arrow-down text-center me-1" />
               Purchase Order
