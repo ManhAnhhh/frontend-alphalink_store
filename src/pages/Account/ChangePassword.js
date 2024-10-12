@@ -21,8 +21,6 @@ const ChangePassword = () => {
       prev.map((item, index) => (index === i ? !item : item))
     );
   };
-  console.log(showPassword);
-  console.log(passArr);
 
   return (
     <div id="change-password">

@@ -15,6 +15,7 @@ const Login = () => {
 
   const [emailLogin, setEmailLogin] = useState("");
   const [passwordLogin, setPasswordLogin] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const isLoading = useSelector((state) => state.Loading.isLoading);
 
@@ -107,7 +108,7 @@ const Login = () => {
       <section id="login">
         <form method="post">
           <h1 className="title">Log In</h1>
-          <div className="icon">
+          <div className="wrapper-input-auth">
             <span>
               <i className="icon fa-regular fa-user fa-2xl" />
             </span>
@@ -123,7 +124,7 @@ const Login = () => {
               onChange={(e) => setEmailLogin(e.target.value)}
             />
           </div>
-          <div className="icon">
+          <div className="wrapper-input-auth">
             <span>
               <i className="icon fa-solid fa-lock fa-2xl" />
             </span>
@@ -131,13 +132,19 @@ const Login = () => {
               className={
                 objectInputs.isValidPassword ? "" : "border border-danger error"
               }
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
               id="password"
               value={passwordLogin}
               onChange={(e) => setPasswordLogin(e.target.value)}
             />
+            <i
+              onClick={() => setShowPassword(!showPassword)}
+              class={`position-absolute icon icon-eyes fa-regular fa-eye${
+                showPassword ? "-slash" : ""
+              }`}
+            ></i>
           </div>
           <div>
             <input onClick={handleLogin} type="submit" value="Log in" />

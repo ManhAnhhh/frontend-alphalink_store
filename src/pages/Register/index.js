@@ -11,11 +11,15 @@ const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const numberInput = 2;
+  const intialShowPassword = Array(numberInput).fill(false);
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(intialShowPassword);
 
   const isLoading = useSelector((state) => state.Loading.isLoading);
 
@@ -30,6 +34,12 @@ const Register = () => {
         dispatch(setLoading(true));
       });
   }, [dispatch]);
+
+  const handleVisiblePassword = (i) => {
+    setShowPassword((prev) =>
+      prev.map((item, index) => (index === i ? !item : item))
+    );
+  };
 
   const defaultObjectInputs = {
     isValidFullName: true,
@@ -151,7 +161,7 @@ const Register = () => {
       <section id="register">
         <form method="post">
           <h1 className="title">Register</h1>
-          <div className="icon">
+          <div className="wrapper-input-auth">
             <span>
               <i className="icon fa-regular fa-user fa-2xl" />
             </span>
@@ -170,7 +180,7 @@ const Register = () => {
               ref={inputRef}
             />
           </div>
-          <div className="icon">
+          <div className="wrapper-input-auth">
             <span>
               <i className="icon fa-regular fa-envelope fa-2xl" />
             </span>
@@ -188,7 +198,7 @@ const Register = () => {
               id="email"
             />
           </div>
-          <div className="icon">
+          <div className="wrapper-input-auth">
             <span>
               <i className="icon fa-solid fa-phone-volume fa-2xl"></i>
             </span>
@@ -206,7 +216,7 @@ const Register = () => {
               onChange={(e) => setPhone(e.target.value)}
             />
           </div>
-          <div className="icon">
+          <div className="wrapper-input-auth">
             <span>
               <i className="icon fa-solid fa-lock fa-2xl" />
             </span>
@@ -216,31 +226,43 @@ const Register = () => {
                   ? "boder-none custom-shadow-none"
                   : "border border-danger error"
               }
-              type="password"
+              type={showPassword[0] ? "text" : "password"}
               name="password"
               placeholder="Password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <i
+              onClick={() => handleVisiblePassword(0)}
+              className={`position-absolute me-2 icon icon-eyes fa-regular fa-eye${
+                showPassword[0] ? "-slash" : ""
+              } `}
+            ></i>
           </div>
-          <div className="icon">
+          <div className="wrapper-input-auth">
             <span>
               <i className="icon fa-solid fa-lock fa-2xl" />
             </span>
             <input
               className={
                 objectInputs.isValidConfirmPassword
-                  ? ""
+                  ? "boder-none custom-shadow-none"
                   : "border border-danger error"
               }
-              type="password"
+              type={showPassword[1] ? "text" : "password"}
               name="confirmPassword"
               placeholder="Confirm Password"
               id="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
+            <i
+              onClick={() => handleVisiblePassword(1)}
+              className={`position-absolute me-2 icon icon-eyes fa-regular fa-eye${
+                showPassword[1] ? "-slash" : ""
+              } `}
+            ></i>
           </div>
           <div>
             <input

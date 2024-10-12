@@ -541,7 +541,7 @@
   box-shadow: 0 0 0 5px rgb(129 140 248 / 30%);
 }
 
-.icon-eyes {
+#change-password .icon-eyes {
   width: 32px;
   line-height: 32px;
   text-align: center;
@@ -550,7 +550,7 @@
   cursor: pointer;
 }
 
-.icon-eyes:hover {
+#change-password .icon-eyes:hover {
   background-color: rgba(0, 0, 0, 0.03);
   color: rgba(129, 140, 248);
 }

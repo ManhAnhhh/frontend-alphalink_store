@@ -145,7 +145,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
     <article id="filters" className="col-xl-3 col-lg-4 col-md-5">
       <div
         style={{
-          height: isCollapsedFilters ? "48px" : "auto",
+          height: isCollapsedFilters ? "48px" : "354px",
           overflow: "hidden",
         }}
       >

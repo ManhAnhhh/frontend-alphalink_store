@@ -326,19 +326,32 @@
   transition: all 0.3s ease;
 }
 
-#register .icon,
-#login .icon {
+#register .wrapper-input-auth,
+#login .wrapper-input-auth {
   position: relative;
 }
 
-#register .icon span,
-#login .icon span {
+#register .wrapper-input-auth span,
+#login .wrapper-input-auth span {
   position: absolute;
   top: 12px;
   left: 42px;
 }
 
-#register .icon span i,
-#login .icon span i {
-  color: #bfbdbd;
+#register .icon-eyes,
+#login .icon-eyes {
+  top: 8px;
+  right: 42px;
+  width: 32px;
+  line-height: 32px;
+  text-align: center;
+  border-radius: 50%;
+  transition: all .3s ease-in-out;
+  cursor: pointer;
+}
+
+#register .icon-eyes:hover,
+#login .icon-eyes:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+  color: rgba(129, 140, 248);
 }

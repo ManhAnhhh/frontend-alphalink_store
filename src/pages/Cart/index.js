@@ -210,7 +210,7 @@ const Cart = () => {
   if (items?.length <= 0) {
     return (
       <div className="container-fluid ">
-        <div className="m-0 text-center pt-3 pb-2 bg-white rounded">
+        <div className="my-2 text-center pt-3 pb-2 bg-white rounded">
           <p>No items in cart</p>
           <button
             className="mx-auto btn-custom mb-3"
