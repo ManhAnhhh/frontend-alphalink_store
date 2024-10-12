@@ -326,16 +326,19 @@
   transition: all 0.3s ease;
 }
 
-.icon {
+#register .icon,
+#login .icon {
   position: relative;
 }
 
-.icon span {
+#register .icon span,
+#login .icon span {
   position: absolute;
   top: 12px;
   left: 42px;
 }
 
-.icon span i {
+#register .icon span i,
+#login .icon span i {
   color: #bfbdbd;
 }

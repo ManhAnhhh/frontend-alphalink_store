@@ -317,6 +317,7 @@
 
 /*! purchase_order */
 #purchase-order .order-title {
+  border: 1px solid #fff;
   border-radius: 8px;
   box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .1);
   background-color: #f9fafc;
@@ -338,19 +339,22 @@
   font-weight: bold;
 }
 
-#purchase-order .order-title .order-title-item .toggle-order-item {
+#purchase-order .order-title .toggle-order-item {
   display: none;
   text-align: center;
   width: 30px;
+  height: 30px;
   line-height: 30px;
   position: absolute;
   top: 8px;
   right: 4px;
   border-radius: 50%;
   transition: all .2s linear;
+  z-index: 2;
+  cursor: pointer;
 }
 
-#purchase-order .order-title .order-title-item .toggle-order-item:hover {
+#purchase-order .order-title .toggle-order-item:hover {
   background-color: #e5f1fe;
   color: var(--main-color);
 }
@@ -367,11 +371,12 @@
 }
 
 @media (width <=1050px) {
-  #purchase-order .order-title .order-title-item:nth-child(1) {
-    color: var(--main-color);
+  #purchase-order .order-title {
+    border: 1px solid var(--border-color);
   }
 
-  #purchase-order .order-title .order-title-item .toggle-order-item {
+  #purchase-order .order-title .toggle-order-item {
+
     display: block !important;
   }
 
@@ -392,7 +397,6 @@
   #purchase-order .order-item-active {
     display: block !important;
   }
-
 }
 
 #purchase-order .order-title .order-title-item:hover,
@@ -407,8 +411,8 @@
 #purchase-order .order-title .start-home,
 #purchase-order .order-title .order-title-item:nth-child(1):hover~.animation,
 #purchase-order .order-title .order-title-item:nth-child(1).active~.animation {
-  width: 100px;
-  left: 0;
+  width: 96px;
+  left: 4px;
 }
 
 #purchase-order .order-title .order-title-item:nth-child(2) {
@@ -477,6 +481,10 @@
   border-radius: 4px;
 }
 
+.list-order-items .item table tr:first-child {
+  border-top: 1px solid var(--border-color)
+}
+
 .list-order-items .item table td {
   padding: 8px;
 }
@@ -492,4 +500,57 @@
 
 .list-order-items .item .cancel-state-item:hover {
   color: var(--light-color) !important;
+}
+
+/*! change-password  */
+.wrapper-input-password {
+  max-width: 440px;
+}
+
+.input-password-group {
+  display: flex;
+  align-items: center;
+  max-width: 221px;
+}
+
+.label-input-password {
+  min-width: 150px;
+}
+
+.input-password {
+  width: 100%;
+  padding: 8px 16px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  outline: none;
+  background-color: #f8fafc;
+  color: #0d0c22;
+  transition: .5s ease;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.input-password::placeholder {
+  color: #94a3b8;
+}
+
+.input-password:focus,
+.input-password:hover {
+  outline: none;
+  border-color: rgba(129, 140, 248);
+  background-color: #fff;
+  box-shadow: 0 0 0 5px rgb(129 140 248 / 30%);
+}
+
+.icon-eyes {
+  width: 32px;
+  line-height: 32px;
+  text-align: center;
+  border-radius: 50%;
+  transition: all .3s ease-in-out;
+  cursor: pointer;
+}
+
+.icon-eyes:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+  color: rgba(129, 140, 248);
 }

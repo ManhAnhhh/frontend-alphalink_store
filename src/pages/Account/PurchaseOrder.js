@@ -41,21 +41,15 @@ const PurchaseOrder = () => {
     };
   }, [windowSize.width]);
 
-  const handleToggle = () => {
+  const handleToggle = (e) => {
     if (window.innerWidth > 1050) return setShowNav(false);
     setShowNav(!showNav);
   };
   return (
-    <div id="purchase-order">
+    <div id="purchase-order" className="h-100">
       <div ref={orderTitle} className="order-title position-relative w-100">
         <NavLink className="order-title-item position-relative" to="all">
           All
-          <i
-            onClick={handleToggle}
-            className={`toggle-order-item icon fa-solid fa-chevron-${
-              showNav ? "up" : "down"
-            } `}
-          ></i>
         </NavLink>
 
         <NavLink
@@ -97,6 +91,14 @@ const PurchaseOrder = () => {
         >
           Canceled
         </NavLink>
+
+        {/* cần font-size thì mới hiện được chữ */}
+        <i
+          onClick={handleToggle}
+          className={`fs-5 toggle-order-item icon fa-solid fa-chevron-${
+            showNav ? "up" : "down"
+          } `}
+        ></i>
 
         <div className="animation position-absolute start-home"></div>
       </div>
