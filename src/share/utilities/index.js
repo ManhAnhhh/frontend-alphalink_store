@@ -22,7 +22,7 @@ export const GetImageProductReview = (imageName) => {
 };
 
 export const PopUp = ({
-  // type[loading, info, success, warning, error]
+  // type = [loading, info, success, warning, error]
   type = "info",
   position = "top-right",
   autoClose = 2000,

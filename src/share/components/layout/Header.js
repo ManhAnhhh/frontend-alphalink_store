@@ -122,7 +122,7 @@ const Header = () => {
 
   const searchItems = (e) => {
     e.preventDefault();
-    if (keyword === "" || keyword === " ") {
+    if (keyword.trim() === "") {
       PopUp({
         type: "warning",
         position: "top-center",
@@ -136,7 +136,7 @@ const Header = () => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      if (keyword === "" || keyword === " ") {
+      if (keyword.trim() === "") {
         PopUp({
           type: "warning",
           position: "top-center",

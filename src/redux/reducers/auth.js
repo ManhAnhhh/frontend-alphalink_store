@@ -23,11 +23,17 @@ export const authCustomerSlice = createSlice({
       state.login.isLoggedIn = false;
       state.login.currentCustomer = null;
     },
+    updateCurrentCustomer: (state, action) => {
+      state.login.currentCustomer.fullName = action.payload.fullName;
+      state.login.currentCustomer.email = action.payload.email;
+      state.login.currentCustomer.phone = action.payload.phone;
+      state.login.currentCustomer.address = action.payload.address;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { loginSuccess, loggedOut, loginFalse } =
+export const { loginSuccess, loggedOut, loginFalse, updateCurrentCustomer } =
   authCustomerSlice.actions;
 
 export default authCustomerSlice.reducer;

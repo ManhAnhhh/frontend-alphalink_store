@@ -18,6 +18,11 @@ export const registerCustomer = (config) =>
 export const loginCustomer = (config) => Http.post("customers/login", config);
 export const getCustomers = (config) => Http.get("customers", config);
 
+export const getCustomerByID = (id, config) =>
+  Http.get(`customer/${id}`, config);
+export const updateCustomer = (id, config) =>
+  Http.post(`customer/${id}/update`, config);
+
 export const addToCart = ({ customerId, productId }, config) =>
   Http.post(`customer/${customerId}/add-to-cart/${productId}`, config);
 export const updateCartItems = (customerId, config) =>

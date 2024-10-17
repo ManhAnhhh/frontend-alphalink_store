@@ -39,7 +39,7 @@ const Login = () => {
 
   const isValidField = () => {
     setObjectInputs(defaultObjectInputs);
-    if (emailLogin === "") {
+    if (emailLogin.trim() === "") {
       PopUp({
         type: "error",
         content: "Email is required",
@@ -56,7 +56,7 @@ const Login = () => {
       setObjectInputs({ ...defaultObjectInputs, isValidEmail: false });
       return false;
     }
-    if (passwordLogin === "") {
+    if (passwordLogin.trim() === "") {
       PopUp({
         type: "error",
         content: "Password is required",
@@ -141,7 +141,7 @@ const Login = () => {
             />
             <i
               onClick={() => setShowPassword(!showPassword)}
-              class={`position-absolute icon icon-eyes fa-regular fa-eye${
+              className={`position-absolute icon icon-eyes fa-regular fa-eye${
                 showPassword ? "-slash" : ""
               }`}
             ></i>

@@ -52,7 +52,7 @@ const Register = () => {
 
   const isValidateField = () => {
     setObjectInputs(defaultObjectInputs);
-    if (fullName === "") {
+    if (fullName.trim() === "") {
       PopUp({
         type: "error",
         content: "Username is required",
@@ -62,7 +62,7 @@ const Register = () => {
       return false;
     }
 
-    if (email === "") {
+    if (email.trim() === "") {
       PopUp({
         type: "error",
         content: "Email is required",
@@ -100,7 +100,7 @@ const Register = () => {
       return false;
     }
 
-    if (password === "") {
+    if (password.trim() === "") {
       PopUp({
         type: "error",
         content: "Password is required",
@@ -108,7 +108,7 @@ const Register = () => {
       setObjectInputs({ ...defaultObjectInputs, isValidPassword: false });
       return false;
     }
-    if (confirmPassword === "") {
+    if (confirmPassword.trim() === "") {
       PopUp({
         type: "error",
         content: "Confirm Password is required",
