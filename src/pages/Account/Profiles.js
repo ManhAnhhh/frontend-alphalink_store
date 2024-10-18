@@ -229,13 +229,14 @@ const Profiles = () => {
                   <div className="inputGroup text-center ">
                     <input
                       name="birthDay"
-                      id="my-birthDay"
+                      id="my-birthday"
                       type="date"
                       value={birthDay}
                       onChange={(e) => setBirthDay(e.target.value)}
                       max={new Date().toISOString().split("T")[0]}
                       min={"1940-01-01"}
                     />
+                    {console.log(birthDay)}
                   </div>
 
                   <button
