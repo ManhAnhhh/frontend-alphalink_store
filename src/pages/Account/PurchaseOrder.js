@@ -1,7 +1,8 @@
 import { Link, NavLink, useParams } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import { getOrdersByCustomerID, order } from "../../services/Api";
+import { cancelOrder, getOrdersByCustomerID } from "../../services/Api";
+import Swal from "sweetalert2";
 
 const PurchaseOrder = () => {
   const { id } = useParams();
@@ -68,6 +69,26 @@ const PurchaseOrder = () => {
     );
   };
 
+  const NoItemInOrder = () => (
+    <div className="text-center my-5">
+      <img width={140} src="/img/no-item.png" alt="no-items" />
+      <p className="text-center my-1 fs-4">No items in order</p>
+    </div>
+  );
+  const onCancelOrder = async (id, orderId) => {
+    cancelOrder(id, { orderId })
+      .then(async ({ data }) => {
+        await Swal.fire({
+          title: "Canceled!",
+          text: "Your order has been canceled.",
+          icon: "success",
+        });
+        window.location.reload();
+        // console.log(data);
+      })
+      .catch((err) => {});
+  };
+
   return (
     <div id="purchase-order" className="h-100">
       {orders.length === 0 ? (
@@ -130,7 +151,7 @@ const PurchaseOrder = () => {
             <div className="animation position-absolute start-home"></div>
           </div>
           <div className="my-2">
-            <Outlet />
+            <Outlet context={[onCancelOrder, NoItemInOrder]} />
           </div>
         </>
       )}

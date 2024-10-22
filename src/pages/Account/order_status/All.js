@@ -1,15 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 
 import { getOrdersByCustomerID } from "../../../services/Api";
 import {
   GetImageProduct,
   capitalizeFirstLetter,
 } from "../../../share/utilities";
+import Swal from "sweetalert2";
 
 const All = () => {
+  const onCancelOrder = useOutletContext()[0];
+  const NoItemInOrder = useOutletContext()[1];
+
   const navigate = useNavigate();
+
   const [orders, setOrders] = useState([]);
+
   const stateOrder = {
     pending: "warning",
     processing: "info",
@@ -19,6 +25,7 @@ const All = () => {
   };
 
   const { id } = useParams();
+
   useEffect(() => {
     getOrdersByCustomerID(id)
       .then(({ data }) => {
@@ -26,20 +33,41 @@ const All = () => {
       })
       .catch((err) => {});
   }, [id]);
-  // console.log(orders);
+
   const isCancellBtn = useMemo(() => ["pending", "processing"], []);
+
+  const handleCancelOrder = (orderId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onCancelOrder(id, orderId);
+      }
+    });
+  };
 
   return (
     <div id="all-purchase">
       <div className="list-order-items">
-        {orders.length !== 0 &&
+        {orders.length === 0 ? (
+          <NoItemInOrder />
+        ) : (
           orders.map((order) => {
             return (
               <div key={order._id} className="item table-responsive">
                 <div className="text-end">
                   {isCancellBtn.includes(order.status.toLowerCase()) && (
-                    <div className="cancel-state-item m-2 d-inline-block btn btn-outline-danger">
-                      Cancel
+                    <div
+                      className="cancel-state-item m-2 d-inline-block btn btn-outline-danger"
+                      onClick={() => handleCancelOrder(order._id)}
+                    >
+                      Cancel Order
                     </div>
                   )}
 
@@ -113,7 +141,15 @@ const All = () => {
                       </td>
                     </tr>
                     <tr>
-                      <td colSpan={3} className="text-end">
+                      {order.reasonCanceled && (
+                        <td className="text-nowrap text-danger">
+                          {capitalizeFirstLetter(order.reasonCanceled)}
+                        </td>
+                      )}
+                      <td
+                        colSpan={order.reasonCanceled ? 2 : 3}
+                        className="text-end"
+                      >
                         Total:
                         <span
                           className="ms-1 text-danger fw-bold"
@@ -128,286 +164,11 @@ const All = () => {
                 <button className="btn-custom py-1 my-2">Repuchase</button>
               </div>
             );
-          })}
+          })
+        )}
       </div>
     </div>
   );
 };
 
 export default All;
-
-// <div className="item table-responsive">
-//           <div className="text-end">
-//             <div className="cancel-state-item m-2 d-inline-block btn btn-outline-danger">
-//               Cancel
-//             </div>
-//             <div className="state-item my-2 d-inline-block btn btn-info text-white">
-//               Processing
-//             </div>
-//           </div>
-//           <table>
-//             <tbody>
-//               <tr className="border-bottom boder-1">
-//                 <td className="item-img">
-//                   <img src="/img/products/acer1_1.jpg" alt="true" />
-//                 </td>
-//                 <td>
-//                   <div className="mb-2">
-//                     Acer Aspire 3 A314-23P-R3QA Slim Laptop
-//                   </div>
-//                   <div className="d-flex gap-4">
-//                     <div className="fs-14">
-//                       Quantity:{" "}
-//                       <span className="ms-1 text-danger fw-bold">1</span>
-//                     </div>
-//                     <div className="fs-14">
-//                       Color: <span className="fw-bold">Black</span>
-//                     </div>
-//                   </div>
-//                 </td>
-//                 <td className="ms-1 text-end text-danger fw-bold text-nowrap">
-//                   $ 400
-//                 </td>
-//               </tr>
-//               <tr className="border-bottom boder-1">
-//                 <td className="item-img">
-//                   <img src="/img/products/acer1_1.jpg" alt="true" />
-//                 </td>
-//                 <td>
-//                   <div className="mb-2">
-//                     Acer Aspire 3 A314-23P-R3QA Slim Laptop
-//                   </div>
-//                   <div className="d-flex gap-4">
-//                     <div className="fs-14">
-//                       Quantity:{" "}
-//                       <span className="ms-1 text-danger fw-bold">1</span>
-//                     </div>
-//                     <div className="fs-14">
-//                       Color: <span className="fw-bold">Black</span>
-//                     </div>
-//                   </div>
-//                 </td>
-//                 <td className="ms-1 text-end text-danger fw-bold text-nowrap">
-//                   $ 400
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td colSpan={3} className="text-end">
-//                   Total:{" "}
-//                   <span
-//                     className="text-danger fw-bold"
-//                     style={{ fontSize: "21px" }}
-//                   >
-//                     $ 800
-//                   </span>
-//                 </td>
-//               </tr>
-//             </tbody>
-//           </table>
-//           <button className="btn-custom py-1 my-2">Repuchase</button>
-//         </div>
-//         <div className="item table-responsive">
-//           <div className="text-end">
-//             <div className="state-item my-2 d-inline-block btn btn-primary text-white">
-//               Shipping
-//             </div>
-//           </div>
-//           <table>
-//             <tbody>
-//               <tr className="border-bottom boder-1">
-//                 <td className="item-img">
-//                   <img src="/img/products/acer1_1.jpg" alt="true" />
-//                 </td>
-//                 <td>
-//                   <div className="mb-2">
-//                     Acer Aspire 3 A314-23P-R3QA Slim Laptop
-//                   </div>
-//                   <div className="d-flex gap-4">
-//                     <div className="fs-14">
-//                       Quantity:{" "}
-//                       <span className="ms-1 text-danger fw-bold">1</span>
-//                     </div>
-//                     <div className="fs-14">
-//                       Color: <span className="fw-bold">Black</span>
-//                     </div>
-//                   </div>
-//                 </td>
-//                 <td className="ms-1 text-end text-danger fw-bold text-nowrap">
-//                   $ 400
-//                 </td>
-//               </tr>
-//               <tr className="border-bottom boder-1">
-//                 <td className="item-img">
-//                   <img src="/img/products/acer1_1.jpg" alt="true" />
-//                 </td>
-//                 <td>
-//                   <div className="mb-2">
-//                     Acer Aspire 3 A314-23P-R3QA Slim Laptop
-//                   </div>
-//                   <div className="d-flex gap-4">
-//                     <div className="fs-14">
-//                       Quantity:{" "}
-//                       <span className="ms-1 text-danger fw-bold">1</span>
-//                     </div>
-//                     <div className="fs-14">
-//                       Color: <span className="fw-bold">Black</span>
-//                     </div>
-//                   </div>
-//                 </td>
-//                 <td className="ms-1 text-end text-danger fw-bold text-nowrap">
-//                   $ 400
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td colSpan={3} className="text-end">
-//                   Total:{" "}
-//                   <span
-//                     className="text-danger fw-bold"
-//                     style={{ fontSize: "21px" }}
-//                   >
-//                     $ 800
-//                   </span>
-//                 </td>
-//               </tr>
-//             </tbody>
-//           </table>
-//           <button className="btn-custom py-1 my-2">Repuchase</button>
-//         </div>
-//         <div className="item table-responsive">
-//           <div className="text-end">
-//             <div className="state-item my-2 d-inline-block btn btn-success text-white">
-//               Success
-//             </div>
-//           </div>
-//           <table>
-//             <tbody>
-//               <tr className="border-bottom boder-1">
-//                 <td className="item-img">
-//                   <img src="/img/products/acer1_1.jpg" alt="true" />
-//                 </td>
-//                 <td>
-//                   <div className="mb-2">
-//                     Acer Aspire 3 A314-23P-R3QA Slim Laptop
-//                   </div>
-//                   <div className="d-flex gap-4">
-//                     <div className="fs-14">
-//                       Quantity:{" "}
-//                       <span className="ms-1 text-danger fw-bold">1</span>
-//                     </div>
-//                     <div className="fs-14">
-//                       Color: <span className="fw-bold">Black</span>
-//                     </div>
-//                   </div>
-//                 </td>
-//                 <td className="ms-1 text-end text-danger fw-bold text-nowrap">
-//                   $ 400
-//                 </td>
-//               </tr>
-//               <tr className="border-bottom boder-1">
-//                 <td className="item-img">
-//                   <img src="/img/products/acer1_1.jpg" alt="true" />
-//                 </td>
-//                 <td>
-//                   <div className="mb-2">
-//                     Acer Aspire 3 A314-23P-R3QA Slim Laptop
-//                   </div>
-//                   <div className="d-flex gap-4">
-//                     <div className="fs-14">
-//                       Quantity:{" "}
-//                       <span className="ms-1 text-danger fw-bold">1</span>
-//                     </div>
-//                     <div className="fs-14">
-//                       Color: <span className="fw-bold">Black</span>
-//                     </div>
-//                   </div>
-//                 </td>
-//                 <td className="ms-1 text-end text-danger fw-bold text-nowrap">
-//                   $ 400
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td colSpan={3} className="text-end">
-//                   Total:{" "}
-//                   <span
-//                     className="text-danger fw-bold"
-//                     style={{ fontSize: "21px" }}
-//                   >
-//                     $ 800
-//                   </span>
-//                 </td>
-//               </tr>
-//             </tbody>
-//           </table>
-//           <button className="btn-custom py-1 my-2">Repuchase</button>
-//         </div>
-//         <div className="item table-responsive">
-//           <div className="text-end">
-//             <div className="state-item my-2 d-inline-block btn btn-danger text-white">
-//               Canceled
-//             </div>
-//           </div>
-//           <table>
-//             <tbody>
-//               <tr className="border-bottom boder-1">
-//                 <td className="item-img">
-//                   <img src="/img/products/acer1_1.jpg" alt="true" />
-//                 </td>
-//                 <td>
-//                   <div className="mb-2">
-//                     Acer Aspire 3 A314-23P-R3QA Slim Laptop
-//                   </div>
-//                   <div className="d-flex gap-4">
-//                     <div className="fs-14">
-//                       Quantity:{" "}
-//                       <span className="ms-1 text-danger fw-bold">1</span>
-//                     </div>
-//                     <div className="fs-14">
-//                       Color: <span className="fw-bold">Black</span>
-//                     </div>
-//                   </div>
-//                 </td>
-//                 <td className="ms-1 text-end text-danger fw-bold text-nowrap">
-//                   $ 400
-//                 </td>
-//               </tr>
-//               <tr className="border-bottom boder-1">
-//                 <td className="item-img">
-//                   <img src="/img/products/acer1_1.jpg" alt="true" />
-//                 </td>
-//                 <td>
-//                   <div className="mb-2">
-//                     Acer Aspire 3 A314-23P-R3QA Slim Laptop
-//                   </div>
-//                   <div className="d-flex gap-4">
-//                     <div className="fs-14">
-//                       Quantity:{" "}
-//                       <span className="ms-1 text-danger fw-bold">1</span>
-//                     </div>
-//                     <div className="fs-14">
-//                       Color: <span className="fw-bold">Black</span>
-//                     </div>
-//                   </div>
-//                 </td>
-//                 <td className="ms-1 text-end text-danger fw-bold text-nowrap">
-//                   $ 400
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td colSpan={3} className="text-end">
-//                   Total:{" "}
-//                   <span
-//                     className="text-danger fw-bold"
-//                     style={{ fontSize: "21px" }}
-//                   >
-//                     $ 800
-//                   </span>
-//                 </td>
-//               </tr>
-//             </tbody>
-//           </table>
-//           <div className="d-flex justify-content-between align-items-center">
-//             <button className="btn-custom py-1 my-2">Repuchase</button>
-//             <div className="fs-14 text-danger">Cancelled by you</div>
-//             {/* <div className="fs-14 text-danger">Cancelled by seller</div>  */}
-//           </div>
-//         </div>

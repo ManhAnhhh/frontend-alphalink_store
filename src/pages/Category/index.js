@@ -98,7 +98,6 @@ const Category = () => {
 
   const categoryParent = useMemo(() => {
     categories.find((cat) => {
-      console.log("re-render");
       return cat._id === category.parent_id;
     });
   }, [categories, category.parent_id]);

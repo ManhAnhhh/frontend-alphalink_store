@@ -236,7 +236,6 @@ const Profiles = () => {
                       max={new Date().toISOString().split("T")[0]}
                       min={"1940-01-01"}
                     />
-                    {console.log(birthDay)}
                   </div>
 
                   <button
