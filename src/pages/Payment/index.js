@@ -10,6 +10,23 @@ import { deleteManyCartItem, order } from "../../services/Api";
 import Swal from "sweetalert2";
 import PaymentSkeleton from "../../share/components/Skeleton/PaymentSkeleton";
 
+const Loading = () => {
+  return (
+    <div
+      className="position-fixed top-0 end-0 start-0 bottom-0 d-flex align-items-center justify-content-center"
+      style={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
+    >
+      <div
+        className="spinner-border"
+        style={{ width: "3rem", height: "3rem" }}
+        role="status"
+      >
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  );
+};
+
 const Payment = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,6 +37,7 @@ const Payment = () => {
   const [total, setTotal] = useState(0);
 
   const isLoading = useSelector((state) => state.Loading.isLoading);
+  const [isLoadingPayment, setIsLoadingPayment] = useState(false);
 
   const methodOfPaymentArr = ["Cash", "Bank"];
 
@@ -82,7 +100,7 @@ const Payment = () => {
         colorIndex: e.colorIndex,
       };
     });
-
+    setIsLoadingPayment(true);
     //? thêm vào database
     await order(customer.id, data).then().catch();
 
@@ -92,6 +110,7 @@ const Payment = () => {
         dispatch(clearCart());
       })
       .catch();
+    setIsLoadingPayment(false);
     navigate("/success");
   };
 
@@ -99,6 +118,7 @@ const Payment = () => {
 
   return (
     <section id="payment" className="my-2">
+      {isLoadingPayment && <Loading />}
       <div className="container-fluid">
         <div className="title-payment mb-3 text-uppercase">
           <h4>Payment</h4>
@@ -198,8 +218,8 @@ const Payment = () => {
             </div>
             <div className="method-of-payment d-flex align-items-center gap-4">
               <p className="m-0 content">
-                <i className="icon fa-solid fa-money-check-dollar me-1"></i> Method
-                of payment:
+                <i className="icon fa-solid fa-money-check-dollar me-1"></i>
+                Method of payment:
               </p>
               {methodOfPaymentArr.map((item, index) => {
                 return (

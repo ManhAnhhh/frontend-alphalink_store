@@ -16,7 +16,7 @@ const Success = () => {
   return (
     <section id="success">
       <div className="container-fluid text-center ">
-        <div className="bg-white rounded">
+        <div className="bg-white rounded my-2">
           <div style={{ width: "50%" }} className="mx-auto">
             <img className="img-fluid" src=" /img/success.png" alt="acer" />
           </div>

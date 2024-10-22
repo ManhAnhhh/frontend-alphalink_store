@@ -113,8 +113,7 @@
 }
 
 #payment-items .item .img-item img {
-  width: 100px;
-  transform: scale(.8);
+  width: 80px;
 }
 
 #payment-items .item .name {
