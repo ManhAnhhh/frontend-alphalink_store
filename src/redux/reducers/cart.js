@@ -29,7 +29,7 @@ export const cartCustomerSlice = createSlice({
       } else if (action.payload.length > 3) {
         state.cart.deleveryPrice = 0;
       } else {
-        state.cart.deleveryPrice = 15;
+        state.cart.deleveryPrice = process.env.REACT_APP_DELEVERY_PRICE || 15;
       }
     },
     clearCart: (state, action) => {

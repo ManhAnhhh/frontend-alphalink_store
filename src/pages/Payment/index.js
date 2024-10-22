@@ -32,8 +32,8 @@ const Payment = () => {
   useEffect(() => {
     const value =
       parseFloat(cart.totalPriceInCart) +
-      cart.deleveryPrice +
-      discountCodePrice;
+      parseFloat(cart.deleveryPrice) +
+      parseFloat(discountCodePrice);
     setTotal(parseFloat(value).toFixed(2));
   }, [cart.deleveryPrice, cart.totalPriceInCart, discountCodePrice]);
 

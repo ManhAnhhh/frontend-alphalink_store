@@ -74,4 +74,9 @@ export const HandlePriceWithDiscount = (price, discount) => {
   return parseFloat(total.toFixed(2));
 };
 
+export const capitalizeFirstLetter = (str) => {
+  if (str.length === 0) return str; // Kiểm tra chuỗi rỗng
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 export const LOADING_TIME = 1500;

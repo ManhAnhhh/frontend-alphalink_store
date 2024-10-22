@@ -391,7 +391,7 @@
   }
 
   #purchase-order .order-title .order-title-item:nth-child(1) {
-    width: 100% !important;
+    width: 90% !important;
   }
 
   #purchase-order .order-item-active {
@@ -475,6 +475,10 @@
   margin: 8px 0;
 }
 
+.list-order-items .item .state-item {
+  pointer-events: none;
+}
+
 .list-order-items .item table {
   background-color: var(--light-color);
   width: 100%;
@@ -498,8 +502,21 @@
   transform: scale(.8);
 }
 
+.list-order-items .item .item-name:hover {
+  color: var(--main-color);
+  transition: color .2s linear;
+  cursor: pointer;
+}
+
 .list-order-items .item .cancel-state-item:hover {
   color: var(--light-color) !important;
+}
+
+.list-order-items .item .btn-canceled {
+  
+  text-transform: uppercase;
+  color: var(--red-color) !important;
+  cursor: default;
 }
 
 /*! change-password  */

@@ -116,6 +116,7 @@ const ProductDetail = () => {
   const handleBuyNow = () => {
     addToCart({ customerId, product, qty: quantity, colorIndex: colorChoosed });
     navigate(`/customer/${customerId}/cart`);
+    window.location.reload();
   };
 
   if (isLoading) return <ProductDetailsSkeleton />;

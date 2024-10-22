@@ -41,3 +41,6 @@ export const deleteManyHeartItem = (customerId, config) =>
 
 export const order = (customerId, config) =>
   Http.post(`customer/${customerId}/order`, config);
+
+export const getOrdersByCustomerID = (customerId, config) =>
+  Http.get(`customer/${customerId}/orderDetails`, config);
