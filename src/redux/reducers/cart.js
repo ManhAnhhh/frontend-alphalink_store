@@ -24,13 +24,16 @@ export const cartCustomerSlice = createSlice({
         )
         .toFixed(2);
       state.cart.totalPriceInCart = parseFloat(totalPriceInCart);
+      let deleveryPrice;
       if (action.payload.length === 0) {
-        state.cart.deleveryPrice = 0;
+        deleveryPrice = 0;
       } else if (action.payload.length > 3) {
-        state.cart.deleveryPrice = 0;
+        deleveryPrice = 0;
       } else {
-        state.cart.deleveryPrice = process.env.REACT_APP_DELEVERY_PRICE || 15;
+        deleveryPrice = process.env.REACT_APP_DELEVERY_PRICE || 15;
       }
+
+      state.cart.deleveryPrice = parseInt(deleveryPrice);
     },
     clearCart: (state, action) => {
       state.cart.items = [];

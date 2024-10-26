@@ -136,7 +136,21 @@ const All = () => {
                       <td colSpan={3} className="text-end">
                         Shipping fee:
                         <span className="ms-1 text-danger fw-bold">
-                          $ {order.items.length > 3 ? 0 : 15}
+                          $ {order.deleveryPrice}
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        colSpan={order.reasonCanceled ? 2 : 3}
+                        className="text-end"
+                      >
+                        Total cost of goods:
+                        <span
+                          className="ms-1 text-danger fw-bold"
+                          style={{ fontSize: "21px" }}
+                        >
+                          $ {order.totalPriceInCart}
                         </span>
                       </td>
                     </tr>
@@ -155,7 +169,12 @@ const All = () => {
                           className="ms-1 text-danger fw-bold"
                           style={{ fontSize: "21px" }}
                         >
-                          $ {order.totalPrice}
+                          ${" "}
+                          {parseFloat(
+                            (
+                              order.totalPriceInCart + order.deleveryPrice
+                            ).toFixed(2)
+                          )}
                         </span>
                       </td>
                     </tr>

@@ -98,7 +98,7 @@ const PaymentSkeleton = () => {
                   {Array(2)
                     .fill()
                     .map(() => (
-                      <tr>
+                      <tr key={Date.now() + Math.random()}>
                         <td className="item d-flex gap-3 align-items-center">
                           <div className="img-item">
                             <Skeleton width={100} height={100} />

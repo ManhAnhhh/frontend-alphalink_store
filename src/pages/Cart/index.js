@@ -51,7 +51,7 @@ const Cart = () => {
       parseFloat(cart.totalPriceInCart) +
       parseFloat(cart.deleveryPrice) +
       parseFloat(discountCodePrice);
-    setTotal(parseFloat(value).toFixed(2));
+    setTotal(parseFloat(value.toFixed(2)));
   }, [cart.deleveryPrice, cart.totalPriceInCart, discountCodePrice]);
 
   const handleDeleteItem = (prd_id, colorIndex) => {
@@ -224,7 +224,7 @@ const Cart = () => {
       </div>
     );
   }
-  
+
   return (
     <>
       <section id="cart" className="my-2">
@@ -354,10 +354,8 @@ const Cart = () => {
                       </td>
                       <td className="price text-danger fw-bold text-center text-nowrap">
                         ${" "}
-                        {(
-                          HandlePriceWithDiscount(item.price, item.discount) *
-                          item.qty
-                        ).toFixed(2)}
+                        {HandlePriceWithDiscount(item.price, item.discount) *
+                          item.qty}
                       </td>
                       <td className="text-center delete-item">
                         <i

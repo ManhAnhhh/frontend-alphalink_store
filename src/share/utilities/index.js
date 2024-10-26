@@ -79,4 +79,19 @@ export const capitalizeFirstLetter = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
+export const formattedPriceUSD = (price, discount) => {
+  const result = HandlePriceWithDiscount(price, discount);
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(result);
+};
+
+export const formattedPriceVND = (price) => {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(price);
+};
+
 export const LOADING_TIME = 1500;

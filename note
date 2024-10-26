@@ -1,4 +1,0 @@
-
-//! chưa xử lý // sai tổng tiền
-// khi order thì phải để giá cả riêng như: tiền sp, tiền ship, tiền voucher
-// khi đó bên backend sẽ lấy ra số tiền dễ hơn 

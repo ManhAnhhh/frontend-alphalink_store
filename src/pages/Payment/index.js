@@ -52,7 +52,7 @@ const Payment = () => {
       parseFloat(cart.totalPriceInCart) +
       parseFloat(cart.deleveryPrice) +
       parseFloat(discountCodePrice);
-    setTotal(parseFloat(value).toFixed(2));
+    setTotal(parseFloat(value.toFixed(2)));
   }, [cart.deleveryPrice, cart.totalPriceInCart, discountCodePrice]);
 
   const handlePayNow = async () => {
@@ -91,7 +91,8 @@ const Payment = () => {
       items,
       voucher,
       note,
-      totalPrice: parseFloat(total),
+      deleveryPrice: cart.deleveryPrice,
+      totalPriceInCart: cart.totalPriceInCart,
     };
 
     const deleteAllItemIncart = items.map((e) => {
@@ -115,6 +116,8 @@ const Payment = () => {
   };
 
   if (isLoading) return <PaymentSkeleton />;
+
+  console.log(cart);
 
   return (
     <section id="payment" className="my-2">
@@ -206,10 +209,8 @@ const Payment = () => {
                       </td>
                       <td className="price text-danger fw-bold text-center text-nowrap">
                         ${" "}
-                        {(
-                          HandlePriceWithDiscount(item.price, item.discount) *
-                          item.qty
-                        ).toFixed(2)}
+                        {HandlePriceWithDiscount(item.price, item.discount) *
+                          item.qty}
                       </td>
                     </tr>
                   ))}
