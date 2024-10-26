@@ -38,7 +38,6 @@ const Cart = () => {
 
   const customerId = params.id;
   let items = [...cart.items];
-
   useEffect(() => {
     getProducts()
       .then(({ data }) => {
@@ -225,7 +224,7 @@ const Cart = () => {
       </div>
     );
   }
-
+  
   return (
     <>
       <section id="cart" className="my-2">

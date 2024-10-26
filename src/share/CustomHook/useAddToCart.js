@@ -8,7 +8,7 @@ export const useAddToCart = () => {
 
   const isLoggedIn = useSelector((state) => state.Auth.login.isLoggedIn);
 
-  const addProductToCart = ({
+  const addProductToCart = async ({
     customerId,
     product,
     qty = 1,
@@ -43,7 +43,7 @@ export const useAddToCart = () => {
       colorIndex,
     };
 
-    addToCart({ customerId, productId: product._id }, info)
+    await addToCart({ customerId, productId: product._id }, info)
       .then(({ data }) => {
         // lưu vào redux để xử lý trên giao diện
         dispatch(updateCart(data.data));

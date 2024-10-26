@@ -2,4 +2,3 @@
 //! chưa xử lý // sai tổng tiền
 // khi order thì phải để giá cả riêng như: tiền sp, tiền ship, tiền voucher
 // khi đó bên backend sẽ lấy ra số tiền dễ hơn 
-// khi buy now ở product-details thì qty không thay đổi ở cart phải reload lại trang mới thay đổi

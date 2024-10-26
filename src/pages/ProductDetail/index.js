@@ -28,6 +28,7 @@ const ProductDetail = () => {
   const [colorChoosed, setColorChoosed] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showImgModal, setShowImgModal] = useState(false);
+  const [cartUpdated, setCartUpdated] = useState(false);
   const [urlImgShowModal, setUrlImgShowModal] = useState("");
   const [product, setProduct] = useState({});
 
@@ -49,6 +50,14 @@ const ProductDetail = () => {
       .then(({ data }) => setCategories(data.data))
       .catch(() => {});
   }, [product.category_id]);
+
+  useEffect(() => {
+    if (cartUpdated) {
+      navigate(`/customer/${customerId}/cart`);
+      setCartUpdated(false);
+    }
+  }, [cartUpdated, customerId, navigate]);
+
   const category = categories.find((cat) => cat._id === product.category_id);
   const categoryParent = categories.find(
     (cat) => cat._id === category.parent_id
@@ -113,10 +122,14 @@ const ProductDetail = () => {
     } catch (e) {}
   };
 
-  const handleBuyNow = () => {
-    addToCart({ customerId, product, qty: quantity, colorIndex: colorChoosed });
-    navigate(`/customer/${customerId}/cart`);
-    window.location.reload();
+  const handleBuyNow = async () => {
+    await addToCart({
+      customerId,
+      product,
+      qty: quantity,
+      colorIndex: colorChoosed,
+    });
+    setCartUpdated(true);
   };
 
   if (isLoading) return <ProductDetailsSkeleton />;
