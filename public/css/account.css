@@ -475,6 +475,11 @@
   margin: 8px 0;
 }
 
+.list-order-items .item>div:first-child {
+  background-color: var(--light-color);
+  border-radius: var(--radius-m);
+}
+
 .list-order-items .item .state-item {
   pointer-events: none;
 }
@@ -485,21 +490,26 @@
   border-radius: 4px;
 }
 
-.list-order-items .item table tr:first-child {
-  border-top: 1px solid var(--border-color)
-}
-
 .list-order-items .item table td {
   padding: 8px;
 }
 
 .list-order-items .item .item-img {
+  min-width: 10px;
   width: 100px;
 }
 
 .list-order-items .item .item-img img {
   width: 100%;
   transform: scale(.8);
+}
+
+.list-order-items .item .item-name {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
 }
 
 .list-order-items .item .item-name:hover {
@@ -513,10 +523,13 @@
 }
 
 .list-order-items .item .btn-canceled {
-  
+  padding: 0 !important;
   text-transform: uppercase;
   color: var(--red-color) !important;
-  cursor: default;
+}
+
+.list-order-items .item .item-end {
+  padding: 8px;
 }
 
 /*! change-password  */
