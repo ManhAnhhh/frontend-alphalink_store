@@ -25,6 +25,8 @@ export const updateCustomer = (id, config) =>
 
 export const addToCart = ({ customerId, productId }, config) =>
   Http.post(`customer/${customerId}/add-to-cart/${productId}`, config);
+export const addManyItemsToCart = (customerId, config) =>
+  Http.post(`customer/${customerId}/add-many-items-to-cart`, config);
 export const updateCartItems = (customerId, config) =>
   Http.post(`customer/${customerId}/update-cart/`, config);
 export const deleteCartItem = ({ customerId, productId }, config) =>

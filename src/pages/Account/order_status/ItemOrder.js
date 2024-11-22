@@ -2,8 +2,12 @@ import { GetImageProduct } from "../../../share/utilities";
 import { useNavigate } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../../share/utilities";
 import Swal from "sweetalert2";
+import { addManyItemsToCart } from "../../../services/Api";
+import { useDispatch } from "react-redux";
+import { updateCart } from "../../../redux/reducers/cart";
 
 const ItemOrder = ({ order, onCancelOrder, id }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const isCancellBtn = ["pending", "processing"];
   const stateOrder = {
@@ -28,6 +32,14 @@ const ItemOrder = ({ order, onCancelOrder, id }) => {
         onCancelOrder(id, orderId);
       }
     });
+  };
+
+  const handleRepuchase = async () => {
+    const items = order.items;
+    await addManyItemsToCart(id, { items }).then(({ data }) => {
+      dispatch(updateCart(data.data));
+    });
+    navigate(`/customer/${id}/cart`);
   };
 
   return (
@@ -123,7 +135,9 @@ const ItemOrder = ({ order, onCancelOrder, id }) => {
           </div>
           <div
             className={`d-flex flex-wrap ${
-              order.reasonCanceled ? "justify-content-between" : "justify-content-end"
+              order.reasonCanceled
+                ? "justify-content-between"
+                : "justify-content-end"
             }`}
           >
             {order.reasonCanceled && (
@@ -146,7 +160,9 @@ const ItemOrder = ({ order, onCancelOrder, id }) => {
           </div>
         </div>
       </div>
-      <button className="btn-custom py-1 my-2">Repuchase</button>
+      <button onClick={handleRepuchase} className="btn-custom py-1 my-2">
+        Repuchase
+      </button>
     </div>
   );
 };

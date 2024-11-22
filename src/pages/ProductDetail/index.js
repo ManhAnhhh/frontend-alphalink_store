@@ -60,7 +60,7 @@ const ProductDetail = () => {
 
   const category = categories.find((cat) => cat._id === product.category_id);
   const categoryParent = categories.find(
-    (cat) => cat._id === category.parent_id
+    (cat) => cat._id === category?.parent_id
   );
 
   const handleColorsProduct = (index) => {

@@ -27,7 +27,9 @@ const Success = () => {
         {orders.length === 0 ? (
           <NoItemInOrder />
         ) : (
-          orders.map((order) => <ItemOrder order={order} id={id} />)
+          orders.map((order) => (
+            <ItemOrder key={order._id} order={order} id={id} />
+          ))
         )}
       </div>
     </div>

@@ -209,8 +209,12 @@ const Payment = () => {
                       </td>
                       <td className="price text-danger fw-bold text-center text-nowrap">
                         ${" "}
-                        {HandlePriceWithDiscount(item.price, item.discount) *
-                          item.qty}
+                        {parseFloat(
+                          (
+                            HandlePriceWithDiscount(item.price, item.discount) *
+                            item.qty
+                          ).toFixed(2)
+                        )}
                       </td>
                     </tr>
                   ))}
