@@ -1,5 +1,7 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+const USD_TO_VND = 20000;
 export const GetImageProduct = (imageName) => {
   if (imageName === undefined) {
     return "/img/error-image.png";
@@ -11,7 +13,11 @@ export const GetImageCustomer = (imageName) => {
   if (imageName === undefined) {
     return "/img/error-image.png";
   }
-  return `${process.env.REACT_APP_BASE_URL}assets/uploads/customers/${imageName}`;
+  try {
+    return `${process.env.REACT_APP_BASE_URL}assets/uploads/customers/${imageName}`;
+  } catch (error) {
+    return error;
+  }
 };
 
 export const GetImageProductReview = (imageName) => {
@@ -91,7 +97,7 @@ export const formattedPriceVND = (price) => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
-  }).format(price);
+  }).format(price * USD_TO_VND);
 };
 
 export const LOADING_TIME = 1500;

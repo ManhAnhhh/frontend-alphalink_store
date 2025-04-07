@@ -19,8 +19,9 @@ const Banner = () => {
         <div className="row d-none d-sm-block">
           <div id="ads">
             <p>
-              Discover cutting-edge electronics at unbeatable prices at
-              AlphaLink Store, your premier destination for tech gadgets!
+              Khám phá các thiết bị điện tử tiên tiến với mức giá không thể
+              tuyệt vời hơn tại AlphaLink Store, điểm đến hàng đầu của bạn cho
+              các thiết bị công nghệ!
             </p>
           </div>
         </div>

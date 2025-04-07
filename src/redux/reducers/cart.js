@@ -30,7 +30,7 @@ export const cartCustomerSlice = createSlice({
       } else if (action.payload.length > 3) {
         deleveryPrice = 0;
       } else {
-        deleveryPrice = process.env.REACT_APP_DELEVERY_PRICE || 15;
+        deleveryPrice = process.env.REACT_APP_DELEVERY_PRICE || 1;
       }
 
       state.cart.deleveryPrice = parseInt(deleveryPrice);

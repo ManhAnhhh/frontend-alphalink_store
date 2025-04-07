@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { clearCart } from "../../redux/reducers/cart";
 import {
+  formattedPriceVND,
   GetImageProduct,
   HandlePriceWithDiscount,
 } from "../../share/utilities";
@@ -59,8 +60,8 @@ const Payment = () => {
     if (cart.items.length === 0) {
       await Swal.fire({
         icon: "error",
-        title: "Cart is empty",
-        text: "Return to Home to buy products",
+        title: "Giỏ hàng trống",
+        text: "Hãy mua sản phẩm trước khi thanh toán.",
       });
       navigate("/");
       return;
@@ -70,7 +71,7 @@ const Payment = () => {
       await Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "This payment method is not supported yet.",
+        text: "Phương thức thanh toán này hiện chưa được hỗ trợ",
       });
       setMethodOfPayment("Cash");
       return;
@@ -117,20 +118,18 @@ const Payment = () => {
 
   if (isLoading) return <PaymentSkeleton />;
 
-  console.log(cart);
-
   return (
     <section id="payment" className="my-2">
       {isLoadingPayment && <Loading />}
       <div className="container-fluid">
         <div className="title-payment mb-3 text-uppercase">
-          <h4>Payment</h4>
+          <h4>Thanh toán</h4>
         </div>
         <div className="wrapper">
           <div className="shipping-address">
             <p className="title text-capitalize">
               <i className="icon fa-solid fa-location-dot" />
-              &nbsp; shipping address
+              &nbsp; Địa chỉ nhận hàng
             </p>
             <div className="info d-flex align-items-center justify-content-between flex-wrap">
               <div className="d-flex justify-content-start justify-content-sm-center flex-wrap">
@@ -152,7 +151,7 @@ const Payment = () => {
                 </div>
               </div>
               <button type="button" className="btn-change-info ms-auto ms-md-0">
-                Change
+                Thay đổi
                 <i className="icon fa-solid fa-gear fa-lg ms-1" />
               </button>
             </div>
@@ -160,16 +159,16 @@ const Payment = () => {
           <div className="order">
             <p className="title text-capitalize">
               <i className="icon fa-solid fa-basket-shopping" />
-              &nbsp; order
+              &nbsp; Đơn mua
             </p>
             <div className="wrapper-payment-item table-responsive">
               <table id="payment-items" className="w-100">
                 <thead>
                   <tr>
-                    <th>Products</th>
-                    <th className="text-center">Quantity</th>
-                    <th className="text-center">Price</th>
-                    <th className="text-center">Total</th>
+                    <th>Sản phẩm</th>
+                    <th className="text-center">Số lượng</th>
+                    <th className="text-center">Giá bán</th>
+                    <th className="text-center">Tổng tiền</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -188,32 +187,39 @@ const Payment = () => {
                           </p>
                           <div className="info d-flex my-1 fs-12">
                             <p className="discount text-secondary me-2">
-                              <del>$ {item.price}</del>
+                              <del> {formattedPriceVND(item.price)}</del>
                             </p>
                             <p className="discount text-danger fw-bold me-2">
-                              ${" "}
-                              {HandlePriceWithDiscount(
-                                item.price,
-                                item.discount
+                              {" "}
+                              {formattedPriceVND(
+                                HandlePriceWithDiscount(
+                                  item.price,
+                                  item.discount
+                                )
                               )}
                             </p>
                             <p className="color">
-                              Color: <b>{item.color[item.colorIndex]}</b>
+                              Màu sắc: <b>{item.color[item.colorIndex]}</b>
                             </p>
                           </div>
                         </div>
                       </td>
                       <td className="text-center text-nowrap">{item.qty}</td>
                       <td className="text-center text-nowrap">
-                        $ {HandlePriceWithDiscount(item.price, item.discount)}
+                        {formattedPriceVND(
+                          HandlePriceWithDiscount(item.price, item.discount)
+                        )}
                       </td>
                       <td className="price text-danger fw-bold text-center text-nowrap">
-                        ${" "}
-                        {parseFloat(
-                          (
-                            HandlePriceWithDiscount(item.price, item.discount) *
-                            item.qty
-                          ).toFixed(2)
+                        {formattedPriceVND(
+                          parseFloat(
+                            (
+                              HandlePriceWithDiscount(
+                                item.price,
+                                item.discount
+                              ) * item.qty
+                            ).toFixed(2)
+                          )
                         )}
                       </td>
                     </tr>
@@ -224,7 +230,7 @@ const Payment = () => {
             <div className="method-of-payment d-flex align-items-center gap-4">
               <p className="m-0 content">
                 <i className="icon fa-solid fa-money-check-dollar me-1"></i>
-                Method of payment:
+                Phương thức thanh toán:
               </p>
               {methodOfPaymentArr.map((item, index) => {
                 return (
@@ -246,12 +252,12 @@ const Payment = () => {
               <div className="d-flex align-items-center justify-content-between flex-wrap gap-4 my-4">
                 <div className="text-note">
                   <label htmlFor="text-note" className="me-4">
-                    Note
+                    Ghi chú
                   </label>
                   <input
                     id="text-note"
                     type="text"
-                    placeholder="Enter text ..."
+                    placeholder="Lưu ý cho cửa hàng ..."
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                   />
@@ -266,52 +272,48 @@ const Payment = () => {
                     type="button"
                     className="btn-custom btn-apply text-uppercase"
                   >
-                    APPLY
+                    Xác nhận
                   </button>
                 </div>
               </div>
               <div className="d-flex align-items-center justify-content-end flex-wrap gap-2 gap-lg-5 my-4">
                 <div className="text-center">
                   <p className="mb-0">
-                    Total: &nbsp;
+                    Tổng tiền: &nbsp;
                     <span className="text-danger fw-bold">
-                      $ {cart.totalPriceInCart}
+                      {formattedPriceVND(cart.totalPriceInCart)}
                     </span>
                   </p>
-                  <p className="mb-0">
-                    (
-                    {cart.length === 1
-                      ? `${cart.items.length} item`
-                      : `${cart.items.length} items`}
-                    )
+                  <p className="mb-0">({cart.items.length} sản phẩm )</p>
+                </div>
+                <div className="fs-4">
+                  <p className="mb-0">+</p>
+                </div>
+                <div className="text-center">
+                  <p className="mb-0">Phí vận chuyển</p>
+                  <p className="text-danger fw-bold mb-0">
+                    {formattedPriceVND(cart.deleveryPrice)}
                   </p>
                 </div>
                 <div className="fs-4">
                   <p className="mb-0">+</p>
                 </div>
                 <div className="text-center">
-                  <p className="mb-0">Delivery</p>
+                  <p className="mb-0">Mã giảm giá</p>
                   <p className="text-danger fw-bold mb-0">
-                    $ {cart.deleveryPrice}
-                  </p>
-                </div>
-                <div className="fs-4">
-                  <p className="mb-0">+</p>
-                </div>
-                <div className="text-center">
-                  <p className="mb-0">Discount</p>
-                  <p className="text-danger fw-bold mb-0">
-                    $ {discountCodePrice}
+                    {formattedPriceVND(discountCodePrice)}
                   </p>
                 </div>
                 <p className="fs-4 mb-0">=</p>
-                <p className="text-danger fw-bold mb-0">$ {total}</p>
+                <p className="text-danger fw-bold mb-0">
+                  {formattedPriceVND(total)}
+                </p>
                 <button
                   type="button"
                   className="btn-custom btn-buy text-uppercase"
                   onClick={handlePayNow}
                 >
-                  Pay Now
+                  Thanh toán ngay
                 </button>
               </div>
             </div>

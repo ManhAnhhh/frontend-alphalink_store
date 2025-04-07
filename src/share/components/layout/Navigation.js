@@ -21,7 +21,7 @@ const Navigation = () => {
     <nav className="navbar navbar-expand-lg">
       <div className="container-fluid">
         <NavLink className="navbar-brand fw-medium nav-item" to="/">
-          Home
+          Trang chủ
         </NavLink>
         <button
           className="navbar-toggler my-2 ms-auto"

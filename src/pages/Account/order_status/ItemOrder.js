@@ -1,6 +1,9 @@
 import { GetImageProduct } from "../../../share/utilities";
 import { useNavigate } from "react-router-dom";
-import { capitalizeFirstLetter } from "../../../share/utilities";
+import {
+  capitalizeFirstLetter,
+  formattedPriceVND,
+} from "../../../share/utilities";
 import Swal from "sweetalert2";
 import { addManyItemsToCart } from "../../../services/Api";
 import { useDispatch } from "react-redux";
@@ -20,13 +23,14 @@ const ItemOrder = ({ order, onCancelOrder, id }) => {
 
   const handleCancelOrder = (orderId) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Bạn có muốn hủy đơn hàng không?",
+      //text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
+      confirmButtonText: "Có",
+      cancelButtonText: "Không",
     }).then((result) => {
       if (result.isConfirmed) {
         onCancelOrder(id, orderId);
@@ -51,7 +55,7 @@ const ItemOrder = ({ order, onCancelOrder, id }) => {
               className="cancel-state-item me-2 d-inline-block btn btn-outline-danger"
               onClick={() => handleCancelOrder(order._id)}
             >
-              Cancel Order
+              Hủy đơn hàng
             </div>
           )}
 
@@ -82,20 +86,20 @@ const ItemOrder = ({ order, onCancelOrder, id }) => {
                       {item.name}
                     </div>
                     <div className="d-flex gap-2 gap-md-4 flex-wrap">
-                      <div className="fs-14">
-                        Quantity:
+                      <div className="fs-12">
+                        Số lượng:
                         <span className="ms-1 text-danger fw-bold">
                           {item.qty}
                         </span>
                       </div>
-                      <div className="fs-14">
-                        Color:
+                      <div className="fs-12">
+                        Màu sắc:
                         <span className="ms-1 fw-bold">{item.color}</span>
                       </div>
                     </div>
                   </td>
                   <td className="ms-1 text-end text-danger fw-bold text-nowrap">
-                    $ {item.price}
+                    {formattedPriceVND(item.price)}
                   </td>
                 </tr>
               );
@@ -109,27 +113,26 @@ const ItemOrder = ({ order, onCancelOrder, id }) => {
             }`}
           >
             {order.note && <div>Note: {order.note}</div>}
-            <div className="text-end">
-              Voucher:
-              <span className="ms-1 text-danger fw-bold">$ 0</span>
+            <div className="text-end fs-12">
+              Mã giảm giá:
+              <span className="ms-1 text-danger fw-bold">0 ₫</span>
             </div>
           </div>
           <div>
-            <div className="text-end">
-              Shipping fee:
+            <div className="text-end fs-12">
+              Phí vận chuyển:
               <span className="ms-1 text-danger fw-bold">
-                $ {order.deleveryPrice}
+                {formattedPriceVND(order.deleveryPrice)}
               </span>
             </div>
           </div>
           <div>
-            <div className="text-end">
-              Total cost of goods:
+            <div className="text-end fs-12">
+              Tổng tiền hàng:
               <span
                 className="ms-1 text-danger fw-bold"
-                style={{ fontSize: "21px" }}
               >
-                $ {order.totalPriceInCart}
+                {formattedPriceVND(order.totalPriceInCart)}
               </span>
             </div>
           </div>
@@ -145,23 +148,19 @@ const ItemOrder = ({ order, onCancelOrder, id }) => {
                 {capitalizeFirstLetter(order.reasonCanceled)}
               </div>
             )}
-            <div className="text-end">
-              Total:
+            <div className="text-end fs-12">
+              Tổng thanh toán:
               <span
                 className="ms-1 text-danger fw-bold"
-                style={{ fontSize: "21px" }}
               >
-                ${" "}
-                {parseFloat(
-                  (order.totalPriceInCart + order.deleveryPrice).toFixed(2)
-                )}
+                {formattedPriceVND(order.totalPriceInCart + order.deleveryPrice)}
               </span>
             </div>
           </div>
         </div>
       </div>
       <button onClick={handleRepuchase} className="btn-custom py-1 my-2">
-        Repuchase
+        Mua lại
       </button>
     </div>
   );

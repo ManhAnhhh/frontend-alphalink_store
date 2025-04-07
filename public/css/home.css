@@ -21,6 +21,7 @@ body {
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
+  font-size: 14px;
   color: var(--dark-color);
 }
 
@@ -184,7 +185,7 @@ header,
 }
 
 #main-header #search {
-  width: 100%;
+  width: 80%;
   outline: none;
   border: 2px solid var(--border-color);
   border-right: none;

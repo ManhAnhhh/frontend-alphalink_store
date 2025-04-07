@@ -16,7 +16,7 @@ const Message = () => {
           className="fw-bold mb-0 me-4"
           style={{ color: "var(--main-color)" }}
         >
-          # Message
+          # Tin nhắn
         </h5>
         <div className="mx-0 my-2 my-md-0 ms-sm-auto me-4 d-flex gap-3 align-items-center">
           <OverlayTrigger placement="top" overlay={tooltip("Notify")}>
@@ -25,7 +25,7 @@ const Message = () => {
           <input
             className="search-message outline-none rounded "
             type="text"
-            placeholder="Find messages . . ."
+            placeholder="Nhập từ khóa"
           />
 
           <OverlayTrigger placement="left" overlay={tooltip("Help")}>

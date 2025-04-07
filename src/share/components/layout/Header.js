@@ -9,6 +9,7 @@ import {
   PopUp,
   HandlePriceWithDiscount,
   LOADING_TIME,
+  formattedPriceVND,
 } from "../../utilities";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -82,7 +83,7 @@ const Header = () => {
     dispatch(clearCart());
     PopUp({
       type: "success",
-      content: "Logout successfully",
+      content: "Đăng nhập thành công",
     });
   };
 
@@ -126,7 +127,7 @@ const Header = () => {
       PopUp({
         type: "warning",
         position: "top-center",
-        content: "Please enter a search keyword",
+        content: "Hãy điền từ khóa",
       });
       return;
     }
@@ -140,7 +141,7 @@ const Header = () => {
         PopUp({
           type: "warning",
           position: "top-center",
-          content: "Please enter a search keyword",
+          content: "Hãy điền từ khóa",
         });
         return;
       }
@@ -156,10 +157,10 @@ const Header = () => {
       <section id="helper">
         <div className="container-fluid py-2 d-flex justify-content-end align-items-center gap-4">
           <div>
-            <p>Help</p>
+            <p>Hỗ trợ</p>
           </div>
           <div>
-            <p>Vietnamese</p>
+            <p>Tiếng Việt</p>
           </div>
           {customer != null && (
             <div className="full-name d-flex align-items-center gap-2 position-relative">
@@ -181,7 +182,7 @@ const Header = () => {
                     to={`/customer/${customerLogin?._id}/profiles`}
                     className="d-flex align-items-center gap-2"
                   >
-                    My Account
+                    Tài khoản của tôi
                   </Link>
                 </li>
                 <li>
@@ -189,12 +190,12 @@ const Header = () => {
                     to={`/customer/${customerLogin?._id}/purchase_order/all`}
                     className="d-flex align-items-center gap-2"
                   >
-                    My Orders
+                    Đơn mua
                   </Link>
                 </li>
                 <li>
                   <Link to="/" onClick={handleLogout}>
-                    Logout
+                    Đăng xuất
                   </Link>
                 </li>
               </ul>
@@ -222,7 +223,7 @@ const Header = () => {
                 className="input py-2 px-3"
                 type="search"
                 name="search"
-                placeholder="Search . . ."
+                placeholder="Nhập từ khóa . . ."
                 onChange={(e) => handleInput(e.target.value)}
                 onKeyDown={handleKeyDown}
               />
@@ -232,7 +233,7 @@ const Header = () => {
                 type="button"
                 onClick={searchItems}
               >
-                Search
+                Tìm kiếm
               </button>
               {isShowSuggestBox && (
                 <div
@@ -266,13 +267,14 @@ const Header = () => {
                                 <p className="m-0 fw-bold">{product.name}</p>
                                 <p className="m-0 fs-14">
                                   <span className="text-decoration-line-through me-2">
-                                    $ {product.price}
+                                    {formattedPriceVND(product.price)}
                                   </span>
                                   <span className="text-danger fw-bold">
-                                    ${" "}
-                                    {HandlePriceWithDiscount(
-                                      product.price,
-                                      product.discount
+                                    {formattedPriceVND(
+                                      HandlePriceWithDiscount(
+                                        product.price,
+                                        product.discount
+                                      )
                                     )}
                                   </span>
                                 </p>
@@ -312,16 +314,16 @@ const Header = () => {
               ) : (
                 <div>
                   <button
-                    onClick={() => navigate("customer/register")}
-                    className="btn-custom py-2 px-2 mx-2"
-                  >
-                    Sign Up
-                  </button>
-                  <button
                     onClick={() => navigate("customer/login")}
                     className="btn-custom py-2 px-2 mx-2"
                   >
-                    Log in
+                    Đăng nhập
+                  </button>
+                  <button
+                    onClick={() => navigate("customer/register")}
+                    className="btn-custom py-2 px-2 mx-2"
+                  >
+                    Đăng ký
                   </button>
                 </div>
               )}
@@ -338,9 +340,7 @@ const Header = () => {
         id="heart-modal"
       >
         <Modal.Header closeButton>
-          <Modal.Title className="modal-title">
-            My favorite products list
-          </Modal.Title>
+          <Modal.Title className="modal-title">Sản phẩm yêu thích</Modal.Title>
         </Modal.Header>
         <Modal.Body className="table-responsive wrapper-table">
           <HeartModal heart={heart} handleClose={handleClose} />
@@ -369,13 +369,13 @@ const HeartModal = (props) => {
 
   const HandleDeleteItem = (prd_id) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Bạn có muốn xóa không ?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Có",
+      cancelButtonText: "Không",
     }).then((result) => {
       if (result.isConfirmed) {
         setCheckedListItems((prev) => prev.filter((item) => item !== prd_id));
@@ -387,8 +387,7 @@ const HeartModal = (props) => {
             //console.log(err);
           });
         Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
+          title: "Xóa thành công!",
           icon: "success",
         });
       }
@@ -417,19 +416,20 @@ const HeartModal = (props) => {
     if (checkedListItems.length === 0) {
       Swal.fire({
         icon: "error",
-        title: "No item selected",
+        title: "Hãy chọn sản phẩm để xóa",
       });
       return;
     }
 
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Bạn có muốn xóa không ?",
+      // text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Có",
+      cancelButtonText: "Không",
     }).then((result) => {
       if (result.isConfirmed) {
         deleteManyHeartItem(customerId, checkedListItems)
@@ -437,14 +437,14 @@ const HeartModal = (props) => {
             dispatch(updateHeart(data.data));
             Swal.fire({
               icon: "success",
-              title: "Delete Items Successfully",
+              title: "Xóa thành công",
             });
             setCheckedListItems([]);
           })
           .catch((err) =>
             Swal.fire({
               icon: "success",
-              title: "Error deleting",
+              title: "Xóa thất bại",
               text: err.message || err,
             })
           );
@@ -454,7 +454,7 @@ const HeartModal = (props) => {
 
   if (heart.length === 0) {
     return (
-      <div className="text-center">No item in my favorite products list</div>
+      <div className="text-center">Không có sản phẩm nào được yêu thích</div>
     );
   }
 
@@ -474,10 +474,10 @@ const HeartModal = (props) => {
               className="text-capitalize text-nowrap"
               htmlFor="select-all-heart"
             >
-              select all
+              Chọn tất cả
             </label>
           </th>
-          <th>Products</th>
+          <th>Sản phẩm</th>
           <th>
             <button
               type="button"
@@ -488,7 +488,7 @@ const HeartModal = (props) => {
               }`}
               onClick={handleDeleteManyItems}
             >
-              Delete
+              Xóa
             </button>
           </th>
         </tr>
@@ -524,12 +524,16 @@ const HeartModal = (props) => {
                   <div className="info d-flex my-1 fs-12">
                     <p className="discount text-secondary m-0 me-2">
                       <del>
-                        $ {HandlePriceWithDiscount(item.price, item.discount)}
+                        {formattedPriceVND(
+                          HandlePriceWithDiscount(item.price, item.discount)
+                        )}
                       </del>
                     </p>
-                    <p className="price text-danger fw-bold m-0 me-4">$1639</p>
+                    <p className="price text-danger fw-bold m-0 me-4">
+                      {formattedPriceVND(item.price)}
+                    </p>
                     <p className="color m-0">
-                      Color: <b>{item.color[0]}</b>
+                      Màu sắc: <b>{item.color[0]}</b>
                     </p>
                   </div>
                   <p className="text-success fw-bold m-0 fs-14">
@@ -537,7 +541,7 @@ const HeartModal = (props) => {
                       style={{ color: "#198754" }}
                       className="fa-regular fa-circle-check me-1"
                     />
-                    In stock
+                    Còn hàng
                   </p>
                 </div>
               </td>

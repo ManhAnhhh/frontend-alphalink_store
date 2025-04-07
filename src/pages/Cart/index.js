@@ -9,13 +9,12 @@ import {
   deleteManyCartItem,
 } from "../../services/Api";
 import {
+  formattedPriceVND,
   GetImageProduct,
   HandlePriceWithDiscount,
 } from "../../share/utilities";
 import Swal from "sweetalert2";
 import { updateCart } from "../../redux/reducers/cart";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 import CartSkeleton from "../../share/components/Skeleton/CartSkeleton";
 
 const Cart = () => {
@@ -56,13 +55,13 @@ const Cart = () => {
 
   const handleDeleteItem = (prd_id, colorIndex) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Bạn có muốn xóa không?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Có",
+      cancelButtonText: "Không",
     }).then((result) => {
       if (result.isConfirmed) {
         deleteCartItem(
@@ -80,8 +79,7 @@ const Cart = () => {
         );
         setIsUpdateActive(true);
         Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
+          title: "Xóa thành công!",
           icon: "success",
         });
       }
@@ -97,7 +95,7 @@ const Cart = () => {
     if (value < 0) {
       Swal.fire({
         icon: "error",
-        title: "Invalid quantity",
+        title: "Số lượng không hợp lệ",
       });
       setIsUpdateActive(false);
       return;
@@ -106,8 +104,8 @@ const Cart = () => {
     if (value >= product.stock) {
       Swal.fire({
         icon: "error",
-        title: "Invalid quantity",
-        text: `Quantity must be less than ${product.stock}`,
+        title: "Số lượng không hợp lệ",
+        text: `Số lượng phải nhỏ hơn ${product.stock}`,
       });
       setIsUpdateActive(false);
       return;
@@ -126,7 +124,7 @@ const Cart = () => {
       dispatch(updateCart(data.data));
       Swal.fire({
         icon: "success",
-        title: "Update Cart Successfully",
+        title: "Đơn hàng của bạn đã được cập nhật",
       });
     });
   };
@@ -134,7 +132,7 @@ const Cart = () => {
   const handleNoUpdateCart = () => {
     Swal.fire({
       icon: "error",
-      title: "Invalid Value Item Cart",
+      title: "Giá trị không hợp lệ",
     });
   };
 
@@ -162,19 +160,19 @@ const Cart = () => {
     if (checkedListItems.length === 0) {
       Swal.fire({
         icon: "error",
-        title: "No item selected",
+        title: "Không có sản phẩm nào được chọn",
       });
       return;
     }
 
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Bạn có muốn xóa không?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Có",
+      cancelButtonText: "Không",
     }).then((result) => {
       if (result.isConfirmed) {
         const data = JSON.stringify(
@@ -191,14 +189,14 @@ const Cart = () => {
             dispatch(updateCart(data.data));
             Swal.fire({
               icon: "success",
-              title: "Delete Items Successfully",
+              title: "Xóa thành công",
             });
             setCheckedListItems([]);
           })
           .catch((err) =>
             Swal.fire({
               icon: "success",
-              title: "Error deleting",
+              title: "Xóa thất bại",
               text: err.message || err,
             })
           );
@@ -212,13 +210,13 @@ const Cart = () => {
     return (
       <div className="container-fluid ">
         <div className="my-2 text-center pt-3 pb-2 bg-white rounded">
-          <p>No items in cart</p>
+          <p>Không có sản phẩm nào trong giỏ hàng</p>
           <button
             className="mx-auto btn-custom mb-3"
             type="button"
             onClick={() => navigate("/")}
           >
-            Return Home
+            Quay lại trang chủ
           </button>
         </div>
       </div>
@@ -230,7 +228,7 @@ const Cart = () => {
       <section id="cart" className="my-2">
         <div className="container-fluid">
           <div className="title-cart mb-3 text-uppercase">
-            <h4>Cart</h4>
+            <h4>Giỏ hàng</h4>
           </div>
           <div className="wrapper-cart-item table-responsive">
             <table id="cart-items" className="w-100">
@@ -244,16 +242,13 @@ const Cart = () => {
                       id="select-all-cart"
                       onChange={handleCheckedAll}
                     />
-                    <label
-                      className="text-capitalize"
-                      htmlFor="select-all-cart"
-                    >
-                      select all
+                    <label htmlFor="select-all-cart">
+                      Chọn tất cả ({items.length})
                     </label>
                   </th>
-                  <th>Products</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
+                  <th>Sản phẩm</th>
+                  <th>Số lượng</th>
+                  <th>Giá tiền</th>
                   <th className="text-nowrap">
                     {isUpdateActive ? (
                       <button
@@ -261,7 +256,7 @@ const Cart = () => {
                         type="button"
                         className="btn-update bg-primary-subtle border border-primary mx-1"
                       >
-                        Update
+                        Cập nhật
                       </button>
                     ) : (
                       <button
@@ -269,7 +264,7 @@ const Cart = () => {
                         type="button"
                         className="btn-no-update bg-secondary-subtle border border-secondary mx-1"
                       >
-                        Update
+                        Cập nhật
                       </button>
                     )}
 
@@ -282,7 +277,7 @@ const Cart = () => {
                       }`}
                       onClick={handleDeleteManyItems}
                     >
-                      Delete
+                      Xóa
                     </button>
                   </th>
                 </tr>
@@ -331,7 +326,7 @@ const Cart = () => {
                               )}
                             </p>
                             <p className="color">
-                              Color: <b>{item.color[item.colorIndex]}</b>
+                              Màu sắc: <b>{item.color[item.colorIndex]}</b>
                             </p>
                           </div>
                         </div>
@@ -380,27 +375,11 @@ const Cart = () => {
 
       <section id="confirm">
         <div className="container-fluid">
-          <div className="d-flex justify-content-between flex-wrap">
-            <div className="d-flex flex-fill fa-2xl return-home-icon align-items-center justify-content-center p-4 p-lg-0">
-              <OverlayTrigger
-                key={"bottom"}
-                placement={"bottom"}
-                overlay={
-                  <Tooltip id={`tooltip-${"bottom"}`} className="fw-bold">
-                    <span>Return Home</span>
-                  </Tooltip>
-                }
-              >
-                <i
-                  onClick={() => navigate("/")}
-                  className="fa-solid fa-arrow-rotate-left"
-                ></i>
-              </OverlayTrigger>
-            </div>
+          <div className="d-flex justify-content-center flex-wrap">
             <div>
               <div className="d-flex align-items-center justify-content-center justify-content-lg-between flex-wrap gap-2 gap-lg-4 mb-2 ">
                 <p className="mb-0">
-                  <b>Buy more 3 items to get free shipping</b>
+                  <b>Mua từ 3 sản phẩm trở lên được miễn phí vận chuyển</b>
                 </p>
                 <div className="d-flex">
                   <input
@@ -413,52 +392,48 @@ const Cart = () => {
                     type="button"
                     className="btn-custom btn-apply text-uppercase"
                   >
-                    APPLY
+                    Xác nhận
                   </button>
                 </div>
               </div>
               <div className="d-flex align-items-center justify-content-center justify-content-md-between flex-wrap gap-2 gap-lg-5">
                 <div className="text-center">
                   <p className="mb-0">
-                    Total: &nbsp;
+                    Thành tiền: &nbsp;
                     <span className="text-danger fw-bold">
-                      $ {cart.totalPriceInCart}
+                      {formattedPriceVND(cart.totalPriceInCart)}
                     </span>
                   </p>
-                  <p className="mb-0">
-                    (
-                    {items.length === 1
-                      ? `${items.length} item`
-                      : `${items.length} items`}
-                    )
+                  <p className="mb-0">({items.length} sản phẩm)</p>
+                </div>
+                <div className="fs-4">
+                  <p className="mb-0">+</p>
+                </div>
+                <div className="text-center">
+                  <p className="mb-0">Phí vận chuyển</p>
+                  <p className="text-danger fw-bold mb-0">
+                    {formattedPriceVND(cart.deleveryPrice)}
                   </p>
                 </div>
                 <div className="fs-4">
                   <p className="mb-0">+</p>
                 </div>
                 <div className="text-center">
-                  <p className="mb-0">Delivery</p>
+                  <p className="mb-0">Mã giảm giá</p>
                   <p className="text-danger fw-bold mb-0">
-                    $ {cart.deleveryPrice}
-                  </p>
-                </div>
-                <div className="fs-4">
-                  <p className="mb-0">+</p>
-                </div>
-                <div className="text-center">
-                  <p className="mb-0">Discount</p>
-                  <p className="text-danger fw-bold mb-0">
-                    $ {discountCodePrice}
+                    {formattedPriceVND(discountCodePrice)}
                   </p>
                 </div>
                 <p className="fs-4">=</p>
-                <p className="text-danger fw-bold mb-0">$ {total}</p>
+                <p className="text-danger fw-bold mb-0">
+                  {formattedPriceVND(total)}
+                </p>
                 <button
                   type="button"
                   className="btn-custom btn-buy text-uppercase"
                   onClick={() => navigate(`/payment/${uniqueId}`)}
                 >
-                  Buy
+                  Mua hàng
                 </button>
               </div>
             </div>

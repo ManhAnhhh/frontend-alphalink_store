@@ -5,6 +5,7 @@ import {
   GetImageProductReview,
   PopUp,
   convertDate,
+  formattedPriceVND,
 } from "../../share/utilities";
 import {
   getProductByID,
@@ -71,7 +72,7 @@ const ProductDetail = () => {
     if (Number(value) <= 0) {
       PopUp({
         type: "error",
-        content: "Quanttity must be greater than 1",
+        content: "Số lượng phải lớn hơn 1",
       });
       setQuantity(1);
       return;
@@ -79,7 +80,7 @@ const ProductDetail = () => {
     if (Number(value) > product.stock) {
       PopUp({
         type: "error",
-        content: `Quanttity must be less than ${product.stock}`,
+        content: `Số lượng phải nhỏ ${product.stock}`,
       });
       setQuantity(product.stock);
       return;
@@ -94,7 +95,7 @@ const ProductDetail = () => {
       if (Number(quantity) === 1) {
         PopUp({
           type: "error",
-          content: "Quanttity must be greater than 1",
+          content: "Số lượng phải lớn hơn 1",
         });
         return;
       }
@@ -103,7 +104,7 @@ const ProductDetail = () => {
       if (Number(quantity) === product.stock) {
         PopUp({
           type: "error",
-          content: `Quanttity must be less than ${product.stock}`,
+          content: `Số lượng phải nhỏ ${product.stock}`,
         });
         return;
       }
@@ -139,7 +140,8 @@ const ProductDetail = () => {
       <section className="breadcrumb-custom">
         <div className="container-fluid">
           <p>
-            home / {categoryParent?.name ? `${categoryParent.name} / ` : ""}{" "}
+            Trang chủ /{" "}
+            {categoryParent?.name ? `${categoryParent.name} / ` : ""}{" "}
             {category?.name} / {product.name}
           </p>
         </div>
@@ -197,16 +199,18 @@ const ProductDetail = () => {
                 <div className="price-item d-flex gap-4">
                   {product.discount !== 0 && (
                     <p className="price text-secondary text-decoration-line-through mb-0">
-                      $ {product.price}
+                      {formattedPriceVND(product.price)}
                     </p>
                   )}
                   <p className="price text-danger fw-bold mb-0">
-                    $ {product.price - (product.price * product.discount) / 100}
+                    {formattedPriceVND(
+                      product.price - (product.price * product.discount) / 100
+                    )}
                   </p>
                 </div>
                 {/* color */}
                 <div className="d-flex align-items-lg-center flex-wrap align-items-center">
-                  <p className="me-2 mb-0">Color:</p>
+                  <p className="me-2 mb-0">Màu sắc:</p>
                   <div className="d-flex flex-wrap">
                     {product?.color?.map((item, index) => (
                       <button
@@ -223,7 +227,7 @@ const ProductDetail = () => {
                 </div>
                 {/* quantity */}
                 <div className="quantity d-flex flex-wrap gap-2 gap-lg-5 align-items-center">
-                  <div className="m-0">Quantity</div>
+                  <div className="m-0">Số lượng</div>
                   <div className="d-flex number">
                     <button onClick={() => handleQuantity(0)}>−</button>
                     <input
@@ -243,7 +247,7 @@ const ProductDetail = () => {
                           style={{ color: "#198754" }}
                           className="fa-regular fa-circle-check me-1 "
                         />
-                        In stock: {product.stock}
+                        Còn lại: {product.stock}
                       </p>
                     ) : (
                       /* danger */
@@ -252,7 +256,7 @@ const ProductDetail = () => {
                           style={{ color: "#dc3545" }}
                           className="fa-regular fa-circle-xmark me-1"
                         />
-                        Out of stock
+                        Hết hàng
                       </p>
                     )}
                   </div>
@@ -271,18 +275,18 @@ const ProductDetail = () => {
                     }
                   >
                     <i className="icon fa-solid fa-cart-shopping fa-lg text-white" />
-                    &nbsp; Add to cart
+                    &nbsp; Thêm vào giỏ hàng
                   </button>
                   <button
                     className="btn-custom btn-items"
                     onClick={handleBuyNow}
                   >
-                    Buy now
+                    Mua ngay
                   </button>
                 </div>
                 <div className="details mt-4">
                   <p className="mb-2">
-                    <b>Product details:</b>
+                    <b>Chi tiết sản phẩm:</b>
                   </p>
                   <p>{product.product_details}</p>
                 </div>
@@ -290,11 +294,11 @@ const ProductDetail = () => {
             </div>
             <div className="col-12">
               <div id="reviews">
-                <p className="title text-uppercase">PRODUCT REVIEWS</p>
+                <p className="title text-uppercase">Đánh giá</p>
                 <div className="comments">
                   {comments.length === 0 ? (
                     <div className="text-center no-comment">
-                      <p className="py-2 m-0">No customer reviews</p>
+                      <p className="py-2 m-0">Chưa có đánh giá nào</p>
                     </div>
                   ) : (
                     comments.map((comment) => {

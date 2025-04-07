@@ -161,7 +161,7 @@ const Search = () => {
     return (
       <div className="container-fluid text-center">
         <p className="bg-white p-4 rounded my-1">
-          No products found for "{keyword}"
+          Không có kết quả cho từ khóa "{keyword}"
         </p>
       </div>
     );
@@ -174,7 +174,7 @@ const Search = () => {
       <section className="breadcrumb-custom">
         <div className="container-fluid">
           <p>
-            {total} Results for "{keyword}"
+            {total} kết quả với từ khóa: "{keyword}"
           </p>
         </div>
       </section>
@@ -196,7 +196,7 @@ const Search = () => {
                 {productsByFilter.length === 0 || keyword === "" ? (
                   <div className="text-center">
                     <p className="bg-white p-4 rounded my-1">
-                      No products found for Filter
+                      Không có sản phẩm nào 
                     </p>
                   </div>
                 ) : (
@@ -258,7 +258,7 @@ const Items = ({
     <>
       <div className="d-flex mt-2 mt-md-0 justify-content-between sort-by">
         <div className="d-flex ">
-          <p className="fw-bold m-0">Sort by:</p>
+          <p className="fw-bold m-0">Giá tiền:</p>
           <select
             name="sort-by-price"
             id="sort-by-price"
@@ -266,19 +266,19 @@ const Items = ({
             onChange={(e) => handleSelectValue(e.target.value)}
           >
             <option className="text-capitalize" value="default">
-              Default
+              Mặc định
             </option>
             <option className="text-capitalize" value="low">
-              Low To High
+              Thấp đến cao
             </option>
             <option className="text-capitalize" value="high">
-              High To Low
+              Cao đến thấp
             </option>
           </select>
         </div>
         {star.length === 0 && !maxPrice && !minPrice ? null : (
           <div style={{ color: "#0d6efd" }}>
-            {prds.length} Results for Filter
+            {prds.length} sản phẩm
           </div>
         )}
       </div>

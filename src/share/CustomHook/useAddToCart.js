@@ -18,7 +18,7 @@ export const useAddToCart = () => {
     if (!isLoggedIn) {
       PopUp({
         type: "warning",
-        content: "You must be logged in to add this product to cart",
+        content: "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng",
       });
       return;
     }
@@ -27,7 +27,7 @@ export const useAddToCart = () => {
     if (product.is_stock === false) {
       PopUp({
         type: "error",
-        content: "This product is out of stock",
+        content: "Sản phẩm đã hết hàng",
       });
       return;
     }
@@ -52,7 +52,7 @@ export const useAddToCart = () => {
     PopUp({
       type: "success",
       position: "top-left",
-      content: "Product added to cart successfully",
+      content: "Thêm vào giỏ hàng thành công",
     });
   };
 

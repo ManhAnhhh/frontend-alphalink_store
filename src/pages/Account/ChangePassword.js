@@ -8,7 +8,7 @@ const ChangePassword = () => {
   const [showPassword, setShowPassword] = useState(intialShowPassword);
   const [passArr, setPassArr] = useState(intialPassword);
 
-  const label = ["Odd Password", "New Password", "Confirm Password"];
+  const label = ["Mật khẩu cũ", "Mật khẩu mới", "Xác nhận mật khẩu"];
 
   const onChangePassword = (value, i) => {
     setPassArr((prev) =>
@@ -28,7 +28,7 @@ const ChangePassword = () => {
         className="my-2 fw-bold py-2 border-bottom border-2 border-primary-subtle"
         style={{ fontSize: 18, color: "var(--main-color)" }}
       >
-        Change Password
+        Thay đổi mật khẩu
       </div>
       <div className="px-4 py-2 wrapper-input-password ms-5">
         {Array(3)
@@ -60,7 +60,7 @@ const ChangePassword = () => {
           })}
         <div>
           <Link to="" className="fs-14 text-primary ">
-            Forget password
+            Quên mật khẩu
           </Link>
         </div>
 
@@ -68,7 +68,7 @@ const ChangePassword = () => {
           className="btn-custom py-2 my-2 d-block ms-auto "
           style={{ width: "130px" }}
         >
-          Apply
+          Xác nhận
         </button>
       </div>
     </div>

@@ -25,6 +25,8 @@ const SideBar = () => {
       .catch((err) => {});
   }, [customer_id]);
 
+  console.log(customer);
+
   return (
     <div id="side-bar" className="d-none d-lg-block">
       <div className="wrapper h-100">
@@ -32,7 +34,7 @@ const SideBar = () => {
           <div>
             <img
               className="my-img"
-              src={GetImageCustomer(customer.picture)}
+              src={GetImageCustomer(customer?.picture)}
               alt="true"
             />
           </div>
@@ -40,7 +42,7 @@ const SideBar = () => {
             <div className="fw-bold" style={{ lineHeight: "1.3" }}>
               {customerName}
             </div>
-            <p className="m-0 fs-12">Manage my profiles</p>
+            <p className="m-0 fs-12">dynamic</p>
           </div>
         </div>
         <ul className="side-bar-bottom list-unstyled">
@@ -50,7 +52,7 @@ const SideBar = () => {
               to={`/customer/${customer_id}/profiles`}
             >
               <i className="icon fa-regular fa-circle-user text-center me-1" />
-              My Profiles
+              Tài khoản của tôi
             </NavLink>
           </li>
           <li>
@@ -59,7 +61,7 @@ const SideBar = () => {
               to={`/customer/${customer_id}/message`}
             >
               <i className="icon fa-regular fa-comments text-center me-1" />
-              Message
+              Tin nhắn
             </NavLink>
           </li>
           <li>
@@ -70,7 +72,7 @@ const SideBar = () => {
               to={`/customer/${customer_id}/purchase_order/all`}
             >
               <i className="icon fa-solid fa-cart-arrow-down text-center me-1" />
-              Purchase Order
+              Đơn mua
             </NavLink>
           </li>
           <li>
@@ -79,13 +81,13 @@ const SideBar = () => {
               to={`/customer/${customer_id}/change_password`}
             >
               <i className="icon fa-solid fa-lock text-center me-1" />
-              Change Password
+              Đổi mật khẩu
             </NavLink>
           </li>
           <li>
             <span className="delete-acc d-inline-block fw-bold text-decoration-none text-danger">
               <i className="icon fa-solid fa-ban text-center me-1 text-danger"></i>
-              Delete Account
+              Xóa tài khoản
             </span>
           </li>
         </ul>

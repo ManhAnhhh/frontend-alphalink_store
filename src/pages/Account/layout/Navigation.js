@@ -22,7 +22,7 @@ const Navigation = () => {
           className="title cursor-pointer"
           onClick={() => navigate(`/customer/${customer_id}/profiles`)}
         >
-          <i className="icon fa-solid fa-house-user me-1" /> My Account
+          <i className="icon fa-solid fa-house-user me-1" /> Quản lý tài khoản
         </div>
         <Navbar.Toggle
           aria-controls="offcanvasNavbar-expand-false"
@@ -44,7 +44,7 @@ const Navigation = () => {
               id="offcanvasNavbarLabel-expand-false"
               className="fw-bold"
             >
-              My Account
+              Quản lý tài khoản
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
@@ -54,30 +54,30 @@ const Navigation = () => {
                 className="nav-item-account text-decoration-none"
                 onClick={handleClose} // Đóng offcanvas khi click
               >
-                Profiles
+                Tài khoản của tôi
               </NavLink>
               <NavLink
                 to={`/customer/${customer_id}/message`}
                 className="nav-item-account text-decoration-none"
                 onClick={handleClose} // Đóng offcanvas khi click
               >
-                Message
+                Tin nhắn
               </NavLink>
               <NavLink
                 to={`/customer/${customer_id}/purchase_order`}
                 className="nav-item-account text-decoration-none"
                 onClick={handleClose} // Đóng offcanvas khi click
               >
-                Purchase Order
+                Đơn mua
               </NavLink>
               <NavLink
                 to={`/customer/${customer_id}/change_password`}
                 className="nav-item-account text-decoration-none"
                 onClick={handleClose} // Đóng offcanvas khi click
               >
-                Change Password
+                Đổi mật khẩu
               </NavLink>
-              <span className="delete-acc text-danger">Delete Account</span>
+              <span className="delete-acc text-danger">Xóa tài khoản</span>
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>

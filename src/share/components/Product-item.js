@@ -1,4 +1,9 @@
-import { GetImageProduct, HandlePriceWithDiscount, PopUp } from "../utilities";
+import {
+  formattedPriceVND,
+  GetImageProduct,
+  HandlePriceWithDiscount,
+  PopUp,
+} from "../utilities";
 import { getProductByID, addHeartItem } from "../../services/Api";
 import { useState, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
@@ -52,7 +57,7 @@ const ProductItem = (props) => {
     if (!isLoggedIn) {
       PopUp({
         type: "error",
-        content: "Please login to add product to your heart",
+        content: "Vui lòng đăng nhập",
       });
       return;
     }
@@ -69,9 +74,9 @@ const ProductItem = (props) => {
       .then(({ data }) => {
         let title;
         if (data.message === "Add to heart successfully") {
-          title = "Product added to my list successfully";
+          title = "Thêm vào danh sách yêu thích thành công";
         } else if (data.message === "Product is existed") {
-          title = "Removed product from my list";
+          title = "Xóa sản phẩm khỏi danh sách yêu thích thành công";
         }
         // if (res.)
         Swal.fire({
@@ -119,15 +124,15 @@ const ProductItem = (props) => {
             <i key={i + 100} className="fa-regular fa-star text-black-50" />
           ))}
         </div>
-        <div className="sold fw-bold">Sold: {sold}</div>
+        <div className="sold fw-bold">Đã bán: {sold}</div>
       </div>
       <div className="price-item d-flex justify-content-between my-1">
         <p className="price-decreased text-danger fw-bold mb-0">
-          $ {HandlePriceWithDiscount(price, discount)}
+          {formattedPriceVND(HandlePriceWithDiscount(price, discount))}
         </p>
         {product.discount !== 0 && (
           <p className="price text-secondary text-decoration-line-through mb-0">
-            $ {product.price}
+            {formattedPriceVND(product.price)}
           </p>
         )}
       </div>
@@ -138,7 +143,7 @@ const ProductItem = (props) => {
               style={{ color: "#198754" }}
               className="fa-regular fa-circle-check me-1"
             />
-            In stock
+            Còn hàng
           </p>
         ) : (
           <p className="text-danger fw-bold mb-0">
@@ -146,7 +151,7 @@ const ProductItem = (props) => {
               style={{ color: "#dc3545" }}
               className="fa-regular fa-circle-xmark me-1 "
             />
-            Out of stock
+            Hết hàng
           </p>
         )}
 
@@ -165,7 +170,7 @@ const ProductItem = (props) => {
         className="btn-add-to-cart btn-custom my-2 w-100"
         onClick={() => addToCart({ customerId, product })}
       >
-        Add to cart
+        Thêm vào giỏ hàng
       </button>
     </>
   );

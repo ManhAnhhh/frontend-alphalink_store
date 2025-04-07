@@ -42,7 +42,7 @@ const Login = () => {
     if (emailLogin.trim() === "") {
       PopUp({
         type: "error",
-        content: "Email is required",
+        content: "Email chưa được nhập",
       });
       setObjectInputs({ ...defaultObjectInputs, isValidEmail: false });
       return false;
@@ -51,7 +51,7 @@ const Login = () => {
     if (!patternEmail.test(emailLogin)) {
       PopUp({
         type: "error",
-        content: "Invalid email",
+        content: "Email không hợp lệ",
       });
       setObjectInputs({ ...defaultObjectInputs, isValidEmail: false });
       return false;
@@ -59,7 +59,7 @@ const Login = () => {
     if (passwordLogin.trim() === "") {
       PopUp({
         type: "error",
-        content: "Password is required",
+        content: "Mật khẩu chưa được nhập",
       });
       setObjectInputs({ ...defaultObjectInputs, isValidPassword: false });
       return false;
@@ -107,7 +107,7 @@ const Login = () => {
     <div className="container" id="auth-container">
       <section id="login">
         <form method="post">
-          <h1 className="title">Log In</h1>
+          <h1 className="title">Đăng nhập</h1>
           <div className="wrapper-input-auth">
             <span>
               <i className="icon fa-regular fa-user fa-2xl" />
@@ -134,7 +134,7 @@ const Login = () => {
               }
               type={showPassword ? "text" : "password"}
               name="password"
-              placeholder="Password"
+              placeholder="Mật khẩu"
               id="password"
               value={passwordLogin}
               onChange={(e) => setPasswordLogin(e.target.value)}
@@ -147,13 +147,13 @@ const Login = () => {
             ></i>
           </div>
           <div>
-            <input onClick={handleLogin} type="submit" value="Log in" />
-            <Link to="/customer/forget">Forget Password?</Link>
-            <Link to="/customer/register">Register</Link>
+            <input onClick={handleLogin} type="submit" value="Đăng nhập " />
+            <Link to="/customer/forget">Quên mật khẩu?</Link>
+            <Link to="/customer/register">Đăng ký</Link>
           </div>
         </form>
         <div className="button">
-          <span>Customer</span>
+          <span className="fs-14">Chào mừng bạn đến với Alphalink Store</span>
         </div>
       </section>
     </div>

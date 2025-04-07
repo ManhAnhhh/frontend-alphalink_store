@@ -436,12 +436,12 @@
 }
 
 #purchase-order .order-title .order-title-item:nth-child(4) {
-  width: 120px;
+  width: 170px;
 }
 
 #purchase-order .order-title .order-title-item:nth-child(4):hover~.animation,
 #purchase-order .order-title .order-title-item:nth-child(4).active~.animation {
-  width: 120px;
+  width: 170px;
   left: 330px;
 }
 
@@ -452,7 +452,7 @@
 #purchase-order .order-title .order-title-item:nth-child(5):hover~.animation,
 #purchase-order .order-title .order-title-item:nth-child(5).active~.animation {
   width: 100px;
-  left: 450px;
+  left: 500px;
 }
 
 #purchase-order .order-title .order-title-item:nth-child(6) {
@@ -462,7 +462,7 @@
 #purchase-order .order-title .order-title-item:nth-child(6):hover~.animation,
 #purchase-order .order-title .order-title-item:nth-child(6).active~.animation {
   width: 110px;
-  left: 550px;
+  left: 600px;
 }
 
 /*! list-order-items */

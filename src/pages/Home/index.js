@@ -71,7 +71,7 @@ const Home = () => {
     <>
       <section id="best-seler">
         <div className="container-fluid">
-          <h2 className="text-uppercase title-product">Best seller</h2>
+          <h2 className="text-uppercase title-product">Sản phẩm bán chạy</h2>
           <Slider {...settings} className="slick-carousel">
             {bestSeller?.map((product, i) => (
               <div key={i} className="px-2 px-lg-1 ">
@@ -85,7 +85,7 @@ const Home = () => {
       </section>
       <section id="feature-products">
         <div className="container-fluid">
-          <h2 className="text-uppercase title-product">Feature products</h2>
+          <h2 className="text-uppercase title-product">Sản phẩm nổi bật</h2>
           <div className="items row">
             {featureProducts?.map((product, i) => (
               <div

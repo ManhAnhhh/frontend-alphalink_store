@@ -135,9 +135,9 @@ const Category = () => {
     <>
       <section className="breadcrumb-custom">
         <div className="container-fluid">
-          <p>{`home / ${
+          <p>{`Trang chủ / ${
             categoryParent?.name ? `${categoryParent.name} / ` : ""
-          }${category.name} (${productsByFilter?.length}) products`}</p>
+          }${category.name} (${productsByFilter?.length}) sản phẩm`}</p>
         </div>
       </section>
       <section id="category">
@@ -155,7 +155,7 @@ const Category = () => {
               />
               <article id="products" className="col-xl-9 col-lg-8 col-md-7">
                 <div className="sort-by d-flex mt-2 mt-md-0">
-                  <p className="fw-bold m-0">Sort by:</p>
+                  <p className="fw-bold m-0">Giá tiền:</p>
                   <select
                     name="sort-by-price"
                     id="sort-by-price"
@@ -163,13 +163,13 @@ const Category = () => {
                     onChange={(e) => handleSelectValue(e.target.value)}
                   >
                     <option className="text-capitalize" value="default">
-                      Default
+                      Mặc định
                     </option>
                     <option className="text-capitalize" value="low">
-                      Low To High
+                      Thấp đến cao
                     </option>
                     <option className="text-capitalize" value="high">
-                      High To Low
+                      Cao đến thấp
                     </option>
                   </select>
                 </div>
@@ -177,7 +177,7 @@ const Category = () => {
                   {productsByFilter.length === 0 && (
                     <div className="container-fluid">
                       <div className="text-center bg-white py-2 my-3 rounded-3">
-                        No Products
+                        Không có sản phẩm nào
                       </div>
                     </div>
                   )}

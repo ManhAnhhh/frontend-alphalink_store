@@ -55,13 +55,7 @@ const Profiles = () => {
 
   const isValidateField = () => {
     // Validate input
-    if (
-      userName.trim() === "" ||
-      email.trim() === "" ||
-      phone.trim() === "" ||
-      address.trim() === "" ||
-      birthDay === ""
-    ) {
+    if (userName.trim() === "" || email.trim() === "" || phone.trim() === "") {
       PopUp({
         type: "error",
         content: "Please fill in all required fields",
@@ -94,13 +88,13 @@ const Profiles = () => {
     if (!isValidateField()) return;
 
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
+      title: "Bạn có muốn cập nhật không?",
+      icon: "info",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Update",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
     }).then((result) => {
       if (result.isConfirmed) {
         let sex = "male";
@@ -153,10 +147,10 @@ const Profiles = () => {
           className="fw-bold"
           style={{ fontSize: "18px", color: "var(--main-color)" }}
         >
-          My Account
+          Hồ sơ của tôi
         </div>
         <p className="m-0 fs-14">
-          Manage profile information to secure your account
+          Quản lý thông tin hồ sơ để bảo mật tài khoản của bạn
         </p>
       </div>
       <div className="px-3">
@@ -173,7 +167,7 @@ const Profiles = () => {
                       type="text"
                       onChange={(e) => setUserName(e.target.value)}
                     />
-                    <label htmlFor="name">User Name</label>
+                    <label htmlFor="name">Họ và tên</label>
                   </div>
                   <div className="inputGroup">
                     <input
@@ -193,7 +187,7 @@ const Profiles = () => {
                       type="number"
                       onChange={(e) => setPhone(e.target.value)}
                     />
-                    <label htmlFor="phone">Phone Number</label>
+                    <label htmlFor="phone">Số điện thoại</label>
                   </div>
 
                   <div className="inputGroup">
@@ -204,7 +198,7 @@ const Profiles = () => {
                       type="text"
                       onChange={(e) => setAddress(e.target.value)}
                     />
-                    <label htmlFor="address">Address</label>
+                    <label htmlFor="address">Địa chỉ</label>
                   </div>
 
                   <div className="radio-inputs">
@@ -214,7 +208,7 @@ const Profiles = () => {
                         name="sex"
                         ref={(e) => (sexRefs.current[0] = e)}
                       />
-                      <span className="name">Male</span>
+                      <span className="name">Nam</span>
                     </label>
                     <label className="radio">
                       <input
@@ -222,7 +216,7 @@ const Profiles = () => {
                         name="sex"
                         ref={(e) => (sexRefs.current[1] = e)}
                       />
-                      <span className="name">Female</span>
+                      <span className="name">Nữ</span>
                     </label>
                   </div>
 
@@ -243,7 +237,7 @@ const Profiles = () => {
                     onClick={handleApply}
                     className="btn-custom w-100 py-2 my-2"
                   >
-                    Apply
+                    Xác nhận
                   </button>
                 </div>
               </div>
@@ -285,7 +279,7 @@ const Profiles = () => {
                   htmlFor="upload-image"
                 >
                   <i className="icon fa-solid fa-upload me-2 text-white" />
-                  Choose File
+                  Chọn ảnh
                 </label>
               </div>
             </div>

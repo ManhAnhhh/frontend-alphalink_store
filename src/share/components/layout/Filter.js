@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { PopUp } from "../../utilities";
+import { formattedPriceVND, PopUp } from "../../utilities";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Filter = ({ highestPrice, minValue, maxValue, star }) => {
@@ -90,14 +90,14 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
     if (min === 0 || max === 0) {
       PopUp({
         type: "error",
-        content: "Please select a price",
+        content: "Vui lòng chọn khoảng giá",
       });
       return false;
     }
     if (Number.isNaN(min) || Number.isNaN(max)) {
       PopUp({
         type: "error",
-        content: "Value must be a number",
+        content: "Giá trị phải là số",
       });
       return false;
     }
@@ -105,7 +105,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
       setMinPrice(0);
       PopUp({
         type: "error",
-        content: "Value must be more than 0",
+        content: "Giá trị phải lớn hơn 0",
       });
       return false;
     }
@@ -113,7 +113,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
     if (min > max) {
       PopUp({
         type: "error",
-        content: `Invalid value`,
+        content: `Giá trị không hợp lệ`,
       });
       return false;
     }
@@ -123,12 +123,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
   const handleApplyPrice = (e) => {
     e.preventDefault();
     if (!checkPrice()) return;
-
     handleNavigate();
-    PopUp({
-      type: "success",
-      content: "Price filter applied",
-    });
   };
 
   const resetAll = () => {
@@ -150,7 +145,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
         }}
       >
         <p className="d-flex justify-content-between align-items-center">
-          Filters
+          Bộ lọc
           <span className="right-left d-none d-md-block">
             <i className="icon fa-solid fa-right-left" />
           </span>
@@ -168,21 +163,25 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
         <div className="d-flex d-md-block justify-content-start justify-content-sm-around flex-wrap">
           <div className="price">
             <div className="filter-name">
-              <p className="m-0">Price</p>
+              <p className="m-0">Giá tiền</p>
               <select
                 name="type-currency"
                 id="type-currency"
                 className="me-0 me-md-auto"
               >
                 <option value="dollar">$</option>
-                <option value="vnd">VND</option>
+                <option selected value="vnd">
+                  VND
+                </option>
               </select>
               <div className="minus-custom">&minus;</div>
             </div>
             <div className="filter-item">
               <p className="fs-14">
-                <span>Highest price: &nbsp; </span>
-                <strong className="text-danger">$ {highestPrice}</strong>
+                <span>Mệnh giá cao nhất: &nbsp; </span>
+                <strong className="text-danger">
+                  {formattedPriceVND(highestPrice)}
+                </strong>
               </p>
               <div className="d-flex justify-content-between align-items-center">
                 <div className="value d-flex justify-content-center align-item-center gap-2">
@@ -210,13 +209,13 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
                 className="btn-price btn-custom"
                 onClick={handleApplyPrice}
               >
-                APPLY
+                Xác nhận
               </button>
             </div>
           </div>
           <div className="rates">
             <p className="filter-name">
-              Rates <span className="minus-custom">&minus;</span>
+              Lượt đánh giá <span className="minus-custom">&minus;</span>
             </p>
             <div className="filter-item">
               {Array(5)
@@ -255,7 +254,7 @@ const Filter = ({ highestPrice, minValue, maxValue, star }) => {
             onClick={resetAll}
             className="btn-price btn-custom w-100"
           >
-            RESET ALL
+            Đặt lại bộ lọc 
           </button>
         </div>
       </div>

@@ -25,7 +25,7 @@ const Success = () => {
             type="button"
             onClick={() => navigate("/")}
           >
-            Return Home
+            Quay lại trang chủ
           </button>
         </div>
       </div>

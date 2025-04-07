@@ -55,7 +55,7 @@ const Register = () => {
     if (fullName.trim() === "") {
       PopUp({
         type: "error",
-        content: "Username is required",
+        content: "Họ và tên không được để trống",
       });
       setObjectInputs({ ...defaultObjectInputs, isValidFullName: false });
       inputRef.current.focus();
@@ -65,7 +65,7 @@ const Register = () => {
     if (email.trim() === "") {
       PopUp({
         type: "error",
-        content: "Email is required",
+        content: "Email không được để trống",
       });
       setObjectInputs({ ...defaultObjectInputs, isValidEmail: false });
       return false;
@@ -75,7 +75,7 @@ const Register = () => {
     if (!patternEmail.test(email)) {
       PopUp({
         type: "error",
-        content: "Invalid email",
+        content: "Email không hợp lệ",
       });
       setObjectInputs({ ...objectInputs, isValidEmail: false });
       return false;
@@ -84,7 +84,7 @@ const Register = () => {
     if (phone === "") {
       PopUp({
         type: "error",
-        content: "Phone is required",
+        content: "Số điện thoại không được để trống",
       });
       setObjectInputs({ ...defaultObjectInputs, isValidPhone: false });
       return false;
@@ -94,7 +94,7 @@ const Register = () => {
     if (!patternPhone.test(phone)) {
       PopUp({
         type: "error",
-        content: "Phone must be numeric and have 10 digits",
+        content: "Số điện thoại không hợp lệ",
       });
       setObjectInputs({ ...objectInputs, isValidPhone: false });
       return false;
@@ -103,7 +103,7 @@ const Register = () => {
     if (password.trim() === "") {
       PopUp({
         type: "error",
-        content: "Password is required",
+        content: "Mật khẩu không được để trống",
       });
       setObjectInputs({ ...defaultObjectInputs, isValidPassword: false });
       return false;
@@ -111,7 +111,7 @@ const Register = () => {
     if (confirmPassword.trim() === "") {
       PopUp({
         type: "error",
-        content: "Confirm Password is required",
+        content: "Xác nhận mật khẩu không được để trống",
       });
       setObjectInputs({
         ...defaultObjectInputs,
@@ -123,7 +123,7 @@ const Register = () => {
     if (password !== confirmPassword) {
       PopUp({
         type: "error",
-        content: "Password is not the same",
+        content: "Mật khẩu không khớp",
       });
       setObjectInputs({ ...objectInputs, isValidConfirmPassword: false });
       return false;
@@ -160,7 +160,7 @@ const Register = () => {
     <div className="container" id="auth-container">
       <section id="register">
         <form method="post">
-          <h1 className="title">Register</h1>
+          <h1 className="title">Đăng ký</h1>
           <div className="wrapper-input-auth">
             <span>
               <i className="icon fa-regular fa-user fa-2xl" />
@@ -173,7 +173,7 @@ const Register = () => {
               }
               type="text"
               name="fullName"
-              placeholder="User Name"
+              placeholder="Họ và tên"
               id="full_name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
@@ -210,7 +210,7 @@ const Register = () => {
               }
               type="text"
               name="phone"
-              placeholder="Phone"
+              placeholder="Số điện thoại"
               id="phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -228,7 +228,7 @@ const Register = () => {
               }
               type={showPassword[0] ? "text" : "password"}
               name="password"
-              placeholder="Password"
+              placeholder="Mật khẩu"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -252,7 +252,7 @@ const Register = () => {
               }
               type={showPassword[1] ? "text" : "password"}
               name="confirmPassword"
-              placeholder="Confirm Password"
+              placeholder="Xác nhận mật khẩu"
               id="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -269,18 +269,18 @@ const Register = () => {
               className="ms-0"
               onClick={handleRegister}
               type="submit"
-              value="Register"
+              value="Đăng ký"
             />
           </div>
           <div>
             <Link to="/customer/login" className="float-none me-0 mb-2 fs-14">
-              Already've an account
+              Đã có tài khoản
             </Link>
           </div>
         </form>
 
         <div className="button">
-          <span>Customer</span>
+          <span className="fs-14">Đăng ký để có trải nghiệm tốt nhất ở Alphalink Store</span>
         </div>
       </section>
     </div>

@@ -17,7 +17,7 @@ const Loading = () => {
         style={{ width: "3rem", height: "3rem" }}
         role="status"
       >
-        <span className="visually-hidden">Loading...</span>
+        <span className="visually-hidden">Đang tải...</span>
       </div>
     </div>
   );

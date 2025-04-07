@@ -97,7 +97,7 @@ const PurchaseOrder = () => {
         <>
           <div ref={orderTitle} className="order-title position-relative w-100">
             <NavLink className="order-title-item position-relative" to="all">
-              All
+              Tất cả
             </NavLink>
 
             <NavLink
@@ -105,7 +105,7 @@ const PurchaseOrder = () => {
               className="order-title-item position-relative"
               to="pending"
             >
-              Pending
+              Chờ xử lý
             </NavLink>
 
             <NavLink
@@ -113,7 +113,7 @@ const PurchaseOrder = () => {
               className="order-title-item position-relative"
               to="processing"
             >
-              Processing
+              Đang xử lý
             </NavLink>
 
             <NavLink
@@ -121,7 +121,7 @@ const PurchaseOrder = () => {
               className="order-title-item position-relative"
               to="shipping"
             >
-              Shipping
+              Đang vận chuyển
             </NavLink>
 
             <NavLink
@@ -129,7 +129,7 @@ const PurchaseOrder = () => {
               className="order-title-item position-relative"
               to="success"
             >
-              Success
+              Hoàn thành
             </NavLink>
 
             <NavLink
@@ -137,7 +137,7 @@ const PurchaseOrder = () => {
               className="order-title-item position-relative"
               to="canceled"
             >
-              Canceled
+              Đã hủy
             </NavLink>
 
             {/* cần font-size thì mới hiện được chữ */}

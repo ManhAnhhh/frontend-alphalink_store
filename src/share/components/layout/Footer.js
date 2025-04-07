@@ -4,19 +4,19 @@ const Footer = () => {
       <section className="support d-flex flex-wrap gap-4 justify-content-center align-items-center my-4">
         <div className="text-uppercase">
           <i className="icon fa-solid fa-circle-check fa-2xl text-primary me-1" />
-          genuine product
+          Sản phẩm chính hãng
         </div>
         <div className="text-uppercase">
           <i className="icon fa-solid fa-cart-shopping fa-2xl text-primary me-1" />
-          free shipping
+          Giao hàng toàn quốc
         </div>
         <div className="text-uppercase">
           <i className="icon fa-solid fa-phone-volume fa-2xl text-primary me-1" />
           1900.1502
         </div>
         <div className="text-uppercase">
-          <i className="icon fa-solid fa-arrows-rotate fa-2xl text-primary me-1" />
-          easy return
+          <i className="icon fa-solid fa-headset fa-2xl text-primary me-1" />
+          Tư vấn nhanh chóng
         </div>
       </section>
       <section className="footer-b bg-black text-light py-4">
@@ -30,13 +30,11 @@ const Footer = () => {
               />
             </div>
             <div className="col-lg-3 col-md-6 col-sm-6">
-              <div className="title text-uppercase fs-5 fw-bold">
-                Contact us
-              </div>
+              <div className="title text-uppercase fs-5 fw-bold">Liên hệ</div>
               <ul>
                 <li className="fs-14">
                   <i className="icon fa-solid fa-location-dot fa-xl text-white me-2" />
-                  Dai Mo - Nam Tu Liem - Ha Noi
+                  Đại Mỗ - Nam Từ Liêm - Hà Nội
                 </li>
                 <li className="fs-14">
                   <i className="icon fa-solid fa-envelope fa-xl text-white me-1" />
@@ -50,7 +48,7 @@ const Footer = () => {
             </div>
             <div className="col-lg-3 col-md-6 col-sm-6 ps-lg-4">
               <div className="title text-uppercase fs-5 fw-bold">
-                Social Network
+                Mạng xã hội
               </div>
               <ul>
                 <li className="fs-14">
@@ -69,32 +67,32 @@ const Footer = () => {
             </div>
             <div className="col-lg-3 col-md-6 col-sm-6">
               <div className="title text-uppercase fs-5 fw-bold">
-                Support - Services
+                Hỗ trợ - Dịch vụ
               </div>
               <ul>
                 <li className="fs-14">
-                  <i className="icon fa-solid fa-handcuffs fa-xl text-white me-1" />
-                  Policy and purchasing instructions replied
+                  <i className="icon fa-solid fa-thumbs-up fa-xl text-white me-1" />
+                  Chính sách và hướng dẫn mua hàng
                 </li>
                 <li className="fs-14">
                   <i className="icon fa-brands fa-guilded fa-xl text-white me-1" />
-                  Instructions for purchasing and converting policies
+                  Quy chế hoạt động
                 </li>
                 <li className="fs-14">
                   <i className="icon fa-solid fa-shield-halved fa-xl text-white me-1" />
-                  Privacy policy
+                  Chính sách bảo mật
                 </li>
                 <li className="fs-14">
                   <i className="icon fa-brands fa-fedora fa-xl text-white me-1" />
-                  Operating regulations
+                  Chính sách vận chuyển
                 </li>
               </ul>
             </div>
           </div>
         </div>
         <div className="text-center fs-5">
-          <i className="icon fa-regular fa-copyright text-white fa-xl" /> 2024 Cyber
-          Store - ManhAnh
+          <i className="icon fa-regular fa-copyright text-white fa-xl" /> 2024
+          Alphalink Store - ManhAnh
         </div>
       </section>
     </footer>
