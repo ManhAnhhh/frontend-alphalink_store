@@ -46,7 +46,7 @@ const Message = () => {
             </div>
             <div className="d-flex align-items-start p-2 item-chat gap-2">
               <div>
-                <img src="/img/linhh.jpg" alt="true" />
+                <img src="/logo192.png" alt="true" />
               </div>
               <div>
                 <div>
@@ -67,7 +67,7 @@ const Message = () => {
             </div>
             <div className="d-flex align-items-start p-2 item-chat gap-2">
               <div>
-                <img src="/img/linhh.jpg" alt="true" />
+                <img src="/logo192.png" alt="true" />
               </div>
               <div>
                 <div>
@@ -81,7 +81,7 @@ const Message = () => {
             </div>
             <div className="d-flex align-items-start p-2 item-chat gap-2">
               <div>
-                <img src="/img/linhh.jpg" alt="true" />
+                <img src="/logo192.png" alt="true" />
               </div>
               <div>
                 <div>
@@ -95,7 +95,7 @@ const Message = () => {
             </div>
             <div className="d-flex align-items-start p-2 item-chat gap-2">
               <div>
-                <img src="/img/linhh.jpg" alt="true" />
+                <img src="/logo192.png" alt="true" />
               </div>
               <div>
                 <div>
@@ -116,7 +116,7 @@ const Message = () => {
             </div>
             <div className="d-flex align-items-start p-2 item-chat gap-2">
               <div>
-                <img src="/img/linhh.jpg" alt="true" />
+                <img src="/logo192.png" alt="true" />
               </div>
               <div>
                 <div>
@@ -130,7 +130,7 @@ const Message = () => {
             </div>
             <div className="d-flex align-items-start p-2 item-chat gap-2">
               <div>
-                <img src="/img/linhh.jpg" alt="true" />
+                <img src="/logo192.png" alt="true" />
               </div>
               <div>
                 <div>
@@ -144,7 +144,7 @@ const Message = () => {
             </div>
             <div className="d-flex align-items-start p-2 item-chat gap-2">
               <div>
-                <img src="/img/linhh.jpg" alt="true" />
+                <img src="/logo192.png" alt="true" />
               </div>
               <div>
                 <div>
@@ -165,7 +165,7 @@ const Message = () => {
             </div>
             <div className="d-flex align-items-start p-2 item-chat gap-2">
               <div>
-                <img src="/img/linhh.jpg" alt="true" />
+                <img src="/logo192.png" alt="true" />
               </div>
               <div>
                 <div>
@@ -180,7 +180,7 @@ const Message = () => {
             </div>
             <div className="d-flex align-items-start p-2 item-chat gap-2">
               <div>
-                <img src="/img/linhh.jpg" alt="true" />
+                <img src="/logo192.png" alt="true" />
               </div>
               <div>
                 <div>
@@ -195,7 +195,7 @@ const Message = () => {
             </div>
             <div className="d-flex align-items-start p-2 item-chat gap-2">
               <div>
-                <img src="/img/linhh.jpg" alt="true" />
+                <img src="/logo192.png" alt="true" />
               </div>
               <div>
                 <div>
@@ -218,7 +218,7 @@ const Message = () => {
           className="send-message d-flex align-items-center position-absolute bottom-0 start-0 end-0 p-2 border-1 border-top"
         >
           <div className="me-2">
-            <img src="/img/linhh.jpg" alt="true" />
+            <img src="/logo192.png" alt="true" />
           </div>
           <div>
             <input type="file" id="sendFile" className="d-none" />

@@ -11,6 +11,8 @@ import { useSelector } from "react-redux";
 import { useAddToCart } from "../CustomHook/useAddToCart";
 import { useDispatch } from "react-redux";
 import { updateHeart } from "../../redux/reducers/heart";
+import NotFound from "../../pages/NotFound";
+
 import Swal from "sweetalert2";
 const ProductItem = (props) => {
   const dispatch = useDispatch();
@@ -21,6 +23,7 @@ const ProductItem = (props) => {
     (state) => state.Auth.login.currentCustomer?.id
   );
   const heartItem = useSelector((state) => state?.Heart?.items);
+  const [notFound,  setNotFound] = useState(false);
   const {
     _id: id,
     name,
@@ -48,9 +51,12 @@ const ProductItem = (props) => {
   useEffect(() => {
     getProductByID(id)
       .then(({ data }) => {
-        setProduct(data.data);
+        if (data.data.length === 0) {
+          setNotFound(true)
+        }else
+          setProduct(data.data)
       })
-      .catch((err) => {});
+      .catch((err) => {setNotFound(true)});
   }, [id]);
 
   const addToHeart = () => {
@@ -91,6 +97,8 @@ const ProductItem = (props) => {
         // console.log(err);
       });
   };
+
+  if (notFound) return <NotFound />;
 
   return (
     <>

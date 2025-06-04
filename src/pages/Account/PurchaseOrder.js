@@ -76,11 +76,30 @@ const PurchaseOrder = () => {
     </div>
   );
   const onCancelOrder = async (id, orderId) => {
-    cancelOrder(id, { orderId })
+    const { value: reason } = await Swal.fire({
+      title: "Nhập lý do hủy đơn",
+      input: "textarea",
+      inputLabel: "Lý do hủy",
+      inputPlaceholder: "Nhập lý do hủy đơn hàng...",
+      inputAttributes: {
+        "aria-label": "Nhập lý do hủy đơn"
+      },
+      showCancelButton: true,
+      confirmButtonText: "Xác nhận hủy",
+      cancelButtonText: "Hủy bỏ",
+      inputValidator: (value) => {
+        if (!value) {
+          return "Vui lòng nhập lý do hủy!";
+        }
+      }
+    });
+
+    if (!reason) return;
+    cancelOrder(id, { orderId, reasonCanceled: reason })
       .then(async ({ data }) => {
         await Swal.fire({
-          title: "Canceled!",
-          text: "Your order has been canceled.",
+          title: "Đã hủy!",
+          text: "Đơn hàng của bạn đã bị hủy.",
           icon: "success",
         });
         window.location.reload();

@@ -12,7 +12,7 @@ import { updateCart } from "../../../redux/reducers/cart";
 const ItemOrder = ({ order, onCancelOrder, id }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isCancellBtn = ["pending", "processing"];
+  const isCancellBtn = ["pending"];
   const stateOrder = {
     pending: "warning",
     processing: "info",
@@ -49,22 +49,31 @@ const ItemOrder = ({ order, onCancelOrder, id }) => {
   return (
     <div className="item">
       <div>
-        <div className="text-end border-bottom">
-          {isCancellBtn.includes(order.status.toLowerCase()) && (
-            <div
-              className="cancel-state-item me-2 d-inline-block btn btn-outline-danger"
-              onClick={() => handleCancelOrder(order._id)}
-            >
-              Hủy đơn hàng
-            </div>
-          )}
+        <div className="d-flex justify-content-between align-content-center">
+          <h6 className="m-3">
+            Mã đơn hàng: <span className="fw-bold">#{order._id.toString().slice(-6)}</span>
+          </h6>
+          <div className="text-end border-bottom">
+            {isCancellBtn.includes(order.status.toLowerCase()) && (
+              <div
+                className="cancel-state-item me-2 d-inline-block btn btn-outline-danger"
+                onClick={() => handleCancelOrder(order._id)}
+              >
+                Hủy đơn hàng
+              </div>
+            )}
 
-          <div
-            className={`state-item me-2 d-inline-block btn btn-${
-              stateOrder[order.status]
-            } my-2 text-white`}
-          >
-            {capitalizeFirstLetter(order.status)}
+            <div
+              className={`state-item me-2 d-inline-block btn btn-${
+                stateOrder[order.status]
+              } my-2 text-white`}
+            >
+              {order.status === 'pending' && 'Chờ xử lý'}
+              {order.status === 'processing' && 'Đang xử lý'}
+              {order.status === 'shipping' && 'Đang vận chuyển'}
+              {order.status === 'success' && 'Hoàn thành'}
+              {order.status === 'canceled' && 'Đã hủy'}
+            </div>
           </div>
         </div>
         <table>
@@ -112,7 +121,7 @@ const ItemOrder = ({ order, onCancelOrder, id }) => {
               order.note ? "justify-content-between" : "justify-content-end"
             }`}
           >
-            {order.note && <div>Note: {order.note}</div>}
+            {order.note && <div>Ghi chú: {order.note}</div>}
             <div className="text-end fs-12">
               Mã giảm giá:
               <span className="ms-1 text-danger fw-bold">0 ₫</span>
@@ -126,7 +135,18 @@ const ItemOrder = ({ order, onCancelOrder, id }) => {
               </span>
             </div>
           </div>
-          <div>
+          <div
+            className={`d-flex flex-wrap ${
+              order.userCanceled
+                ? "justify-content-between"
+                : "justify-content-end"
+            }`}
+          >
+            {order.userCanceled && (
+              <div className="text-nowrap text-danger">
+                {capitalizeFirstLetter(order.userCanceled)}
+              </div>
+            )}
             <div className="text-end fs-12">
               Tổng tiền hàng:
               <span

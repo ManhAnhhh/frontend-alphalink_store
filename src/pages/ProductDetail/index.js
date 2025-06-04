@@ -17,6 +17,7 @@ import { useAddToCart } from "../../share/CustomHook/useAddToCart";
 import { useSelector } from "react-redux";
 import ProductDetailsSkeleton from "../../share/components/Skeleton/ProductDetailsSkeleton";
 import Modal from "react-bootstrap/Modal";
+import NotFound from "../../pages/NotFound";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const ProductDetail = () => {
   const [colorChoosed, setColorChoosed] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showImgModal, setShowImgModal] = useState(false);
+  const [notFound,  setNotFound] = useState(false);
   const [cartUpdated, setCartUpdated] = useState(false);
   const [urlImgShowModal, setUrlImgShowModal] = useState("");
   const [product, setProduct] = useState({});
@@ -39,8 +41,13 @@ const ProductDetail = () => {
   );
   useEffect(() => {
     getProductByID(id, {})
-      .then(({ data }) => setProduct(data.data))
-      .catch();
+      .then(({ data }) => {
+        if (data.data.length === 0) {
+          setNotFound(true)
+        }else
+          setProduct(data.data)
+      })
+      .catch(() => setNotFound(true));
     getCommentsByIdProduct(id)
       .then(({ data }) => setComments(data.data))
       .catch(() => {});
@@ -134,6 +141,8 @@ const ProductDetail = () => {
   };
 
   if (isLoading) return <ProductDetailsSkeleton />;
+
+  if (notFound) return <NotFound />;
 
   return (
     <>
