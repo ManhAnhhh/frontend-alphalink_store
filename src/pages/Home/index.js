@@ -57,7 +57,24 @@ const Home = () => {
           return data?.data?.filter((products) => products.sold >= 100);
         });
         setfeatureProducts(() => {
-          return data?.data?.filter((products) => products.is_feature === true);
+          // Đảm bảo data và data.data tồn tại
+          if (!data?.data) {
+            return [];
+          }
+
+          // 1. Sắp xếp các sản phẩm theo trường 'updatedAt' giảm dần
+          //    (sản phẩm mới nhất sẽ lên đầu)
+          const sortedProducts = [...data.data].sort((a, b) => {
+            // Chuyển đổi chuỗi ngày thành đối tượng Date để so sánh
+            const dateA = new Date(a.updatedAt);
+            const dateB = new Date(b.updatedAt);
+            return dateB.getTime() - dateA.getTime(); // Sắp xếp giảm dần
+          });
+
+          // 2. Lấy ra 12 sản phẩm đầu tiên
+          const latestProducts = sortedProducts.slice(0, 12);
+
+          return latestProducts;
         });
       })
       .catch((err) => {});
@@ -85,7 +102,7 @@ const Home = () => {
       </section>
       <section id="feature-products">
         <div className="container-fluid">
-          <h2 className="text-uppercase title-product">Sản phẩm nổi bật</h2>
+          <h2 className="text-uppercase title-product">Sản phẩm mới</h2>
           <div className="items row">
             {featureProducts?.map((product, i) => (
               <div

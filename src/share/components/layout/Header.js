@@ -156,9 +156,9 @@ const Header = () => {
     <header>
       <section id="helper">
         <div className="container-fluid py-2 d-flex justify-content-end align-items-center gap-4">
-          <div>
+          {/* <div>
             <p>Hỗ trợ</p>
-          </div>
+          </div> */}
           <div>
             <p>Tiếng Việt</p>
           </div>

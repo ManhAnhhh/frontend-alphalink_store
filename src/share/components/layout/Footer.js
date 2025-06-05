@@ -20,8 +20,8 @@ const Footer = () => {
         </div>
       </section>
       <section className="footer-b bg-black text-light py-4">
-        <div className="container-fluid py-2 d-flex gap-4">
-          <div className="row">
+        <div className="container-fluid py-2 d-flex gap-4 w-100">
+          <div className="row w-100">
             <div className="logo-footer col-lg-3 col-md-6 col-sm-6">
               <img
                 className="img-fluid"
@@ -29,7 +29,7 @@ const Footer = () => {
                 alt="logo-footer"
               />
             </div>
-            <div className="col-lg-3 col-md-6 col-sm-6">
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6">
               <div className="title text-uppercase fs-5 fw-bold">Liên hệ</div>
               <ul>
                 <li className="fs-14">
@@ -46,7 +46,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="col-lg-3 col-md-6 col-sm-6 ps-lg-4">
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 ps-lg-4">
               <div className="title text-uppercase fs-5 fw-bold">
                 Mạng xã hội
               </div>
@@ -65,7 +65,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="col-lg-3 col-md-6 col-sm-6">
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6">
               <div className="title text-uppercase fs-5 fw-bold">
                 Hỗ trợ - Dịch vụ
               </div>

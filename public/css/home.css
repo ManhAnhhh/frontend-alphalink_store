@@ -412,6 +412,11 @@ main {
 }
 
 #best-seler .slick-carousel .name-item,
+#feature-products .name-item {
+  min-height: 40px;
+}
+
+#best-seler .slick-carousel .name-item,
 #best-seler .slick-carousel .desc-item p,
 #feature-products .name-item,
 #feature-products .desc-item p {
@@ -422,6 +427,10 @@ main {
   line-clamp: 2;
   margin: 0;
   cursor: pointer;
+}
+#best-seler .slick-carousel .desc-item p,
+#feature-products .desc-item p {
+  min-height: 40px;
 }
 
 #best-seler .slick-carousel .name-item:hover a,
@@ -444,9 +453,16 @@ main {
 
 #best-seler .slick-carousel .img-item img,
 #feature-products .img-item img {
-  width: 80%;
+  /* width: 80%; */
   aspect-ratio: 679/486;
   transform: scale(.8);
+}
+
+#best-seler .slick-carousel .img-item img {
+  height: 200px;
+}
+#feature-products .img-item img {
+  height: 150px;
 }
 
 /* Zoom-in on hover */

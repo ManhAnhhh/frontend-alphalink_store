@@ -1,8 +1,8 @@
 const NotFound = () => {
   return (
-    <div id="not-found" className="wrapper">
-      <p className="text-center fw-bold fs-3">Trang không tồn tại</p>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+    <div id="not-found" className="wrapper d-flex flex-column align-items-center justify-content-center h-100">
+      <p className="text-center fw-bold fs-3 my-2">Trang không tồn tại</p>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" style={{ width: "50%" }}>
         <title>404</title>
         <g id="Layer_12 yellow-back-fig" data-name="Layer 12">
           <path

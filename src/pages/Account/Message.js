@@ -41,7 +41,7 @@ const Message = () => {
           <div className="items-chat">
             <div className="divider d-flex align-items-center gap-2">
               <div className="line bg-dark opacity-25 mt-3 mb-2" />
-              <div className="mt-1 text-nowrap">Today</div>
+              <div className="mt-1 text-nowrap">Hôm nay</div>
               <div className="line bg-dark opacity-25 mt-3 mb-2" />
             </div>
             <div className="d-flex align-items-start p-2 item-chat gap-2">

@@ -114,7 +114,7 @@ const ProductItem = (props) => {
           <img src={GetImageProduct(img[0])} alt={GetImageProduct(img[0])} />
         </Link>
       </div>
-      <h5 className="name-item pt-2">
+      <h5 className="name-item my-2">
         <Link to={`/product-detail/${id}`} className="text-decoration-none">
           {name}
         </Link>

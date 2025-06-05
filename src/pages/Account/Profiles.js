@@ -58,7 +58,7 @@ const Profiles = () => {
     if (userName.trim() === "" || email.trim() === "" || phone.trim() === "") {
       PopUp({
         type: "error",
-        content: "Please fill in all required fields",
+        content: "Vui lòng điền vào tất cả các trường bắt buộc",
       });
 
       return false;
@@ -68,7 +68,7 @@ const Profiles = () => {
     if (!patternEmail.test(email)) {
       PopUp({
         type: "error",
-        content: "Invalid email",
+        content: "Email không hợp lệ",
       });
       return false;
     }
@@ -77,7 +77,7 @@ const Profiles = () => {
     if (!patternPhone.test(phone)) {
       PopUp({
         type: "error",
-        content: "Phone must be numeric and have 10 digits",
+        content: "Số điện thoại phải là số và có 10 chữ số",
       });
       return false;
     }
@@ -123,7 +123,7 @@ const Profiles = () => {
             await Swal.fire({
               position: "center",
               icon: "success",
-              title: "Information updated successfully.",
+              title: "Thông tin đã được cập nhật thành công",
               showConfirmButton: true,
               timer: 1500,
             });
@@ -131,7 +131,7 @@ const Profiles = () => {
           })
           .catch((err) => {
             Swal.fire({
-              title: "Update Failed!",
+              title: "Cập nhật thất bại!",
               text: err?.response?.data?.message || err,
               icon: "error",
             });
@@ -252,7 +252,7 @@ const Profiles = () => {
                 marginLeft: "-12px",
               }}
             >
-              Avatar
+              Ảnh đại diện
             </div>
             <div className="d-flex flex-column align-item-center justify-content-center gap-2 my-5">
               <div className="text-center">

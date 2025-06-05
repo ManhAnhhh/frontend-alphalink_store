@@ -63,8 +63,8 @@ const PurchaseOrder = () => {
     return (
       <div className="text-center py-5">
         <i className="icon fa-solid fa-shopping-bag fa-5x"></i>
-        <h3 className="text-muted">No orders yet.</h3>
-        <Link to="/">Return Home</Link>
+        <h3 className="text-muted">Chưa có đơn hàng nào.</h3>
+        <Link to="/">Trở về trang chủ</Link>
       </div>
     );
   };
@@ -72,7 +72,7 @@ const PurchaseOrder = () => {
   const NoItemInOrder = () => (
     <div className="text-center my-5">
       <img width={140} src="/img/no-item.png" alt="no-items" />
-      <p className="text-center my-1 fs-4">No items in order</p>
+      <p className="text-center my-1 fs-4">Không có sản phẩm nào trong đơn hàng</p>
     </div>
   );
   const onCancelOrder = async (id, orderId) => {

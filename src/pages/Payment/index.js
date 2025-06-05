@@ -22,7 +22,7 @@ const Loading = () => {
         style={{ width: "3rem", height: "3rem" }}
         role="status"
       >
-        <span className="visually-hidden">Loading...</span>
+        <span className="visually-hidden">Đang tải ...</span>
       </div>
     </div>
   );
@@ -40,7 +40,7 @@ const Payment = () => {
   const isLoading = useSelector((state) => state.Loading.isLoading);
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
 
-  const methodOfPaymentArr = ["Cash", "Bank"];
+  const methodOfPaymentArr = ["Thanh toán khi nhận hàng", "Chuyển khoản"];
 
   const cart = useSelector((state) => state.Cart.cart);
   const customer = useSelector((state) => state.Auth.login.currentCustomer);
@@ -67,13 +67,13 @@ const Payment = () => {
       return;
     }
 
-    if (methodOfPayment === "Bank") {
+    if (methodOfPayment === "Chuyển khoản") {
       await Swal.fire({
         icon: "error",
-        title: "Oops...",
+        title: "Lỗi ...",
         text: "Phương thức thanh toán này hiện chưa được hỗ trợ",
       });
-      setMethodOfPayment("Cash");
+      setMethodOfPayment("Thanh toán khi nhận hàng");
       return;
     }
 
@@ -266,7 +266,7 @@ const Payment = () => {
                   <input
                     type="text"
                     className="voucher"
-                    placeholder="Voucher"
+                    placeholder="Mã giảm giá"
                   />
                   <button
                     type="button"

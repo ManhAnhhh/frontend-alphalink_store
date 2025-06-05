@@ -45,7 +45,7 @@ const ChangePassword = () => {
                     value={passArr[index]}
                     className="input-password"
                     type={showPassword[index] ? "text" : "password"}
-                    placeholder="Password"
+                    placeholder="Mật khẩu"
                     onChange={(e) => onChangePassword(e.target.value, index)}
                   />
                   <i
