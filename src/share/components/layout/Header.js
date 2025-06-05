@@ -83,7 +83,7 @@ const Header = () => {
     dispatch(clearCart());
     PopUp({
       type: "success",
-      content: "Đăng nhập thành công",
+      content: "Đăng xuất thành công",
     });
   };
 

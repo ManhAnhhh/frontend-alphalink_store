@@ -25,7 +25,7 @@ const SideBar = () => {
       .catch((err) => {});
   }, [customer_id]);
 
-  console.log(customer);
+  // console.log(customer);
 
   return (
     <div id="side-bar" className="d-none d-lg-block">
